@@ -37,7 +37,20 @@ public class CustomClassLoaderTest {
     public void testMyClassLoader() throws ClassNotFoundException {
         // 自定义的类加载器的类加载器是 AppClassLoader
         System.out.println(MyClassLoader.class.getClassLoader());
-//        MyClassLoader loader = new MyClassLoader();
+
+        MyClassLoader loader = new MyClassLoader();
+        String className = "com.ljt.study.jvm.TestLoader";
+        Class<?> clazz1 = loader.loadClass(className);
+        Class<?> clazz2 = loader.loadClass(className);
+        System.out.println(clazz1.getClassLoader());
+        System.out.println(clazz1.getClassLoader().getParent());
+        // 双亲委派 只加载一次
+        System.out.println(clazz1 == clazz2);
+    }
+
+    @Test
+    public void testMyClassLoaderAndClassForName() throws ClassNotFoundException {
+        String className = "com.ljt.study.jvm.TestLoader";
         /**
          * 如果设置parent为null
          *
@@ -48,12 +61,13 @@ public class CustomClassLoaderTest {
          * }
          */
         MyClassLoader loader = new MyClassLoader(null);
-        String className = "com.ljt.study.jvm.TestLoader";
         Class<?> clazz1 = loader.loadClass(className);
-        Class<?> clazz2 = loader.loadClass(className);
-        System.out.println(clazz1.getClassLoader());
-        System.out.println(clazz1.getClassLoader().getParent());
-        // 双亲委派 只加载一次
+        System.out.println("loadClass不会执行静态语句块");
+        /**
+         * Class.forName 默认使用AppClassLoader 默认类初始化。这里使用单个参数为报错。因为不在classpath
+         * 指定类加载器，并且初始化。静态语句块有输出。
+         */
+        Class<?> clazz2 = Class.forName(className, true, loader);;
         System.out.println(clazz1 == clazz2);
     }
 }
