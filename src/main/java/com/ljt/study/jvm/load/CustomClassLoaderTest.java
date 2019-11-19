@@ -93,6 +93,13 @@ public class CustomClassLoaderTest {
         System.out.println(clazz4.hashCode() + " = " + clazz3.getClassLoader());
     }
 
+    @Test
+    public void testSetParent() {
+        MyClassLoader parent = new MyClassLoader();
+        ClassLoader classLoader = new ClassLoader(parent) {};
+        System.out.println(classLoader.getParent().getClass());
+    }
+
 
     /**
      * 自定义加载器的测试类
