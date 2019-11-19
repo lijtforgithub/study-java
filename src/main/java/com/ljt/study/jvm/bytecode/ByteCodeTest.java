@@ -1,4 +1,4 @@
-package com.ljt.study.jvm;
+package com.ljt.study.jvm.bytecode;
 
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
  * @author LiJingTang
  * @date 2019-11-10 10:09
  */
-public class MainTest {
+public class ByteCodeTest {
 
     /**
      * 1.把数值入栈
@@ -24,4 +24,5 @@ public class MainTest {
         i = i ++;
         System.out.println(i);
     }
+
 }

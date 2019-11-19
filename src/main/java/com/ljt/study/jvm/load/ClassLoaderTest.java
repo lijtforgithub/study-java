@@ -1,4 +1,4 @@
-package com.ljt.study.jvm.loading;
+package com.ljt.study.jvm.load;
 
 import org.junit.jupiter.api.Test;
 import sun.net.spi.nameservice.dns.DNSNameService;
@@ -45,12 +45,12 @@ public class ClassLoaderTest {
     @Test
     public void printClassLoaderPath() {
         String separator = System.lineSeparator();
-        System.out.println("sun.boot.class.path" + separator + System.getProperty("sun.boot.class.path").replaceAll(";",
-                separator) + separator);
-        System.out.println("java.ext.dirs" + separator + System.getProperty("java.ext.dirs").replaceAll(";",
-                separator) + separator);
-        System.out.println("java.class.path" + separator + System.getProperty("java.class.path").replaceAll(";",
-                separator) + separator);
+        String bootPath = "sun.boot.class.path";
+        System.out.println(bootPath + separator + System.getProperty(bootPath).replaceAll(";", separator) + separator);
+        String extPath = "java.ext.dirs";
+        System.out.println(extPath + separator + System.getProperty(extPath).replaceAll(";", separator) + separator);
+        String appPath = "java.class.path";
+        System.out.println(appPath + separator + System.getProperty(appPath).replaceAll(";", separator) + separator);
     }
 
     /**
