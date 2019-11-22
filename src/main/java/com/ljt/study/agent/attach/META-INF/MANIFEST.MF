@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Can-Redefine-Classes: true
+Agent-Class: com.ljt.study.agent.attach.AgentMain
+Can-Retransform-Classes: true
+Boot-Class-Path: javassist-3.26.0-GA.jar

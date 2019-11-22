@@ -5,6 +5,8 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * 响应式编程 RxJava (Observer + Asynchronous)
  *
@@ -42,7 +44,11 @@ public class RxJavaTest {
             }
         });
 
-        for (;;) ;
+        try {
+            TimeUnit.MINUTES.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }
