@@ -6,7 +6,7 @@ package com.ljt.study.lang.overload;
  * @author LiJingTang
  * @date 2019-11-22 15:54
  */
-public class ExtendsChainTest {
+public class ExtendsChain {
 
     public static void main(String[] args) {
         A a1 = new A();

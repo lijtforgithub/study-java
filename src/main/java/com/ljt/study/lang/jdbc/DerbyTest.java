@@ -1,4 +1,4 @@
-package com.ljt.study.jdbc;
+package com.ljt.study.lang.jdbc;
 
 import java.sql.*;
 import java.util.Properties;

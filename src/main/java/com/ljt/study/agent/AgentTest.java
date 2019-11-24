@@ -25,7 +25,7 @@ public class AgentTest {
         }).start();
     }
 
-    public static void sayHello() {
+    private static void sayHello() {
         try {
             TimeUnit.SECONDS.sleep(3);
         } catch (InterruptedException e) {
@@ -34,7 +34,7 @@ public class AgentTest {
         System.out.println("Hello World");
     }
 
-    public static void sayBye() {
+    private static void sayBye() {
         try {
             TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {

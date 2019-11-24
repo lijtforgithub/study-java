@@ -9,7 +9,8 @@
    `schedule(TimerTask task, long delay, long period)`  
  这两个方法与上面两个不同，前面提过Timer的计时器任务会因为前一个任务执行时间较长而延时。在这两个方法中，每一次执行的task的计划时间会随着前一个task实际时间而发生改变，也就是scheduledExecutionTime(n+1)=realExecutionTime(n)+periodTime。也就是说如果第n个task由于某种情况导致这次的执行时间过长，最后导致systemCurrentTime >= scheduledExecutionTime(n+1)，这时第n+1个task并不会因为到时了而执行，会等待第n个task执行完之后再执行，那么这样势必会导致n+2个的执行时间scheduledExecutionTime发生改变；
 即scheduledExecutionTime(n+2)=realExecutionTime(n+1)+periodTime。所以这两个方法更加注重保存**间隔**时间的稳定。
-3. `scheduleAtFixedRate(TimerTask task, Date firstTime, long period) scheduleAtFixedRate(TimerTask task, long delay, long period)`  
+3. `scheduleAtFixedRate(TimerTask task, Date firstTime, long period)`  
+ `scheduleAtFixedRate(TimerTask task, long delay, long period)`  
 scheduleAtFixedRate与schedule方法的侧重点不同，schedule方法侧重保存间隔时间的稳定，而scheduleAtFixedRate方法更加侧重于保持执行**频率**的稳定。在schedule方法中会因为前一个任务的延迟而导致其后面的定时任务延时，而scheduleAtFixedRate方法则不会， 如果第n个task执行时间过长导致systemCurrentTime >= scheduledExecutionTime(n+1)，则不会做任何等待他会立即执行第n+1个task，所以scheduleAtFixedRate方法执行时间的计算方法不同于schedule，而是scheduledExecutionTime(n)=firstExecuteTime+n*periodTime，该计算方法永远保持不变。所以scheduleAtFixedRate更加侧重于保持执行频率的稳定。
 
 > 对于Timer的缺陷，我们可以考虑 ScheduledThreadPoolExecutor 来替代。Timer是基于绝对时间的，对系统时间比较敏感，而ScheduledThreadPoolExecutor则是基于相对时间；Timer是内部是单一线程，而ScheduledThreadPoolExecutor内部是个线程池， 所以可以支持多个任务并发执行。

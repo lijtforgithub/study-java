@@ -1,4 +1,4 @@
-package com.ljt.study.lang.path;
+package com.ljt.study.lang.grammar;
 
 import java.io.File;
 import java.net.URISyntaxException;
