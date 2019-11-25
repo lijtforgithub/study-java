@@ -1,5 +1,7 @@
 package com.ljt.study.juc.cacheline;
 
+import com.ljt.study.juc.ThreadUtils;
+
 import static com.ljt.study.juc.cacheline.CacheLineTest.COUNT;
 
 /**
@@ -11,20 +13,22 @@ import static com.ljt.study.juc.cacheline.CacheLineTest.COUNT;
 public class CacheLinePaddingTest {
 
     public static void main(String[] args) throws InterruptedException {
-        Thread t0 = new Thread(() -> {
+        Thread t1 = new Thread(() -> {
             for (long i = 0; i < COUNT; i++) {
                 array[0].x = i;
             }
         });
-        Thread t1 = new Thread(() -> {
+
+        Thread t2 = new Thread(() -> {
             for (long i = 0; i < COUNT; i++) {
                 array[1].x = i;
             }
         });
 
         final long startTime = System.currentTimeMillis();
-        t0.start(); t1.start();
-        t0.join(); t1.join();
+        t1.start();
+        t2.start();
+        ThreadUtils.join(t1, t2);
         System.out.println(System.currentTimeMillis() - startTime);
     }
 

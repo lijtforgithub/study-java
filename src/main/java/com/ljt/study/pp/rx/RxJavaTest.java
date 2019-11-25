@@ -1,11 +1,10 @@
 package com.ljt.study.pp.rx;
 
+import com.ljt.study.juc.ThreadUtils;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * 响应式编程 RxJava (Observer + Asynchronous)
@@ -44,11 +43,7 @@ public class RxJavaTest {
             }
         });
 
-        try {
-            TimeUnit.MINUTES.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        ThreadUtils.sleepSeconds(10);
     }
 
 }

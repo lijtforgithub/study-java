@@ -11,7 +11,8 @@ import java.util.Objects;
  */
 public class ObjectSize {
 
-    private ObjectSize() {}
+    private ObjectSize() {
+    }
 
     private static Instrumentation instrumentation;
 

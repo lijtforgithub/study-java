@@ -1,6 +1,7 @@
 package com.ljt.study.juc.atomic;
 
-import java.util.concurrent.TimeUnit;
+import com.ljt.study.juc.ThreadUtils;
+
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicStampedReference;
 
@@ -18,47 +19,33 @@ public class ABATest {
 
     public static void main(String[] args) {
         Thread t1 = new Thread(() -> {
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            ThreadUtils.sleepSeconds(1);
             atomicInt.compareAndSet(100, 101);
             atomicInt.compareAndSet(101, 100);
         });
 
         Thread t2 = new Thread(() -> {
-            try {
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            ThreadUtils.sleepSeconds(2);
             System.out.println(atomicInt.compareAndSet(100, 101)); // true
         });
 
-        t1.start(); t2.start();
+        t1.start();
+        t2.start();
 
         Thread t3 = new Thread(() -> {
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            ThreadUtils.sleepSeconds(1);
             atomicStampedRef.compareAndSet(100, 101, atomicStampedRef.getStamp(), atomicStampedRef.getStamp() + 1);
             atomicStampedRef.compareAndSet(101, 100, atomicStampedRef.getStamp(), atomicStampedRef.getStamp() + 1);
         });
 
         Thread t4 = new Thread(() -> {
             int stamp = atomicStampedRef.getStamp();
-            try {
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            ThreadUtils.sleepSeconds(2);
             System.out.println(atomicStampedRef.compareAndSet(100, 101, stamp, stamp + 1)); // false
         });
 
-        t3.start(); t4.start();
+        t3.start();
+        t4.start();
     }
 
 }

@@ -11,9 +11,9 @@ public class NumberTypeTest {
     @Test
     public void testByte() {
         System.out.println(Byte.decode("-0101")); // 八进制
-        System.out.println(Byte.decode("012"));	// 八进制
-        System.out.println(Byte.decode("0xF"));	// 十六进制
-        System.out.println(Byte.decode("+#E"));	// 十六进制
+        System.out.println(Byte.decode("012"));    // 八进制
+        System.out.println(Byte.decode("0xF"));    // 十六进制
+        System.out.println(Byte.decode("+#E"));    // 十六进制
 
         System.out.println(Byte.parseByte("101011", 2)); // 二进制
         System.out.println(Byte.parseByte("10", 8)); // 八进制

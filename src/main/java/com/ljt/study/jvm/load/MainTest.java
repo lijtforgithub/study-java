@@ -6,7 +6,7 @@ package com.ljt.study.jvm.load;
  * @author LiJingTang
  * @date 2019-11-10 20:52
  */
-public class LoadTest {
+public class MainTest {
 
     public static void main(String[] args) {
         System.out.println(T1.i);
@@ -14,8 +14,8 @@ public class LoadTest {
     }
 
     private static class T1 {
-
-        static int i = 2;
+        // 静态变量没有引用关系顺序赋值
+        private static int i = 2;
         private static T1 t = new T1();
 
         private T1() {
@@ -24,9 +24,9 @@ public class LoadTest {
     }
 
     private static class T2 {
-
+        // 静态变量没有引用关系顺序赋值
         private static T2 t = new T2();
-        static int i = 2;
+        private static int i = 2;
 
         private T2() {
             i++;

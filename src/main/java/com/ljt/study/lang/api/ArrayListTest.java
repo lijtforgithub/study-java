@@ -21,7 +21,7 @@ public class ArrayListTest {
         System.out.println(arrayList.toArray().getClass().getSimpleName());
 
         String[] array = {"Hello", "World"};
-        List<String> list =  Arrays.asList(array);
+        List<String> list = Arrays.asList(array);
         Object[] elementData = list.toArray();
         System.out.println(Arrays.toString(elementData));
         System.out.println(elementData.getClass().getSimpleName());
@@ -38,7 +38,7 @@ public class ArrayListTest {
         arrayList.add("Hello");
         arrayList.add("World");
 
-        String[] array = new String [5];
+        String[] array = new String[5];
         System.out.println(Arrays.toString(array));
         System.arraycopy(arrayList.toArray(), 0, array, 0, arrayList.size());
         System.out.println(Arrays.toString(array));

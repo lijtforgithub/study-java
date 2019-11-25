@@ -1,5 +1,6 @@
 package com.ljt.study.lang.api;
 
+import com.ljt.study.juc.ThreadUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -7,7 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author LiJingTang
@@ -39,8 +39,8 @@ public class TimerTaskTest {
     }
 
     @AfterEach
-    public void after() throws InterruptedException {
-        TimeUnit.SECONDS.sleep(30);
+    public void after() {
+        ThreadUtils.sleepSeconds(30);
     }
 
 
@@ -79,7 +79,7 @@ public class TimerTaskTest {
     /**
      * 指定时间点执行
      */
-    private static class MyTimerTask3  extends TimerTask {
+    private static class MyTimerTask3 extends TimerTask {
 
         public MyTimerTask3(Date date) {
             new Timer().schedule(this, date);

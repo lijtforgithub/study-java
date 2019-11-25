@@ -88,12 +88,15 @@ public class ObjectTest {
         public Object getObj() {
             return obj;
         }
+
         public void setObj(Object obj) {
             this.obj = obj;
         }
+
         public File getFile() {
             return file;
         }
+
         public void setFile(File file) {
             this.file = file;
         }

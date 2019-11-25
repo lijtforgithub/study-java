@@ -14,7 +14,7 @@ import java.util.Objects;
  * @date 2019-11-12 22:57
  */
 public class CustomClassLoaderTest {
-    
+
     @Test
     public void testLoadClass() throws ClassNotFoundException {
         String name = this.getClass().getName();
@@ -66,7 +66,7 @@ public class CustomClassLoaderTest {
          * Class.forName 默认使用AppClassLoader 默认类初始化。这里使用单个参数为报错。因为不在classpath
          * 指定类加载器，并且初始化。静态语句块有输出。
          */
-        Class<?> clazz2 = Class.forName(CLASS_NAME, true, loader);;
+        Class<?> clazz2 = Class.forName(CLASS_NAME, true, loader);
         System.out.println("Class.forName会执行静态语句块");
         System.out.println(clazz1 == clazz2);
     }
@@ -96,7 +96,8 @@ public class CustomClassLoaderTest {
     @Test
     public void testSetParent() {
         MyClassLoader parent = new MyClassLoader();
-        ClassLoader classLoader = new ClassLoader(parent) {};
+        ClassLoader classLoader = new ClassLoader(parent) {
+        };
         System.out.println(classLoader.getParent().getClass());
     }
 

@@ -54,7 +54,7 @@ public class SystemTest {
 
         System.exit(0); // 终止了程序 非正常退出
 
-        for (Enumeration<?> eum = System.getProperties().propertyNames(); eum.hasMoreElements();) {
+        for (Enumeration<?> eum = System.getProperties().propertyNames(); eum.hasMoreElements(); ) {
             String propertyName = String.valueOf(eum.nextElement());
             System.out.println(propertyName + " - " + System.getProperty(propertyName));
         }
@@ -62,8 +62,8 @@ public class SystemTest {
 
     @Test
     public void testArraycopy() {
-        String[] src = { "a", "b", "c" };
-        String[] dest = { "A", "B", "C", "D", "E", "F" };
+        String[] src = {"a", "b", "c"};
+        String[] dest = {"A", "B", "C", "D", "E", "F"};
 
         System.out.println(Arrays.toString(src));
         System.arraycopy(src, 0, dest, 2, 2);

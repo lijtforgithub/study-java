@@ -12,7 +12,7 @@ import java.util.List;
  * @author LiJingTang
  * @date 2019-11-21 10:59
  */
-public class AttachTest {
+public class LoadAgent {
 
     private static final String AGENT_PATH = "D:/Workspace/IDEA/study/target/artifacts/agent/agent-agentmain.jar";
 

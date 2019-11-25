@@ -1,5 +1,6 @@
 package com.ljt.study.lang.api;
 
+import com.ljt.study.juc.ThreadUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,11 +34,7 @@ public class TimerTest {
             @Override
             public void run() {
                 System.out.println("firstTimerTask invoked, the time: " + (System.currentTimeMillis() - startTime));
-                try {
-                    TimeUnit.SECONDS.sleep(4); // 线程休眠
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                ThreadUtils.sleepSeconds(4);
             }
         }, 1000);
 
@@ -61,11 +58,7 @@ public class TimerTest {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                try {
-                    TimeUnit.SECONDS.sleep(1); // 线程休眠
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                ThreadUtils.sleepSeconds(1);
                 LocalDateTime time = LocalDateTime.ofInstant(new Date(this.scheduledExecutionTime()).toInstant(), ZoneId.systemDefault());
                 System.out.println("schedule | " + time.toString().replace('T', ' ') + "  " + LocalDateTime.now().toString().replace('T', ' '));
             }
@@ -74,11 +67,7 @@ public class TimerTest {
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                try {
-                    TimeUnit.SECONDS.sleep(1); // 线程休眠
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                ThreadUtils.sleepSeconds(1);
                 LocalDateTime time = LocalDateTime.ofInstant(new Date(this.scheduledExecutionTime()).toInstant(), ZoneId.systemDefault());
                 System.out.println("scheduleAtFixedRate | " + time.toString().replace('T', ' ') + "  " + LocalDateTime.now().toString().replace('T', ' '));
             }
@@ -115,11 +104,7 @@ public class TimerTest {
 
         executorService.schedule(() -> {
             System.out.println("firstTimerTask invoked, the time: " + (System.currentTimeMillis() - startTime));
-            try {
-                TimeUnit.SECONDS.sleep(4);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            ThreadUtils.sleepSeconds(4);
         }, 1, TimeUnit.SECONDS);
 
         executorService.schedule(() -> System.out.println("secondTimerTask invoked, the time: "
@@ -137,8 +122,8 @@ public class TimerTest {
     }
 
     @AfterEach
-    public void after() throws InterruptedException {
-        TimeUnit.SECONDS.sleep(30);
+    public void after() {
+        ThreadUtils.sleepSeconds(30);
     }
 
 }

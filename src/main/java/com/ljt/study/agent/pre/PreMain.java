@@ -9,10 +9,7 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 在main方法之前运行
@@ -22,7 +19,8 @@ import java.util.Set;
  */
 public class PreMain {
 
-    private PreMain() {}
+    private PreMain() {
+    }
 
     /**
      * 该方法在main方法之前运行，与main方法运行在同一个JVM中 并被同一个System ClassLoader装载
@@ -68,14 +66,16 @@ public class PreMain {
 
         @Override
         public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
-            ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
+                                ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
             className = className.replace("/", ".");
             if (!METHOD_MAP.containsKey(className)) {
                 return null;
             }
 
+            CtClass ctClass = null;
+
             try {
-                CtClass ctClass = CLASS_POLL.getCtClass(className);
+                ctClass = CLASS_POLL.getCtClass(className);
 
                 for (String methodName : METHOD_MAP.get(className)) {
                     CtMethod ctMethod = ctClass.getDeclaredMethod(methodName);
@@ -85,11 +85,11 @@ public class PreMain {
                     CtMethod newMethod = CtNewMethod.copy(ctMethod, methodName, ctClass, null);
 
                     String body = "{" + SYS_LINE +
-                        "long startTime = " + SYS_TIME + SYS_LINE +
-                        newMethodName + "($$);" + SYS_LINE + // 调用原有代码，类似于method(); ($$)表示所有的参数
-                        "long endTime = " + SYS_TIME + SYS_LINE +
-                        "System.out.println(\"方法 [" + methodName + "]cost:\" + (endTime - startTime) + \"ms.\");" +
-                        SYS_LINE + "}";
+                            "long startTime = " + SYS_TIME + SYS_LINE +
+                            newMethodName + "($$);" + SYS_LINE + // 调用原有代码，类似于method(); ($$)表示所有的参数
+                            "long endTime = " + SYS_TIME + SYS_LINE +
+                            "System.out.println(\"方法 [" + methodName + "]cost:\" + (endTime - startTime) + \"ms.\");" +
+                            SYS_LINE + "}";
                     newMethod.setBody(body);
                     ctClass.addMethod(newMethod);
                 }
@@ -97,6 +97,10 @@ public class PreMain {
                 return ctClass.toBytecode();
             } catch (Exception e) {
                 throw new IllegalClassFormatException(e.getMessage());
+            } finally {
+                if (Objects.nonNull(ctClass)) {
+                    ctClass.detach();
+                }
             }
         }
     }

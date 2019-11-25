@@ -1,5 +1,7 @@
 package com.ljt.study.jvm.jmm;
 
+import com.ljt.study.juc.ThreadUtils;
+
 /**
  * 指令乱序证明
  *
@@ -11,7 +13,7 @@ public class Disorder {
     private static int x = 0, y = 0;
     private static int a = 0, b = 0;
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         int i = 0;
         for (; ; ) {
             i++;
@@ -30,8 +32,9 @@ public class Disorder {
                 b = 1;
                 y = a;
             });
-            t1.start(); t2.start();
-            t1.join(); t2.join();
+            t1.start();
+            t2.start();
+            ThreadUtils.join(t1, t2);
 
             String result = "第" + i + "次 (" + x + "," + y + "）";
             if (x == 0 && y == 0) {

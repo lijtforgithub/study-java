@@ -4,7 +4,6 @@ import javassist.ClassPool;
 import javassist.CtBehavior;
 import javassist.CtClass;
 
-import java.io.ByteArrayInputStream;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
@@ -20,7 +19,8 @@ import java.util.Objects;
  */
 public class AgentMain {
 
-    private AgentMain() {}
+    private AgentMain() {
+    }
 
     public static void agentmain(String agentArgs, Instrumentation inst) throws UnmodifiableClassException {
         System.out.printf("%s => agentmain方法：agentArgs = %s \n", AgentMain.class.toString(), agentArgs);
@@ -37,7 +37,7 @@ public class AgentMain {
     }
 
     private static boolean matchClass(String className) {
-        return className.startsWith("com.ljt.study.agent");
+        return className.equals("com.ljt.study.agent.AgentTest");
     }
 
     private static boolean matchMethod(String methodName) {
@@ -54,13 +54,13 @@ public class AgentMain {
 
         @Override
         public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
-            ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
+                                ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
             className = className.replace("/", ".");
             CtClass ctClass = null;
 
             try {
-                ctClass = CLASS_POLL.makeClass(new ByteArrayInputStream(classfileBuffer));
-                System.out.println("CtClass = " + ctClass.getName());
+                ctClass = CLASS_POLL.getCtClass(className);
+//                ctClass = CLASS_POLL.makeClass(new ByteArrayInputStream(classfileBuffer));
 
                 if (!ctClass.isInterface()) {
                     for (CtBehavior method : ctClass.getDeclaredBehaviors()) {
