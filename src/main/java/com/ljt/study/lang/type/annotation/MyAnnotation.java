@@ -9,7 +9,7 @@ import java.lang.annotation.*;
  * @date 2019-11-23 11:02
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.METHOD, ElementType.TYPE })
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Inherited
 public @interface MyAnnotation {
 
@@ -24,6 +24,6 @@ public @interface MyAnnotation {
     public TrafficLampEnum enumAttr() default TrafficLampEnum.RED; // 枚举属性
 
     // 包级使用的属性
-    AttrAnnotation annotationAttr() default @AttrAnnotation( {}); // 注解属性@MetaAnnotation就是一个对象了
+    AttrAnnotation annotationAttr() default @AttrAnnotation({}); // 注解属性@MetaAnnotation就是一个对象了
 
 }

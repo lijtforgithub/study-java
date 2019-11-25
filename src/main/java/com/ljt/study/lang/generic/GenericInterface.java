@@ -9,15 +9,15 @@ public class GenericInterface {
     /**
      * 泛型接口实现类
      */
-    static class ChildClass implements SuperInterface<ChildClass, ChildClass> {
+    static class Child implements SuperInterface<Child, Child> {
 
         @Override
-        public ChildClass getEObject() {
+        public Child getEObject() {
             return null;
         }
 
         @Override
-        public ChildClass getTObject() {
+        public Child getTObject() {
             return null;
         }
     }

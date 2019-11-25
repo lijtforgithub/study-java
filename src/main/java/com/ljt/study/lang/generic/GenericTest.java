@@ -56,7 +56,7 @@ public class GenericTest {
     public <T> void test() {
         // T obj = new T();
         // T[] objArray = new T[5];
-        T[] objs = (T[]) new Object[] { "hello", "world", 1L };
+        T[] objs = (T[]) new Object[]{"hello", "world", 1L};
 
         // 不允许泛型类型创建泛型数组
         // ArrayList<String>[] list = new ArrayList<String>[10];

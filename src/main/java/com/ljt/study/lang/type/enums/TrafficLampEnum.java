@@ -6,7 +6,7 @@ package com.ljt.study.lang.type.enums;
  * @author LiJingTang
  * @date 2019-11-22 23:24
  */
-public enum  TrafficLampEnum {
+public enum TrafficLampEnum {
 
     RED(30) {
         @Override

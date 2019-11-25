@@ -1,4 +1,4 @@
-package com.ljt.study.jvm.bytecode;
+package com.ljt.study.jvm.instruction;
 
 import org.junit.jupiter.api.Test;
 

@@ -44,7 +44,7 @@ public class GenericActualType {
 
     @Test
     public void getInterfaceActualType() {
-        Type[] types = GenericInterface.ChildClass.class.getGenericInterfaces();
+        Type[] types = GenericInterface.Child.class.getGenericInterfaces();
         for (Type type : types) {
             printActualType(type);
         }

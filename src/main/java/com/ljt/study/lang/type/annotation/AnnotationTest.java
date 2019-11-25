@@ -8,8 +8,8 @@ import java.util.Arrays;
  * @author LiJingTang
  * @date 2019-11-23 10:59
  */
-@MyAnnotation(name="LiJingTang", value=0, clazz=AnnotationTest.class, arrayAttr="李敬堂", enumAttr=
-        TrafficLampEnum.GREEN, annotationAttr=@AttrAnnotation({ "Hello", "World" }))
+@MyAnnotation(name = "LiJingTang", value = 0, clazz = AnnotationTest.class, arrayAttr = "李敬堂", enumAttr =
+        TrafficLampEnum.GREEN, annotationAttr = @AttrAnnotation({"Hello", "World"}))
 public class AnnotationTest {
 
     @MyAnnotation(1)
@@ -26,11 +26,11 @@ public class AnnotationTest {
             System.out.println(annotation.annotationAttr());
 
             // @Inherited注解的注解 子类可以继承
-            System.out.println(SubClass.class.getAnnotation(MyAnnotation.class));
+            System.out.println(Sub.class.getAnnotation(MyAnnotation.class));
         }
     }
 
-    private static class SubClass extends AnnotationTest {
+    private static class Sub extends AnnotationTest {
 
     }
 

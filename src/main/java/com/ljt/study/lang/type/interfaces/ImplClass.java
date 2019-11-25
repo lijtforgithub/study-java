@@ -10,7 +10,7 @@ public class ImplClass implements Interf2 {
         ImplClass impl = new ImplClass();
         System.out.println(impl.STR);
     }
-    
+
 }
 
 interface Interf1 {

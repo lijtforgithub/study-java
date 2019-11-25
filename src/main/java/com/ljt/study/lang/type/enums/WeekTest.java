@@ -38,7 +38,8 @@ public class WeekTest {
      */
     private static abstract class AbstractWeek {
 
-        private AbstractWeek() {}
+        private AbstractWeek() {
+        }
 
         public static final AbstractWeek MON = new AbstractWeek() {
             @Override

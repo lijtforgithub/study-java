@@ -12,8 +12,10 @@ public class GenericClass<E> {
 
     private ArrayList<E> list = new ArrayList<E>();
 
+    // 默认构造函数
     public GenericClass() {
-    }; // 默认构造函数
+    }
+
 
     /**
      * 返回这个栈的元素个数

@@ -28,7 +28,7 @@ public enum PayrollDayEnum {
     }
 
     private enum PayTypeEnum {
-        WEEKDAY	{
+        WEEKDAY {
             @Override
             double overtimePay(double hrs, double payRate) {
                 return hrs <= HOURS_PER_SHIFT ? 0 : (hrs - HOURS_PER_SHIFT) * payRate / 2;
@@ -42,6 +42,7 @@ public enum PayrollDayEnum {
         };
 
         private static final int HOURS_PER_SHIFT = 8;
+
         abstract double overtimePay(double hrs, double payRate);
 
         private double pay(double hoursWorked, double payRate) {

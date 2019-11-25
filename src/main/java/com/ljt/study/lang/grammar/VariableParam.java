@@ -14,7 +14,7 @@ public class VariableParam {
         m(1, "String", new Object());
     }
 
-    private static void m(Object ... params) {
+    private static void m(Object... params) {
         for (Object obj : params) {
             System.out.println(obj);
         }

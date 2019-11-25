@@ -16,15 +16,15 @@ public class Array {
     /**
      * asList接受的参数是一个泛型的变长参数，基本数据类型是无法型化的，也就是说8个基本类型是无法作为asList的参数的，
      * 要想作为泛型参数就必须使用其所对应的包装类型。在Java中数组是一个对象，它是可以泛型化的。因此基本数据类型数组是作为一个参数传进去的。
-     *
+     * <p>
      * public static List asList(Object[] a) - JDK1.4
      * public static <T> List<T> asList(T... a) - JDK1.5
-     *
+     * <p>
      * 如果是基本类型的数组则会用JDK1.5的语法作为一个参数放进List，所以打印的话会是一个数组地址。如：[[I@1c313da]
      * 如果是引用类型的话会兼容JDK1.4的语法，如果是字符串，打印的如：[hello, world, from, java]
      */
     @Test
-    public void asList () {
+    public void asList() {
         int[] intArray = {1, 2, 3, 4, 5};
         List<int[]> intList = Arrays.asList(intArray);
         System.out.println(intList + " - " + intList.size());
@@ -40,7 +40,7 @@ public class Array {
      * 未重写，它直接抛出UnsupportedOperationException异常
      */
     @Test
-    public void asListUnmodifiable () {
+    public void asListUnmodifiable() {
         Integer[] array = {1, 2, 3, 4, 5};
         List<Integer> list = Arrays.asList(array);
         list.add(6);
@@ -111,7 +111,7 @@ public class Array {
     public void testNew() {
         String[] aArray = new String[5];
         String[] bArray = {"a", "b", "c", "d", "e"};
-        String[] cArray = new String[] {"a", "b", "c", "d", "e"};
+        String[] cArray = new String[]{"a", "b", "c", "d", "e"};
     }
 
     // 输出一个数组
@@ -149,7 +149,7 @@ public class Array {
     // 把提供的数组元素放入一个字符串
     @Test
     public void arrayToString() {
-        System.out.println(StringUtils.join(new String[] {"a", "b", "c"}, ", "));
+        System.out.println(StringUtils.join(new String[]{"a", "b", "c"}, ", "));
     }
 
     // 将一个数组列表转换为数组

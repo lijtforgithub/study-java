@@ -84,7 +84,9 @@ public class GenericRule {
             public int getSize() {
                 return size;
             }
-        };
+        }
+
+        ;
     }
 
 }

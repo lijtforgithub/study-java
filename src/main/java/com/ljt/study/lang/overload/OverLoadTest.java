@@ -31,7 +31,7 @@ public class OverLoadTest {
          * 重写父类方法，实现多态
          */
         @Override
-        public String drink(){
+        public String drink() {
             return "喝的是 " + getName();
         }
 
@@ -54,7 +54,7 @@ public class OverLoadTest {
          * 重写父类方法，实现多态
          */
         @Override
-        public String drink(){
+        public String drink() {
             return "喝的是 " + getName();
         }
 
@@ -74,6 +74,7 @@ public class OverLoadTest {
         public String getName() {
             return name;
         }
+
         public void setName(String name) {
             this.name = name;
         }
@@ -81,6 +82,7 @@ public class OverLoadTest {
         public String drink() {
             return "喝的是" + getName();
         }
+
         @Override
         public String toString() {
             return null;
