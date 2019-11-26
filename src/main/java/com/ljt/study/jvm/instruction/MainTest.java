@@ -16,7 +16,7 @@ public class MainTest {
      * 6 istore_1          把栈顶（0）赋值给局部变量表1位置变量并出栈
      */
     @Test
-    public void testIPP() {
+    public void testIPlusPlus() {
         int i = 0;
         i = i++;
         System.out.println(i);
@@ -30,7 +30,7 @@ public class MainTest {
      * 6 istore_1          把栈顶（1）赋值给局部变量表1位置变量并出栈
      */
     @Test
-    public void testPPI() {
+    public void testPlusPlusI() {
         int i = 0;
         i = ++i;
         System.out.println(i);
