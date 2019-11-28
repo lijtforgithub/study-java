@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.example.org/catchTaskXML"
+	xmlns:tns="http://www.example.org/catchTaskXML" elementFormDefault="qualified">
+	
+	<xsd:element name="catchTasks">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="task" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:choice>
+							<xsd:element name="dbVist">
+								<xsd:complexType>
+									<xsd:all>
+										<xsd:element name="platformDBAlias" type="xsd:string"/>
+									</xsd:all>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="jmsVist">
+								<xsd:complexType>
+									<xsd:all>
+										<xsd:element name="jmsURL" type="xsd:string"/>
+										<xsd:element name="queueName" type="xsd:string"/>
+									</xsd:all>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="wsVist">
+								<xsd:complexType>
+									<xsd:all>
+										<xsd:element name="webservice" type="xsd:string"/>
+									</xsd:all>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:attribute name="name" type="xsd:string" use="required"/>
+						<xsd:attribute name="class" type="xsd:string" use="required"/>
+						<xsd:attribute name="taskCarrierImpl" type="xsd:string"/>
+						<xsd:attribute name="dataProviderNode" type="xsd:long" use="required"/>
+						<xsd:attribute name="dataModelNode" type="xsd:long" use="required"/>
+						<xsd:attribute name="targetNode" type="xsd:string" use="required"/>
+						<xsd:attribute name="frequency" type="xsd:long" use="required"/>
+						<xsd:attribute name="priority" type="xsd:long" use="required"/>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

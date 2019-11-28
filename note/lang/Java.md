@@ -79,8 +79,8 @@ OuterClass.InnerClass innerObject = new OuterClass.InnerClass();
 
 泛型是使用一种称为类型消除的方法来实现的。编译器使用泛型类型信息来编译代码，但是随后会消除它。因此，泛型信息在运行时是不可用的。这中方法使泛型代码向后兼用使用原始类型的遗留代码。  
 泛型存在于编译时。一旦编译器确认泛型类型是安全使用的，就会将它转换为原始类型。 当编译泛型类、接口、方法时，编译器用Object类型代替泛型类型。如果一个泛型是受限的，那么编译器就会用一个受限类型来替换它。  
-不管实际的具体类型是什么，泛型类是被它的所有实例所共享的。
-`ArrayList<String> list1 = new ArrayList<>(); `
+不管实际的具体类型是什么，泛型类是被它的所有实例所共享的。  
+`ArrayList<String> list1 = new ArrayList<>(); `  
 `ArrayList<Integer> list2 = new ArrayList<>();`  
 尽管在编译时ArrayList <String>和ArrayList<Integer>是两种类型，但是，在运行时只有一个ArrayList类会被加载到JVM中。
 
@@ -89,6 +89,27 @@ OuterClass.InnerClass innerObject = new OuterClass.InnerClass();
 2. 不能new E[]，不能使用泛型类型参数创建数组。E elements = newE[capacity]; 是错误的。可以通过创建一个Object类型的数组。 E elements = (E[])new Object[capacity]; 会导致一个免检的编译警告。
 3. **在静态环境下不允许类的参数是泛型类型**。由于泛型类的所有实例都有相同的运行时的类，所以泛型类的静态变量和方法是被它的所有实例所共享的。因此，在静态方法、数据域或者初始化语句中，为了类而引用泛型类型参数是非法的。（所有实例共享的，用哪一个具体的类替换泛型都是矛盾的）。
 4. 异常类不能是泛型的。因为JVM必须检查抛出的异常与catch字句中指定的类型匹配。但泛型信息在运行时是不可用的。
+#### 反射
+*反射就是把Java类中的各种成分映射成相应的Java类。*  
+如果底层方法是静态的，那么可以忽略指定的obj参数。该参数可以为null。 如果底层方法所需的形参数为0，则所提供的args数组长度可以为0或null。
+如果方法正常完成，则将该方法返回的值返回给调用者；如果该值为基本类型，则首先适当地将其包装在对象中。
+但是，如果该值的类型为一组基本类型，则数组元素不被包装在对象中；换句话说，将返回基本类型的数组。 如果底层方法返回类型为void，则该调用返回null。
+
+启动Java程序的main方法的参数是一个字符串数组，即`public static void main(String[] args)`，通过反射方式来调用这个main方法时，如何为invoke方法传递参数呢？  
+按JDK1.5的语法，整个数组是一个参数，而按JDK1.4的语法，数组中的每个元素对应一个参数，当把一个字符串数组作为参数传递给invoke方法是，javac会到底按照哪种语法处理呢？
+JDK1.5肯定要兼容JDK1.4的语法，会按JDK1.4的语法进行处理，即把数组打散成为若干个单独的参数。所以，在给main方法传递参数时，不能使用代码  
+`mainMethod.invoke(null, new String[]{"xxx"})`  
+javac只把它当作JDK1.4的语法进行理解，而不把它当作JDK1.5的语法解释，因此会出现参数类型不对的问题。
+解决办法：  
+`mainMethod.invoke(null, new Object[]{new String[]{"xxx"}})`  
+`mainMethod.invoke(null, (Object)new String[]{"xxx"})`  
+编译器会做特殊处理，编译时不把参数当作数组看待，也就不会数组打散成若干个参数了。
+`public static List asList(Object[] a)` - JDK1.4    
+`public static <T> List<T> asList(T... a)` - JDK1.5  
+如果是基本类型的数组则会用JDK1.5的语法作为一个参数放进List，所以打印的话会是一个数组地址。`[[I@1c313da]`  
+如果是引用类型的话会兼容JDK1.4的语法，如果是字符串，打印的如：  
+`[hello, world, from, java]`
+
 ## 特性
 #### 1.封装
 - 良好的封装能够减少耦合。

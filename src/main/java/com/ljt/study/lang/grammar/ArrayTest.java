@@ -11,7 +11,7 @@ import java.util.*;
  * @author LiJingTang
  * @date 2019-11-22 17:23
  */
-public class Array {
+public class ArrayTest {
 
     /**
      * asList接受的参数是一个泛型的变长参数，基本数据类型是无法型化的，也就是说8个基本类型是无法作为asList的参数的，

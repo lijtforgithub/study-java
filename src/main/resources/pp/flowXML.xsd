@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+		targetNamespace="http://www.example.org/flowXML"
+		xmlns="http://www.example.org/flowXML" elementFormDefault="qualified">
+		
+		<xsd:element name="dataMap">
+			<xsd:complexType>
+				<xsd:sequence>
+					<xsd:element name="identifier" type="xsd:string"/>
+					<xsd:element name="displayName" type="xsd:string"/>
+					<xsd:element name="dataTarget" maxOccurs="unbounded">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="targetNodeId" type="xsd:long"/>
+								<xsd:element name="targetNodeName" type="xsd:string"/>
+								<xsd:element name="targetPriority" type="xsd:int"/>
+								<xsd:element name="table" maxOccurs="unbounded">
+									<xsd:complexType>
+										<xsd:sequence>
+											<xsd:element name="tableName" type="xsd:string"/>
+											<xsd:element name="modelItemNo" type="xsd:int"/>
+											<xsd:element ref="column" maxOccurs="unbounded"/>
+										</xsd:sequence>
+									</xsd:complexType>
+								</xsd:element>
+							</xsd:sequence>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:element>
+		
+		<xsd:element name="column">
+			<xsd:complexType>
+				<xsd:all>
+					<xsd:element name="IDName" type="xsd:string"/>
+					<xsd:element name="type" type="xsd:string"/>
+					<xsd:element name="formula" type="xsd:string"/>
+					<xsd:element name="primaryKeyFlag" type="xsd:boolean"/>
+					<xsd:element name="updateColumnFlag" type="xsd:boolean"/>
+					<xsd:element name="value">
+						<xsd:complexType>
+							<xsd:all>
+								<xsd:element name="sourceIDName" type="xsd:string"/>
+							</xsd:all>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:all>
+			</xsd:complexType>
+		</xsd:element>
+		
+</xsd:schema>
