@@ -22,7 +22,7 @@ public class GenericTest {
         list1.getClass().getMethod("add", Object.class).invoke(list1, "Java Generic");
         System.out.println(list1.get(list1.size() - 1));
 
-        List list3 = new ArrayList<Object>();
+        List list3 = new ArrayList<>();
         List<String> list4 = list3;
 
         // 参数化类型不能继承

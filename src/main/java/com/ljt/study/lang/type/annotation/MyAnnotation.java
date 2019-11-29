@@ -13,15 +13,15 @@ import java.lang.annotation.*;
 @Inherited
 public @interface MyAnnotation {
 
-    public String name() default "Lijt"; // 字符串属性 默认值用default设置
+    String name() default "Lijt"; // 字符串属性 默认值用default设置
 
-    public int value(); // 属性value调用的地方可以不用写value=
+    int value(); // 属性value调用的地方可以不用写value=
 
-    public Class<?> clazz() default Class.class; // 字节码属性
+    Class<?> clazz() default Class.class; // 字节码属性
 
-    public String[] arrayAttr() default {}; // 数组属性
+    String[] arrayAttr() default {}; // 数组属性
 
-    public TrafficLampEnum enumAttr() default TrafficLampEnum.RED; // 枚举属性
+    TrafficLampEnum enumAttr() default TrafficLampEnum.RED; // 枚举属性
 
     // 包级使用的属性
     AttrAnnotation annotationAttr() default @AttrAnnotation({}); // 注解属性@MetaAnnotation就是一个对象了

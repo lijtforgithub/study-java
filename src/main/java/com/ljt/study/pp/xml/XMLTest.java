@@ -34,9 +34,10 @@ public class XMLTest {
     @Test
     public void testDom4j() throws DocumentException {
         Element root = new SAXReader().read(INPUT).getRootElement();
+        Iterator it = root.elementIterator(PEOPLE);
 
-        for (Iterator<Element> i = root.elementIterator(PEOPLE); i.hasNext(); ) {
-            Element element = i.next();
+        while (it.hasNext()) {
+            Element element = (Element) it.next();
             System.out.printf("姓名：%s / 密码： %s %s",
                     element.elementText(NAME),
                     element.elementText(PASSWORD),
@@ -78,7 +79,7 @@ public class XMLTest {
 
     private static class SaxReader extends DefaultHandler {
 
-        private Stack<String> tack = new Stack();
+        private Stack<String> tack = new Stack<>();
 
         @Override
         public void characters(char[] ch, int start, int length) {

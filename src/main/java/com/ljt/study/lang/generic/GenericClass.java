@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class GenericClass<E> {
 
-    private ArrayList<E> list = new ArrayList<E>();
+    private ArrayList<E> list = new ArrayList<>();
 
     // 默认构造函数
     public GenericClass() {

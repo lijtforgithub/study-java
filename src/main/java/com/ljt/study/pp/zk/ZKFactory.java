@@ -32,21 +32,7 @@ public class ZKFactory {
 
             synchronized (ZKFactory.class) {
                 if (zk == null) {
-                    try {
-                        zk = new ZooKeeper(ZK_SERVER_IP, ZK_TIMEOUT, new Watcher() {
-
-                            @Override
-                            public void process(WatchedEvent event) {
-                                if (Event.KeeperState.SyncConnected == event.getState()) {
-                                    latch.countDown();
-                                }
-                            }
-                        });
-
-                        latch.await();
-                    } catch (IOException | InterruptedException e) {
-                        logger.error(e.getMessage());
-                    }
+                    zk = newConnection();
                 }
             }
         }
@@ -56,7 +42,7 @@ public class ZKFactory {
 
     public static ZooKeeper newConnection() {
         ZooKeeper zookeeper = null;
-        final CountDownLatch countDownLatch = new CountDownLatch(1);
+        final CountDownLatch latch = new CountDownLatch(1);
 
         try {
             zookeeper = new ZooKeeper(ZK_SERVER_IP, ZK_TIMEOUT, new Watcher() {
@@ -64,12 +50,12 @@ public class ZKFactory {
                 @Override
                 public void process(WatchedEvent event) {
                     if (Event.KeeperState.SyncConnected == event.getState()) {
-                        countDownLatch.countDown();
+                        latch.countDown();
                     }
                 }
             });
 
-            countDownLatch.await();
+            latch.await();
         } catch (IOException | InterruptedException e) {
             logger.error(e.getMessage());
         }

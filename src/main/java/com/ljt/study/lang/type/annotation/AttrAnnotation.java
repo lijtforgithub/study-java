@@ -8,6 +8,6 @@ package com.ljt.study.lang.type.annotation;
  */
 public @interface AttrAnnotation {
 
-    public String[] value();
+    String[] value();
 
 }

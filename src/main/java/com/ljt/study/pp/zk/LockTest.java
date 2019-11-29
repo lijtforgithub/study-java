@@ -25,41 +25,36 @@ public class LockTest {
         for (int i = 0; i < THREAD_NUM; i++) {
             final int index = i + 1;
 
-            new Thread() {
-                @Override
-                public void run() {
-                    ZooKeeper zk = ZKFactory.newConnection();
-                    DistributedLock disLock = new DistributedLock("【线程-" + index + "】", zk);
+            new Thread(() -> {
+                ZooKeeper zk = ZKFactory.newConnection();
+                DistributedLock disLock = new DistributedLock("【线程-" + index + "】", zk);
 
-                    disLock.setToDoService(new ToDoService() {
-                        @Override
-                        public void dodo() {
-                            logger.info("业务逻辑：修改第行{}代码", index);
-                            latch.countDown();
-                            try {
-                                Thread.sleep(1000L);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-
+                disLock.setToDoService(() -> {
+                    logger.info("业务逻辑：修改第行{}代码", index);
+                    latch.countDown();
                     try {
-                        if (disLock.lock()) {
-                            disLock.todo();
-                            disLock.unLock();
-                        }
-                    } catch (KeeperException | InterruptedException e) {
+                        Thread.sleep(1000L);
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                });
+
+                try {
+                    if (disLock.lock()) {
+                        disLock.todo();
+                        disLock.unLock();
+                    }
+                } catch (KeeperException | InterruptedException e) {
+                    e.printStackTrace();
                 }
-            }.start();
+            }).start();
         }
 
         try {
             latch.await();
             logger.info("所有线程运行结束！GAME OVER");
-        } catch (InterruptedException e) {
+        } catch (
+                InterruptedException e) {
             e.printStackTrace();
         }
     }

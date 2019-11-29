@@ -2,7 +2,6 @@ package com.ljt.study.lang.collection;
 
 import com.ljt.study.juc.ThreadUtils;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -16,11 +15,10 @@ public class FailFastTest {
     public static void main(String[] args) {
         List<Integer> list = IntStream.rangeClosed(1, 10).boxed().collect(Collectors.toList());
         Thread t1 = new Thread(() -> {
-            Iterator<Integer> it = list.iterator();
-            while (it.hasNext()) {
-                System.out.println(Thread.currentThread().getName() + "遍历：" + it.next());
+            list.forEach(i -> {
+                System.out.println(Thread.currentThread().getName() + "遍历：" + i);
                 ThreadUtils.sleepSeconds(1);
-            }
+            });
         });
 
         Thread t2 = new Thread(() -> {

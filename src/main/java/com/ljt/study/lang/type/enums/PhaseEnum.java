@@ -31,7 +31,7 @@ public enum PhaseEnum {
 
         static {
             for (PhaseEnum p : PhaseEnum.values()) {
-                m.put(p, new EnumMap<PhaseEnum, TransitionEnum>(PhaseEnum.class));
+                m.put(p, new EnumMap<>(PhaseEnum.class));
             }
             for (TransitionEnum trans : TransitionEnum.values()) {
                 m.get(trans.src).put(trans.dest, trans);
