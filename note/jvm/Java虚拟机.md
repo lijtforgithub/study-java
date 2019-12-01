@@ -20,3 +20,7 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 
 - code_length，虚拟机规范中明确限制了一个方法不允许超过65535条字节码指令，超过了这个限制，Javac编译器会拒绝编译。 
 
+### 命令
+- 观察虚拟机配置：java -XX:+PrintCommandLineFlags -version
+
+

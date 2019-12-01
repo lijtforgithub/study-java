@@ -13,6 +13,18 @@ public class ObjectSizeTest {
 
     public static void main(String[] args) {
         System.out.println(ObjectSize.sizeOf(new Object()));
+        System.out.println(ObjectSize.sizeOf(new int[]{}));
+        System.out.println(ObjectSize.sizeOf(new Obj()));
+    }
+
+    private static class Obj {
+        // markword            4
+        // ClassPointer        4
+        // 数组长度             4
+        private byte b;     // 1
+        private int i;      // 4
+        private String s;   // 4
+        private Object o;   // 4
     }
 
 }
