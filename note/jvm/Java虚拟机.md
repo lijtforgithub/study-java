@@ -16,7 +16,7 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 
 - max_stack代表了操作数栈（Operand Stacks）深度的最大值。在方法执行的任意时刻，操作数栈都不会超过这个深度。虚拟机运行的时候需要根据这个值来分配栈帧（Stack Frame）中操作栈深度。
 
-- max_locals代表了局部变量表所需要的存储空间。在这里，max_locals的单位是Slot，Slot是虚拟机为局部变量分配内存所使用的最小单位。对于byte、char、float、int、short、boolean和returnAddress等长度不超过32位的数据类型，每个局部变量占用1个Slot，而double和long这两种64位的数据类型则需要两个Slot来存放。局部变量表中的Slot可以重用，当局部变量作用域超出时，这个局部变量所占的Slot可以被其他局部变量使用。
+- max_locals代表了局部变量表所需要的存储空间。在这里，max_locals的单位是变量槽（Slot），Slot是虚拟机为局部变量分配内存所使用的最小单位。对于byte、char、float、int、short、boolean和returnAddress等长度不超过32位的数据类型，每个局部变量占用1个Slot，而double和long这两种64位的数据类型则需要两个Slot来存放。局部变量表中的Slot可以重用，当局部变量作用域超出时，这个局部变量所占的Slot可以被其他局部变量使用。
 
 - code_length，虚拟机规范中明确限制了一个方法不允许超过65535条字节码指令，超过了这个限制，Javac编译器会拒绝编译。 
 
