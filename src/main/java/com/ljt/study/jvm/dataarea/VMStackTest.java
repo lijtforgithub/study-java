@@ -1,4 +1,4 @@
-package com.ljt.study.jvm.jmm;
+package com.ljt.study.jvm.dataarea;
 
 import org.junit.jupiter.api.Test;
 
