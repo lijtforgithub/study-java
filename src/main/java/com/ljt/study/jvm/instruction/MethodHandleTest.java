@@ -67,8 +67,9 @@ public class MethodHandleTest {
 
             MethodType mt = MethodType.methodType(void.class);
             try {
-                MethodHandle mh = MethodHandles.lookup().findSpecial(GrandFather.class, "thinking", mt, getClass());
-                mh.invoke(this);
+                MethodHandle mh = MethodHandles.lookup()
+                        .findVirtual(GrandFather.class, "thinking", mt).bindTo(new GrandFather());
+                mh.invokeExact();
             } catch (Throwable e) {
                 e.printStackTrace();
             }
