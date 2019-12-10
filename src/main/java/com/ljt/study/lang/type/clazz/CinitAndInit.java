@@ -58,7 +58,7 @@ public class CinitAndInit {
         }
 
         {
-            System.out.println("构造代码块  -> 在其他构造方法之前执行");
+            System.out.println("子类构造代码块 -> 在构造方法之前执行");
         }
     }
 
