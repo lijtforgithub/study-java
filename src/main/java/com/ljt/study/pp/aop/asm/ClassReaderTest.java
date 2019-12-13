@@ -1,4 +1,4 @@
-package com.ljt.study.pp.bytecode.asm;
+package com.ljt.study.pp.aop.asm;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
@@ -19,7 +19,7 @@ public class ClassReaderTest extends ClassVisitor {
         ClassReaderTest cp = new ClassReaderTest();
         new ClassReader("java.lang.Runnable").accept(cp, 0);
         new ClassReader(ClassReaderTest.class.getClassLoader()
-                .getResourceAsStream("com/ljt/study/pp/bytecode/asm/ClassReaderTest$T.class")).accept(cp, 0);
+                .getResourceAsStream("com/ljt/study/pp/aop/asm/ClassReaderTest$T.class")).accept(cp, 0);
     }
 
     public ClassReaderTest() {
