@@ -58,10 +58,6 @@ public class ProxyTest {
         System.out.println(proxy.getClass().getName()); // getClass() native方法没有被代理
     }
 
-    private static class BusinessServiceProxy {
-        private BusinessService businessService;
-    }
-
     private static class LoggerInvocationHandler implements InvocationHandler {
 
         private Object target;

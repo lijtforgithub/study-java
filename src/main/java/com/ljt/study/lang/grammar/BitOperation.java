@@ -2,6 +2,10 @@ package com.ljt.study.lang.grammar;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 /**
  * 位运算应用口诀	清零取反要用与，某位置一可用或 若要取反和交换，轻轻松松用异或
  *
@@ -39,6 +43,131 @@ public class BitOperation {
          */
         System.out.println(12 >>> 3);
         System.out.println(-12 >>> 3);
+    }
+
+    /**
+     * 奇偶判断
+     */
+    @Test
+    public void oddEven() {
+        // x & 1 = 1 是奇数
+        Predicate<Integer> odd = x -> (x & 1) == 1;
+        // x & 1 = 0 是偶数
+        Predicate<Integer> even = x -> (x & 1) == 0;
+        System.out.println(odd.test(3));
+        System.out.println(even.test(4));
+    }
+
+    /**
+     * 求平均值（整除）
+     * 有两个int类型变量x、y,首先要求x+y的和，再除以2，但是有可能x+y的结果会超过int的最大表示范围
+     */
+    @Test
+    public void average() {
+        BiFunction<Integer, Integer, Integer> fun = (x, y) -> (x & y) + ((x ^ y) >> 1);
+        System.out.println(fun.apply(100, 110));
+        System.out.println(fun.apply(1, 2));
+    }
+
+    /**
+     * 对于一个大于0的整数，判断它是不是2的次方
+     */
+    @Test
+    public void is2Pow() {
+        Predicate<Integer> p = x -> ((x & (x - 1)) == 0) && (x != 0);
+        System.out.println(p.test(8));
+        System.out.println(p.test(10));
+        System.out.println(p.test(16));
+    }
+
+    /**
+     * 数值交换
+     */
+    @Test
+    public void switchVal() {
+        int x = 3, y = 4;
+        x ^= y;
+        y ^= x;
+        x ^= y;
+        System.out.println("x = " + x);
+        System.out.println("y = " + y);
+    }
+
+    /**
+     * 求绝对值
+     */
+    @Test
+    public void abs() {
+        Function<Integer, Integer> abs = x -> {
+            int y;
+            y = x >> 31;
+            return (x ^ y) - y;        // or: (x+y)^y
+        };
+        System.out.println(abs.apply(3));
+        System.out.println(abs.apply(-4));
+    }
+
+    /**
+     * 取模运算
+     */
+    @Test
+    public void mod() {
+        // a % (2^n) 等价于 a & (2^n - 1)
+        BiFunction<Integer, Integer, Integer> m1 = (x, n) -> x % _2Pow(n);
+        BiFunction<Integer, Integer, Integer> m2 = (x, n) -> x & (_2Pow(n) - 1);
+        System.out.println(m1.apply(10, 4));
+        System.out.println(m2.apply(10, 4));
+    }
+
+    /**
+     * 2^n
+     *
+     * @param n
+     * @return 2的n次方
+     */
+    private static int _2Pow(int n) {
+        return (int) Math.pow(2, n);
+    }
+
+    /**
+     * 乘法
+     */
+    @Test
+    public void multi() {
+        // a * (2^n) 等价于 a << n
+        BiFunction<Integer, Integer, Integer> m1 = (x, n) -> x * _2Pow(n);
+        BiFunction<Integer, Integer, Integer> m2 = (x, n) -> x << n;
+        System.out.println(m1.apply(4, 4));
+        System.out.println(m2.apply(4, 4));
+    }
+
+    /**
+     * 除法
+     */
+    @Test
+    public void div() {
+        // a / (2^n) 等价于 a>> n
+        BiFunction<Integer, Integer, Integer> d1 = (x, n) -> x / _2Pow(n);
+        BiFunction<Integer, Integer, Integer> d2 = (x, n) -> x >> n;
+        System.out.println(d1.apply(64, 4));
+        System.out.println(d2.apply(64, 4));
+    }
+
+    /**
+     * 求相反数
+     */
+    @Test
+    public void opposite() {
+        Function<Integer, Integer> opp = x -> (~x + 1);
+        System.out.println(opp.apply(12));
+        System.out.println(opp.apply(-10));
+    }
+
+    @Test
+    public void mod2() {
+        // a % 2 等价于 a & 1
+        Function<Integer, Integer> m2 = x -> x & 1;
+        System.out.println(m2.apply(5));
     }
 
 }
