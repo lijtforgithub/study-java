@@ -7,7 +7,7 @@ import java.util.Observer;
  * @author LiJingTang
  * @date 2019-12-15 20:56
  */
-public class ObserverTest {
+public class ObserverDemo {
 
     public static void main(String[] args) {
         MoM m = new MoM();

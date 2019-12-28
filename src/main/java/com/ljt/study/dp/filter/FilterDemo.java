@@ -7,7 +7,7 @@ import java.util.List;
  * @author LiJingTang
  * @date 2019-12-15 21:32
  */
-public class FilterTest {
+public class FilterDemo {
 
     public static void main(String[] args) {
         Request request = new Request();

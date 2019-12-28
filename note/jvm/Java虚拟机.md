@@ -22,5 +22,11 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 
 ### 命令
 - 观察虚拟机配置：java -XX:+PrintCommandLineFlags -version
+- 打印GC信息：-XX:+PrintGCDetails
+#### jps
+
+#### jstat
+#### jmap
+**jmap -histo:live PID | head -n 20**
 
 

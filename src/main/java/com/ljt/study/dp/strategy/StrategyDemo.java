@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
  * @author LiJingTang
  * @date 2019-12-10 15:50
  */
-public class DuckStrategy {
+public class StrategyDemo {
 
     @Test
     public void test_MallardDuck() {

@@ -6,7 +6,7 @@ import java.io.Serializable;
  * @author LiJingTang
  * @date 2019-12-15 21:42
  */
-public class PrototypeTest {
+public class PrototypeDemo {
 
     public static void main(String[] args) throws CloneNotSupportedException {
         InItem in = new InItem();
