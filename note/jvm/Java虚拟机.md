@@ -20,9 +20,22 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 
 - code_length，虚拟机规范中明确限制了一个方法不允许超过65535条字节码指令，超过了这个限制，Javac编译器会拒绝编译。 
 
-### 命令
-- 观察虚拟机配置：java -XX:+PrintCommandLineFlags -version
-- 打印GC信息：-XX:+PrintGCDetails
+## 命令
+#### java 参数
+-ea 指明了开启断言检测  
+-cp 指明了执行这个class文件所需要的所有类的包路径-即系统类加载器的路径  
+-verbose 启用详细输出
+1. :gc
+2. :class  
+-D 设置系统属性 -D<名称>=<值> eg: java -Denv=test
+- -X
+- -XX
+
+| 参数 | 说明 |
+|---|---|
+| -XX:+PrintCommandLineFlags  | 虚拟机配置  |
+| -XX:+PrintGCDetails  | 打印GC信息  |
+
 #### jps
 
 #### jstat
