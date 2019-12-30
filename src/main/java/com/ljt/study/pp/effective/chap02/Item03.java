@@ -7,7 +7,7 @@ package com.ljt.study.pp.effective.chap02;
 public class Item03 {
 
     private enum SingletonEnum {
-        INSTANCE;
+        INSTANCE
     }
 
     private static class SingletonClass {

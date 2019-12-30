@@ -97,11 +97,7 @@ public class LockTest {
             this.selfPath = this.zk.create(LOCK_SUB_PATH, null, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
             logger.info("{}创建锁路径{} ", this.client, this.selfPath);
 
-            if (this.checkMinPath()) {
-                return true;
-            }
-
-            return false;
+            return this.checkMinPath();
         }
 
         public void unLock() {

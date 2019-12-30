@@ -102,7 +102,7 @@ public class Item02Builder {
 
     private interface Builder<T> {
 
-        public T build();
+        T build();
 
     }
 

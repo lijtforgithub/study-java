@@ -17,8 +17,8 @@ public class LoggerDecorator {
         ILogger newObj = new XMLLogger(existObj);
         String[] s = {"how", "are", "you"};
 
-        for (int i = 0; i < s.length; i++) {
-            newObj.log(s[i]);
+        for (String value : s) {
+            newObj.log(value);
             ThreadUtils.sleepSeconds(1);
         }
 

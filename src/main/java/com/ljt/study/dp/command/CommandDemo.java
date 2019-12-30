@@ -47,7 +47,7 @@ public class CommandDemo {
 
     @Test
     public void testSimple() {
-        SimpleRomteControl remote = new SimpleRomteControl();
+        SimpleRemoteControl remote = new SimpleRemoteControl();
         Light light = new Light();
         LightOnCommand lightOn = new LightOnCommand(light);
 
@@ -105,11 +105,11 @@ public class CommandDemo {
         }
     }
 
-    private static class SimpleRomteControl {
+    private static class SimpleRemoteControl {
 
         private Command slot;
 
-        public SimpleRomteControl() {
+        public SimpleRemoteControl() {
             super();
         }
 

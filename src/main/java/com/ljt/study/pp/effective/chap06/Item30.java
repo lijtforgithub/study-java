@@ -46,7 +46,7 @@ public class Item30 {
         System.out.println(eMap.toString());
     }
 
-    private static enum OperationEnum {
+    private enum OperationEnum {
 
         PLUS("+") {
             @Override
@@ -115,7 +115,7 @@ public class Item30 {
         }
     }
 
-    private static enum PayrollDayEnum {
+    private enum PayrollDayEnum {
 
         MONDAY(PayTypeEnum.WEEKDAY),
         TUESDAY(PayTypeEnum.WEEKDAY),

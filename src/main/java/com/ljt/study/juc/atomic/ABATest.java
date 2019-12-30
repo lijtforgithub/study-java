@@ -13,9 +13,9 @@ import java.util.concurrent.atomic.AtomicStampedReference;
  */
 public class ABATest {
 
-    private static AtomicInteger atomicInt = new AtomicInteger(100);
+    private static final AtomicInteger atomicInt = new AtomicInteger(100);
     // 加了版本戳
-    private static AtomicStampedReference atomicStampedRef = new AtomicStampedReference(100, 0);
+    private static final AtomicStampedReference<Integer> atomicStampedRef = new AtomicStampedReference<>(100, 0);
 
     public static void main(String[] args) {
         Thread t1 = new Thread(() -> {

@@ -120,13 +120,9 @@ public class RMITest {
 
         private void watchNode(final ZooKeeper zk) {
             try {
-                List<String> nodeList = zk.getChildren(ZK_REGISTRY_PATH, new Watcher() {
-
-                    @Override
-                    public void process(WatchedEvent event) {
-                        if (Event.EventType.NodeChildrenChanged == event.getType()) {
-                            watchNode(zk);
-                        }
+                List<String> nodeList = zk.getChildren(ZK_REGISTRY_PATH, event -> {
+                    if (Watcher.Event.EventType.NodeChildrenChanged == event.getType()) {
+                        watchNode(zk);
                     }
                 });
 
@@ -154,12 +150,11 @@ public class RMITest {
                 if (1 == size) {
                     url = this.urls.get(0);
                     logger.debug("using only url：{}", url);
-                    System.out.println(url);
                 } else {
                     url = this.urls.get(ThreadLocalRandom.current().nextInt(size));
                     logger.debug("using random url：{}", url);
-                    System.out.println(url);
                 }
+                System.out.println(url);
 
                 try {
                     service = (T) Naming.lookup(url);

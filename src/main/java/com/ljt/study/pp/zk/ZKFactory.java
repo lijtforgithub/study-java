@@ -1,6 +1,5 @@
 package com.ljt.study.pp.zk;
 
-import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
 import org.slf4j.Logger;
@@ -45,13 +44,9 @@ public class ZKFactory {
         final CountDownLatch latch = new CountDownLatch(1);
 
         try {
-            zookeeper = new ZooKeeper(ZK_SERVER_IP, ZK_TIMEOUT, new Watcher() {
-
-                @Override
-                public void process(WatchedEvent event) {
-                    if (Event.KeeperState.SyncConnected == event.getState()) {
-                        latch.countDown();
-                    }
+            zookeeper = new ZooKeeper(ZK_SERVER_IP, ZK_TIMEOUT, event -> {
+                if (Watcher.Event.KeeperState.SyncConnected == event.getState()) {
+                    latch.countDown();
                 }
             });
 

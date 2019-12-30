@@ -115,7 +115,7 @@ public class CustomClassLoaderTest {
     /**
      * 自定义类加载器 重写findClass
      */
-    private class MyClassLoader extends ClassLoader {
+    private static class MyClassLoader extends ClassLoader {
 
         public MyClassLoader() {
         }

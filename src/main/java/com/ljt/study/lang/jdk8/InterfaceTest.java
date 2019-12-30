@@ -19,31 +19,31 @@ import java.util.function.Supplier;
 public class InterfaceTest {
 
     public static void main(String[] args) {
-        Defaulable defaulable = DefaulableFactory.create(DefaultableImpl::new);
+        Defaultable defaulable = DefaultableFactory.create(DefaultableImpl::new);
         System.out.println(defaulable.notRequired());
 
-        defaulable = DefaulableFactory.create(OverridableImpl::new);
+        defaulable = DefaultableFactory.create(OverridableImpl::new);
         System.out.println(defaulable.notRequired());
     }
 
-    private interface DefaulableFactory {
+    private interface DefaultableFactory {
 
-        static Defaulable create(Supplier<Defaulable> supplier) {
+        static Defaultable create(Supplier<Defaultable> supplier) {
             return supplier.get();
         }
     }
 
-    private interface Defaulable {
+    private interface Defaultable {
 
         default String notRequired() {
             return "Default implementation";
         }
     }
 
-    private static class DefaultableImpl implements Defaulable {
+    private static class DefaultableImpl implements Defaultable {
     }
 
-    private static class OverridableImpl implements Defaulable {
+    private static class OverridableImpl implements Defaultable {
 
         @Override
         public String notRequired() {
@@ -57,26 +57,26 @@ public class InterfaceTest {
      */
     @Test
     public void testConsumer() {
-        Consumer<String> consumer = str -> System.out.println(str); // 一个参数可以不写括号
+        Consumer<String> consumer = System.out::println; // 一个参数可以不写括号
         consumer.accept("我是消费型接口!");
     }
 
     /**
      * Supplier<R> 供给型接口（无参数 有返回值）
      *
-     * @param R 返回值类型
+     * R 返回值类型
      */
     @Test
     public void testSupplier() {
-        Supplier<Date> supplier = () -> new Date(); // 没有参数 括号必须写
+        Supplier<Date> supplier = Date::new; // 没有参数 括号必须写
         System.out.println("当前时间:" + supplier.get());
     }
 
     /**
      * Function<T,R> 函数型接口（接受一个参数 有返回值）
      *
-     * @param T 传入参数
-     * @return R 返回值类型
+     * T 传入参数
+     * R 返回值类型
      */
     @Test
     public void testFunction() {
@@ -87,8 +87,8 @@ public class InterfaceTest {
     /**
      * Predicate<T> 断定型接口（接受一个参数 返回Boolean型值）
      *
-     * @param T 传入参数
-     * @return Boolean 返回一个Boolean型值
+     * T 传入参数
+     * Boolean 返回一个Boolean型值
      */
     @Test
     public void testPredicate() {
@@ -99,9 +99,9 @@ public class InterfaceTest {
 
     @Test
     public void testComparator() {
-        Comparator<User> comparator = (o1, o2) -> o1.getAge() - o2.getAge();
-        User user1 = new User(1, "李斯", 50);
-        User user2 = new User(2, "淳于越", 30);
+        Comparator<LambdaTest.User> comparator = Comparator.comparingInt(LambdaTest.User::getAge);
+        LambdaTest.User user1 = new LambdaTest.User(1, "李斯", 50);
+        LambdaTest.User user2 = new LambdaTest.User(2, "淳于越", 30);
 
         System.out.println(comparator.compare(user1, user2));
         System.out.println(comparator.reversed().compare(user1, user2));
@@ -130,14 +130,14 @@ public class InterfaceTest {
     public void testOptional2() {
         Optional<String> fullName = Optional.ofNullable(null);
         System.out.println("Full Name is set? " + fullName.isPresent());
-        System.out.println("Full Name: " + fullName.orElseGet(() -> "[none]"));
+        System.out.println("Full Name: " + fullName.orElse("[none]"));
         System.out.println(fullName.map(s -> "Hey " + s + "!").orElse("Hey Stranger!"));
 
         System.out.println();
 
         Optional<String> firstName = Optional.of("Tom");
         System.out.println("First Name is set? " + firstName.isPresent());
-        System.out.println("First Name: " + firstName.orElseGet(() -> "[none]"));
+        System.out.println("First Name: " + firstName.orElse("[none]"));
         System.out.println(firstName.map(s -> "Hey " + s + "!").orElse("Hey Stranger!"));
     }
 

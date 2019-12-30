@@ -253,9 +253,8 @@ public class SecurityTest {
             // keyGenerator.init(128,new SecureRandom(password.getBytes())); // Linux 会报错
             SecretKey secretKey = keyGenerator.generateKey();
             byte[] encodeByteArray = secretKey.getEncoded();
-            SecretKeySpec secretKeySpec = new SecretKeySpec(encodeByteArray, "AES");
 
-            return secretKeySpec;
+            return new SecretKeySpec(encodeByteArray, "AES");
         }
     }
 
@@ -329,12 +328,11 @@ public class SecurityTest {
             try {
                 DESKeySpec dks = new DESKeySpec(key);
                 SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(ALGORITHM);
-                SecretKey secretKey = keyFactory.generateSecret(dks);
 
                 // 当使用其他对称加密算法时，如AES、Blowfish等算法时，用下述代码替换上述三行代码
                 // SecretKey secretKey = new SecretKeySpec(key, ALGORITHM);
 
-                return secretKey;
+                return keyFactory.generateSecret(dks);
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -398,9 +396,8 @@ public class SecurityTest {
         private static Key toKey(String password) throws Exception {
             PBEKeySpec keySpec = new PBEKeySpec(password.toCharArray());
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(ALGORITHM);
-            SecretKey secretKey = keyFactory.generateSecret(keySpec);
 
-            return secretKey;
+            return keyFactory.generateSecret(keySpec);
         }
 
         /**
@@ -469,15 +466,15 @@ public class SecurityTest {
     /**
      * byte类型数组转换成十六进制字符串
      */
-    private static String parseByteToHexString(byte byteArray[]) {
+    private static String parseByteToHexString(byte[] byteArray) {
         if (byteArray == null || byteArray.length < 1) {
             return null;
         }
 
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < byteArray.length; i++) {
-            String hex = Integer.toHexString(byteArray[i] & 0xFF);
+        for (byte b : byteArray) {
+            String hex = Integer.toHexString(b & 0xFF);
 
             if (hex.length() == 1) {
                 hex = '0' + hex;

@@ -14,7 +14,7 @@ import java.util.Collection;
 public class AnnotationTest {
 
     public static void main(String[] args) {
-        final Holder<String> holder = new @NonEmpty Holder<String>();
+        final Holder<String> holder = new @NonEmpty Holder<>();
         @NonEmpty
         Collection<@NonEmpty String> strings = new ArrayList<>();
 

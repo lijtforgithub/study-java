@@ -49,10 +49,10 @@ public class XMLTest {
     public void testJdom() throws JDOMException, IOException {
         List<org.jdom2.Element> nodes = new SAXBuilder().build(INPUT).getRootElement().getChildren();
 
-        for (int i = 0; i < nodes.size(); i++) {
+        for (org.jdom2.Element node : nodes) {
             System.out.printf("姓名：%s / 密码： %s %s",
-                    nodes.get(i).getChild(NAME).getText(),
-                    nodes.get(i).getChild(PASSWORD).getText(),
+                    node.getChild(NAME).getText(),
+                    node.getChild(PASSWORD).getText(),
                     System.lineSeparator());
         }
     }

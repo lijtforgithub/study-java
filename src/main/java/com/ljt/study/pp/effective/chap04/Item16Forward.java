@@ -9,7 +9,7 @@ import java.util.*;
 public class Item16Forward {
 
     public static void main(String[] args) {
-        InstrumentedHashSet<String> set = new InstrumentedHashSet<>(new TreeSet<String>());
+        InstrumentedHashSet<String> set = new InstrumentedHashSet<>(new TreeSet<>());
         set.addAll(Arrays.asList("Snap", "Crackle", "Pop"));
         System.out.println(set.getAddCount());
         System.out.println(set.size());

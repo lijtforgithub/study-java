@@ -97,9 +97,8 @@ public class DynamicProxy {
             System.out.println(clazz);
 
             Constructor<?> constructor = clazz.getConstructor(InvocationHandler.class);
-            Object obj = constructor.newInstance(handler);
 
-            return obj;
+            return constructor.newInstance(handler);
         }
     }
 

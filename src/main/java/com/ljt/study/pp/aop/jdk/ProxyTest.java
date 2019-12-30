@@ -80,10 +80,8 @@ public class ProxyTest {
                 System.out.println(proxy);
 
                 System.out.println(method.getName() + "() | before...");
-                obj = method.invoke(this.target, args);
-            } else {
-                obj = method.invoke(this.target, args);
             }
+            obj = method.invoke(this.target, args);
 
             return obj;
         }

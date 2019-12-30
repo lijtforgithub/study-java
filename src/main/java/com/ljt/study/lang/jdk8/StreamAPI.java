@@ -65,7 +65,7 @@ public class StreamAPI {
     @Test
     public void testMax() {
         Optional<String> max = numbers.stream()
-                .max((o1, o2) -> Integer.parseInt(o1) - Integer.parseInt(o2));
+                .max(Comparator.comparingInt(Integer::parseInt));
 
         System.out.println(max.get());
     }
@@ -86,8 +86,8 @@ public class StreamAPI {
         reduced.ifPresent(System.out::println);
 
         int sum = numbers.stream()
-                .map(e -> Integer.valueOf(e))
-                .reduce(0, (x, y) -> x + y);
+                .map(Integer::valueOf)
+                .reduce(0, Integer::sum);
 
         System.out.println(sum);
     }
@@ -99,14 +99,14 @@ public class StreamAPI {
     public void testMap() {
         list.stream()
                 .map(String::toUpperCase)
-                .sorted((a, b) -> b.compareTo(a))
+                .sorted(Comparator.reverseOrder())
                 .forEach(System.out::println);
     }
 
     @Test
     public void testGroupingBy() {
         Map<Integer, Integer> map = numbers.stream()
-                .map(e -> Integer.valueOf(e))
+                .map(Integer::valueOf)
                 .filter(e -> e % 2 == 0)
                 .collect(Collectors.groupingBy(p -> p, Collectors.summingInt(p -> 1)));
 
@@ -200,7 +200,7 @@ public class StreamAPI {
 
         double totalPoints = tasks.stream()
                 .parallel()
-                .map(task -> task.getPoints())  // or map( Task::getPoints )
+                .map(Streams.Task::getPoints)  // or map( Task::getPoints )
                 .reduce(0, Integer::sum);
         System.out.println("Total points (all tasks): " + totalPoints);
 

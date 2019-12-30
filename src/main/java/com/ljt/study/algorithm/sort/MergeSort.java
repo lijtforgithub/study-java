@@ -49,7 +49,7 @@ public class MergeSort {
                 tempArray[k++] = array[j++];
             }
         }
-        /**总有一个先扫描完*/
+        // 总有一个先扫描完
         while (i <= mid) { // 若第一段序列还没扫描完，将其全部复制到临时数组
             tempArray[k++] = array[i++];
         }

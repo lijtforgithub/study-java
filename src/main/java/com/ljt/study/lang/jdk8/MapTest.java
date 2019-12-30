@@ -23,7 +23,7 @@ public class MapTest {
 
     @Test
     public void testMerge() {
-        IntStream.range(1, 6).forEach(i -> map.merge(KEY, i, (oldValue, newValue) -> oldValue + newValue));
+        IntStream.range(1, 6).forEach(i -> map.merge(KEY, i, Integer::sum));
         System.out.println(map);
     }
 

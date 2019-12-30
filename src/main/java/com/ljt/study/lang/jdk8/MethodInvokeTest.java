@@ -1,6 +1,6 @@
 package com.ljt.study.lang.jdk8;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -14,7 +14,7 @@ public class MethodInvokeTest {
 
     public static void main(String[] args) {
         Car car = Car.create(Car::new); // 构造器引用：语法Class::new 或者更一般的Class<T>::new
-        List<Car> cars = Arrays.asList(car);
+        List<Car> cars = Collections.singletonList(car);
 
         cars.forEach(System.out::println);
 

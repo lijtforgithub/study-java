@@ -23,7 +23,7 @@ public class Disorder {
             b = 0;
             Thread t1 = new Thread(() -> {
                 //由于线程one先启动，下面这句话让它等一等线程two. 读着可根据自己电脑的实际性能适当调整等待时间.
-                shortWait(100000);
+                shortWait();
                 a = 1;
                 x = b;
             });
@@ -46,12 +46,12 @@ public class Disorder {
         }
     }
 
-    private static void shortWait(long interval) {
+    private static void shortWait() {
         long start = System.nanoTime();
         long end;
         do {
             end = System.nanoTime();
-        } while (start + interval >= end);
+        } while (start + (long) 100000 >= end);
     }
 
 }

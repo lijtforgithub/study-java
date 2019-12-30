@@ -16,13 +16,13 @@ public class GenericTest {
         List<Integer> list1 = new ArrayList<>(2);
         List<String> list2 = new ArrayList<>(1);
         list1.add(1);
-        list2.add(new Integer(1).toString());
+        list2.add(Integer.toString(1));
         System.out.println(list1.getClass() == list2.getClass()); // 同一份字节码
 
         list1.getClass().getMethod("add", Object.class).invoke(list1, "Java Generic");
         System.out.println(list1.get(list1.size() - 1));
 
-        List list3 = new ArrayList<>();
+        List<String> list3 = new ArrayList<>();
         List<String> list4 = list3;
 
         // 参数化类型不能继承

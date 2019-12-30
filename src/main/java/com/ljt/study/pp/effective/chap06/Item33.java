@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public class Item33 {
 
-    private static enum PhaseEnum {
+    private enum PhaseEnum {
         SOLID, LIQUID, GAS;
 
         public enum Transition {
@@ -28,11 +28,11 @@ public class Item33 {
                 this.dst = dst;
             }
 
-            private static final Map<PhaseEnum, Map<PhaseEnum, Transition>> map = new EnumMap<PhaseEnum, Map<PhaseEnum, Transition>>(PhaseEnum.class);
+            private static final Map<PhaseEnum, Map<PhaseEnum, Transition>> map = new EnumMap<>(PhaseEnum.class);
 
             static {
                 for (PhaseEnum p : PhaseEnum.values()) {
-                    map.put(p, new EnumMap<PhaseEnum, Transition>(PhaseEnum.class));
+                    map.put(p, new EnumMap<>(PhaseEnum.class));
                 }
                 for (Transition t : Transition.values()) {
                     map.get(t.src).put(t.dst, t);

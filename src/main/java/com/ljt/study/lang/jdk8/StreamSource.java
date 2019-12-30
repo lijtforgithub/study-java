@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,7 +55,7 @@ public class StreamSource {
         stream.sequential(); // 串行
         System.out.println("并行 = " + stream.isParallel());
 
-        List<String> list = stream.sorted((e1, e2) -> e2.compareTo(e1))
+        List<String> list = stream.sorted(Comparator.reverseOrder())
                 .skip(2).collect(Collectors.toList());
         System.err.println(list);
     }

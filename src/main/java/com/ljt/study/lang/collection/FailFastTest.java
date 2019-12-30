@@ -14,12 +14,10 @@ public class FailFastTest {
 
     public static void main(String[] args) {
         List<Integer> list = IntStream.rangeClosed(1, 10).boxed().collect(Collectors.toList());
-        Thread t1 = new Thread(() -> {
-            list.forEach(i -> {
-                System.out.println(Thread.currentThread().getName() + "遍历：" + i);
-                ThreadUtils.sleepSeconds(1);
-            });
-        });
+        Thread t1 = new Thread(() -> list.forEach(i -> {
+            System.out.println(Thread.currentThread().getName() + "遍历：" + i);
+            ThreadUtils.sleepSeconds(1);
+        }));
 
         Thread t2 = new Thread(() -> {
             int i = 0;

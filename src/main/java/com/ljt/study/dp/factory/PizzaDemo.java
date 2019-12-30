@@ -110,5 +110,5 @@ enum PizzaTypeEnum {
     CHEESE,
     PEPPERONI,
     CLAM,
-    VEGGIE;
+    VEGGIE
 }

@@ -31,10 +31,8 @@ public class MenuIterator {
         }
 
         public void printMenu() {
-            Iterator<Menu> it = this.menus.iterator();
 
-            while (it.hasNext()) {
-                Menu menu = it.next();
+            for (Menu menu : this.menus) {
                 printMenu(menu.iterator());
             }
         }
@@ -128,11 +126,7 @@ public class MenuIterator {
 
             @Override
             public boolean hasNext() {
-                if (this.position >= menuItems.length || menuItems[position] == null) {
-                    return false;
-                } else {
-                    return true;
-                }
+                return this.position < menuItems.length && menuItems[position] != null;
             }
 
             @Override
@@ -151,9 +145,8 @@ public class MenuIterator {
                 }
 
                 if (menuItems[position - 1] != null) {
-                    for (int i = position - 1; i < (menuItems.length - 1); i++) {
-                        menuItems[i] = menuItems[i + 1];
-                    }
+                    if (menuItems.length - 1 - position - 1 >= 0)
+                        System.arraycopy(menuItems, position - 1 + 1, menuItems, position - 1, menuItems.length - 1 - position - 1);
 
                     menuItems[menuItems.length - 1] = null;
                 }

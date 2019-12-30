@@ -15,7 +15,7 @@ public class Item13 {
 
     private static final Object[] PRIVATE_VALUES_2 = {};
 
-    public static final Object[] values() {
+    public static Object[] values() {
         return PRIVATE_VALUES_2.clone();
     }
 

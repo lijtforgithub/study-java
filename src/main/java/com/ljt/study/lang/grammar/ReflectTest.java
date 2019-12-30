@@ -7,6 +7,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * @author LiJingTang
@@ -131,7 +132,7 @@ public class ReflectTest {
 
         int[] iArray = new int[]{1, 2, 3, 4, 5};
         String[] sArray = new String[]{"hello", "world", "from", "java"};
-        System.out.println(Arrays.asList(iArray));
+        System.out.println(Collections.singletonList(iArray));
         System.out.println(Arrays.asList(sArray));
 
         printObject(sArray);

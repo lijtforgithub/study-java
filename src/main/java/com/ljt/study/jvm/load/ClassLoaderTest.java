@@ -73,8 +73,8 @@ public class ClassLoaderTest {
     @Test
     public void printBootstrapClassPath() {
         URL[] urls = sun.misc.Launcher.getBootstrapClassPath().getURLs();
-        for (int i = 0; i < urls.length; i++) {
-            System.out.println(urls[i].toExternalForm());
+        for (URL url : urls) {
+            System.out.println(url.toExternalForm());
         }
     }
 

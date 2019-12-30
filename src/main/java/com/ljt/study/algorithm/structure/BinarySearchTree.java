@@ -195,7 +195,7 @@ public class BinarySearchTree<E extends Comparable<E>> implements Tree<E> {
     private void midOrder(Node<E> node, StringBuilder sbuilder) {
         if (node != null) {
             midOrder(node.left, sbuilder);
-            sbuilder.append(node.item.toString() + ", ");
+            sbuilder.append(node.item.toString()).append(", ");
             midOrder(node.right, sbuilder);
         }
     }
@@ -214,7 +214,7 @@ public class BinarySearchTree<E extends Comparable<E>> implements Tree<E> {
 
     private void preOrder(Node<E> node, StringBuilder sbuilder) {
         if (node != null) {
-            sbuilder.append(node.item.toString() + ", ");
+            sbuilder.append(node.item.toString()).append(", ");
             midOrder(node.left, sbuilder);
             midOrder(node.right, sbuilder);
         }
@@ -236,7 +236,7 @@ public class BinarySearchTree<E extends Comparable<E>> implements Tree<E> {
         if (node != null) {
             midOrder(node.left, sbuilder);
             midOrder(node.right, sbuilder);
-            sbuilder.append(node.item.toString() + ", ");
+            sbuilder.append(node.item.toString()).append(", ");
         }
     }
 

@@ -13,8 +13,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Item08 {
 
+    /**
+     * 对称性
+     */
     @Test
-    /**对称性*/
     public void testSymmetry() {
         CaseInsensitiveString cis = new CaseInsensitiveString("Polish");
         String s = "Polish";
@@ -26,7 +28,10 @@ public class Item08 {
         System.out.println(list.contains(s)); // Sun的虚拟机实现返回false
     }
 
-    @Test /**传递性*/
+    /**
+     * 传递性
+     */
+    @Test
     public void testTransitivity() {
         Point p = new Point(1, 2);
         ColorPoint cp = new ColorPoint(1, 2, Color.RED);
@@ -41,7 +46,7 @@ public class Item08 {
     }
 
     /**
-     *  对称性：区分大小写的字符串
+     * 对称性：区分大小写的字符串
      */
     private static final class CaseInsensitiveString {
 

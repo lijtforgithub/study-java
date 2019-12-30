@@ -59,7 +59,7 @@ public class ArrayTest {
         System.out.println(a.getClass().getName());
         System.out.println(b.getClass().getName());
         System.out.println(a.getClass().equals(b.getClass()));
-        System.out.println(a.getClass().equals(new int[1].getClass()));
+        System.out.println(a.getClass().equals(int[].class));
     }
 
     /**
