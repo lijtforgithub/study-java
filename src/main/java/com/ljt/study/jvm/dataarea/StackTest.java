@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
  * @author LiJingTang
  * @date 2019-12-02 13:29
  */
-public class VMStackTest {
+public class StackTest {
 
     /**
      * -verbose:gc
