@@ -9,4 +9,4 @@ Follower和Leader进行投票 超过半数commit确认成功
 - Watcher 注册一个只会通知一次。
 - 数据据保存在内存 定期落地磁盘
 - zookeeper 恢复模式-选主 广播模式（Zab 原子广播）
-- Znode 临时和持久化
+- ZNode 临时和持久化

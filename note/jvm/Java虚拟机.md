@@ -21,25 +21,82 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 - code_length，虚拟机规范中明确限制了一个方法不允许超过65535条字节码指令，超过了这个限制，Javac编译器会拒绝编译。 
 
 ## 命令
-#### java 参数
+- java1.6以后默认把当前目录设置为classpath
+- jar文件 = 路径(文件夹)
+#### java
+```
 -ea 指明了开启断言检测  
 -cp 指明了执行这个class文件所需要的所有类的包路径-即系统类加载器的路径  
 -verbose 启用详细输出
-1. :gc
-2. :class  
+    :gc GC信息
+    :class 与 java -verbose 一样（显示加载了哪些类）
 -D 设置系统属性 -D<名称>=<值> eg: java -Denv=test
-- -X
-- -XX
+-X 输出非标准选项的帮助
+```
+###### java -XX:
+```
+-XX:+PrintFlagsFinal 输出所有参数的名称及默认值
 
-| 参数 | 说明 |
-|---|---|
-| -XX:+PrintCommandLineFlags  | 虚拟机配置  |
-| -XX:+PrintGCDetails  | 打印GC信息  |
+-XX:+<option> 开启 option 参数
+-XX:-<option> 关闭 option 参数
+-XX:<option>=<value> 将 option 参数的值设为value
+```
+- 内存管理参数
+
+| 参数 | 默认值 | 说明 |
+|---|---|---|
+| DisableExplicitGC | 关闭 | 忽略来自System.gc()方法触发的垃圾回收 |
+| ExplicitGCInvokesConcurrent | 关闭 | 当收到System.gc()方法提交的垃圾收集申请时，使用CMS收集器进行收集 |
+| UseSerialGC | Client模式开启/其他关闭 | **Client模式下的默认值**；开启后，使用Serial+Serial Old的收集器组合进行内存回收 |
+| UseParNewGC | 关闭 | 开启后，使用ParNew+Serial Old的收集器组合进行内存回收 |
+| UseParallelGC | Server模式开启/其他关闭 | **Server模式下的默认值**；开启后，使用Parallel Scavenge+Serial Old的收集器组合进行内存回收 |
+| UseParallelOldGC | 关闭 | 开启后，使用Parallel Scavenge+Parallel Old的收集器组合进行内存回收 |
+| UseConcMarkSweepGC | 关闭 | 开启后，使用ParNew+CMS+Serial Old的收集器组合进行内存回收，如果CMS收集器出现Concurrent Mode Failure，则Serial Old作为后备收集器 |
+| SurvivorRatio | 8 | 新生代中Eden区域与Survivor区域的容量比值 |
+| PretenureSizeThreshold | 0 | 直接晋升到老年代的对象大小，设置这个参数后，大于这个参数的对象将直接在老年代分配。0的意思时不管多大都是先在eden中分配内存。 |
+| MaxTenuringThreshold | 15 | 0-15之间的数值。晋升到老年代的对象年龄。每个对象在坚持过一次Minor GC之后年龄+1，超过这个参数值时进入老年代 |
+| UseAdaptiveSizePolicy | 开启 | 动态调整Java堆中各个区域的大小及进入老年代的年龄 |
+| HandlePromotionFailure | <=1.5关闭/>=1.6开启 | 是否允许分配担保失败，即老年代的剩余空间不足以应付新生代的整个Eden和Survivor区的所有对象都存活的极端情况 |
+| ParallelGCThreads | <=8默认CPU数量/>8小于CPU数量 | 设置并行GC时进行内存回收的线程数 |
+| GCTimeRatio | 99 | GC时间占总时间的比率；仅在使用Parallel Scavenge收集器时生效 |
+| MaxGCPauseMillis | - | 设置GC的最大停顿时间；仅在使用Parallel Scavenge收集器时生效 |
+| CMSInitiatingOccupancyFraction | 68 | 设置CMS收集器在老年代空间被使用多少后触发的垃圾回收；仅在使用CMS收集器时生效 |
+| UseCMSCompactAtFullCollection | 开启 | 设置CMS收集器在完成垃圾收集后是否要进行一次内存碎片整理；仅在使用CMS收集器时生效 |
+| CMSFullGCsBeforeCompaction | 0 | 设置CMS收集器在进行若干次垃圾收集后再启动一次内存碎片整理；仅在使用CMS收集器时生效。0的意思是每次都整理 |
+| ScavengeBeforeFullGC | 开启 | 再Full GC发生之前触发一次MinorGC |
+| UseGCOverheadLimit | 开启 | 禁止GC过程无限制地执行，如果过于频繁，就直接发生OOM |
+| UseTLAB | Server模式开启 | 优先在本地线程缓冲区分配对象，避免分配内存时的锁定过程 |
+| MaxHeapFreeRatio | 70 | 当Xmx值比Xms值大时，堆可以动态收缩和扩展，这个参数控制当堆空闲大于指定比率时自动收缩 |
+| MinHeapFreeRatio | 40 | 当Xmx值比Xms值大时，堆可以动态收缩和扩展，这个参数控制当堆空闲小于指定比率时自动扩展 |
+| MaxPermSize | <=1.7 64M | 永久代最大值 |
+
+- 调试参数
+
+| 参数 | 默认值 | 说明 |
+|---|---|---|
+| HeapDumpOnOutOfMemoryError | 关闭 | 发生OOM时是否生成堆转储快照 |
+| OnOutOfMemoryError | - | 发生OOM时执行指定的命令 |
+| OnError | - | 虚拟机抛出ERROR时执行指定的命令 |
+| PrintConcurrentLocks | 关闭 | 打印JUC中锁的状态 |
+| PrintCommandLineFlags | 关闭 | 打印启动虚拟机时输入的非稳定参数 |
+| PrintCompilation | 关闭 | 打印方法即时编译信息 |
+| PrintGC | 关闭 | 打印GC信息 |
+| PrintGCDetails | 关闭 | 打印GC的详细信息 |
+| PrintGCTimeStamps | 关闭 | 打印GC停顿耗时 |
+| PrintTenuringDistribution | 关闭 | 打印GC后新生代各个年龄对象的大小 |
+| TraceClassLoading | 关闭 | 打印类加载信息 |
+| TraceClassUnLoading | 关闭 | 打印类卸载载信息 |
 
 #### jps
 
 #### jstat
 #### jmap
-**jmap -histo:live PID | head -n 20**
+```
+jmap -histo:live PID | head -n 20**
+```
+#### jinfo
+```
+jinfo -flag UseParallelGC PID
+```
 
 
