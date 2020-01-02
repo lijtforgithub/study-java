@@ -11,7 +11,7 @@ public class ThreadUtils {
     private ThreadUtils() {
     }
 
-    public static void sleepSeconds(int i) {
+    public static void sleepSeconds(long i) {
         try {
             TimeUnit.SECONDS.sleep(i);
         } catch (InterruptedException e) {
@@ -19,7 +19,7 @@ public class ThreadUtils {
         }
     }
 
-    public static void sleep(int i, TimeUnit timeUnit) {
+    public static void sleep(long i, TimeUnit timeUnit) {
         try {
             timeUnit.sleep(i);
         } catch (InterruptedException e) {
