@@ -32,7 +32,17 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
     :class 与 java -verbose 一样（显示加载了哪些类）
 -D 设置系统属性 -D<名称>=<值> eg: java -Denv=test
 -X 输出非标准选项的帮助
+
 ```
+| 参数 | 默认值 | 说明 |
+|---|---|---|
+| -Xms<Size> | 物理内存1/64 | 初始堆大小 |
+| -Xmx<Size> | 物理内存1/4 | 最大堆大小 |
+| -Xss<Size> | >=1.5 1M | 线程堆栈大小 |
+| -Xmn<Size> |  | 新生代大小 |
+| -Xmixed | 开启 | 混合模式执行 |
+| -Xint |  | 解释模式执行（启动快/执行慢） |
+| -Xcomp |  | 编译模式执行（执行快/启动慢） |
 ###### java -XX:
 ```
 -XX:+PrintFlagsFinal 输出所有参数的名称及默认值
@@ -47,11 +57,11 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 |---|---|---|
 | DisableExplicitGC | 关闭 | 忽略来自System.gc()方法触发的垃圾回收 |
 | ExplicitGCInvokesConcurrent | 关闭 | 当收到System.gc()方法提交的垃圾收集申请时，使用CMS收集器进行收集 |
-| UseSerialGC | Client模式开启/其他关闭 | **Client模式下的默认值**；开启后，使用Serial+Serial Old的收集器组合进行内存回收 |
-| UseParNewGC | 关闭 | 开启后，使用ParNew+Serial Old的收集器组合进行内存回收 |
-| UseParallelGC | Server模式开启/其他关闭 | **Server模式下的默认值**；开启后，使用Parallel Scavenge+Serial Old的收集器组合进行内存回收 |
-| UseParallelOldGC | 关闭 | 开启后，使用Parallel Scavenge+Parallel Old的收集器组合进行内存回收 |
-| UseConcMarkSweepGC | 关闭 | 开启后，使用ParNew+CMS+Serial Old的收集器组合进行内存回收，如果CMS收集器出现Concurrent Mode Failure，则Serial Old作为后备收集器 |
+| **UseSerialGC** | Client模式开启/其他关闭 | **Client模式下的默认值**；开启后，使用Serial+Serial Old的收集器组合进行内存回收 |
+| **UseParNewGC** | 关闭 | 开启后，使用ParNew+Serial Old的收集器组合进行内存回收 |
+| **UseParallelGC** | Server模式开启/其他关闭 | **Server模式下的默认值**；开启后，使用Parallel Scavenge+Serial Old的收集器组合进行内存回收 |
+| **UseParallelOldGC** | 关闭 | 开启后，使用Parallel Scavenge+Parallel Old的收集器组合进行内存回收 |
+| **UseConcMarkSweepGC** | 关闭 | 开启后，使用ParNew+CMS+Serial Old的收集器组合进行内存回收，如果CMS收集器出现Concurrent Mode Failure，则Serial Old作为后备收集器 |
 | SurvivorRatio | 8 | 新生代中Eden区域与Survivor区域的容量比值 |
 | PretenureSizeThreshold | 0 | 直接晋升到老年代的对象大小，设置这个参数后，大于这个参数的对象将直接在老年代分配。0的意思时不管多大都是先在eden中分配内存。 |
 | MaxTenuringThreshold | 15 | 0-15之间的数值。晋升到老年代的对象年龄。每个对象在坚持过一次Minor GC之后年龄+1，超过这个参数值时进入老年代 |
@@ -69,6 +79,10 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 | MaxHeapFreeRatio | 70 | 当Xmx值比Xms值大时，堆可以动态收缩和扩展，这个参数控制当堆空闲大于指定比率时自动收缩 |
 | MinHeapFreeRatio | 40 | 当Xmx值比Xms值大时，堆可以动态收缩和扩展，这个参数控制当堆空闲小于指定比率时自动扩展 |
 | MaxPermSize | <=1.7 64M | 永久代最大值 |
+| **MetaspaceSize** | >1.7 | 初始元空间大小 |
+| **MaxMetaspaceSize** | 默认不限制 | 最大元空间大小 |
+| MinMetaspaceFreeRatio | 40 | 在GC之后，最小的Metaspace剩余空间容量的百分比，减少为分配空间所导致的垃圾收集  |
+| MaxMetaspaceFreeRatio | 70 | 在GC之后，最大的Metaspace剩余空间容量的百分比，减少为释放空间所导致的垃圾收集 |
 
 - 调试参数
 
@@ -82,13 +96,33 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 | PrintCompilation | 关闭 | 打印方法即时编译信息 |
 | PrintGC | 关闭 | 打印GC信息 |
 | PrintGCDetails | 关闭 | 打印GC的详细信息 |
-| PrintGCTimeStamps | 关闭 | 打印GC停顿耗时 |
+| PrintGCDateStamps  PrintGCTimeStamps | 关闭 | 打印GC停顿耗时间 |
 | PrintTenuringDistribution | 关闭 | 打印GC后新生代各个年龄对象的大小 |
 | TraceClassLoading | 关闭 | 打印类加载信息 |
 | TraceClassUnLoading | 关闭 | 打印类卸载载信息 |
 
-#### jps
+- 即时编译参数
 
+| 参数 | 默认值 | 说明 |
+|---|---|---|
+| CompileThreshold | Client模式1500/Server模式10000 | 触发方式即时编译的阈值 |
+| OnStackReplacePercentage | Client模式933/Server模式140 | OSR比率，它是OSR即时编译阈值计算公式的一个参数，用于代替BackEdgeThreshold参数控制回边计算器的实际溢出阈值 |
+| ReservedCodeCacheSize | - | 即时编译器编译的代码缓存值的最大值 |
+
+- 多线程相关参数
+
+| 参数 | 默认值 | 说明 |
+|---|---|---|
+| ~~UseSpinning~~ | 1.5关闭/>=1.6开启/<font color=red>>=1.7无</font> | 开启自旋锁以避免线程频繁挂起和唤醒 |
+| ~~PreBlockSpin~~ | 10/<font color=red>>=1.7无</font> | 使用自旋锁时默认的自旋次数 |
+| UseThreadPriorities | 开启 | 使用本地线程优先级 |
+| UseBiasedLocking | 开启 | 是否使用偏向锁 |
+| UseFastAccessorMethods | >=1.7关闭 | 当频繁反射执行某个方法时，生成字节码来加快反射的执行速度 |
+
+#### jps
+```
+jps -lv
+```
 #### jstat
 #### jmap
 ```
@@ -98,5 +132,9 @@ jmap -histo:live PID | head -n 20**
 ```
 jinfo -flag UseParallelGC PID
 ```
-
+#### javap
+jdk自带的反解析工具
+```
+javap -v <CLASS>
+```
 
