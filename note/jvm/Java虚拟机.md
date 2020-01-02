@@ -81,8 +81,6 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 | MaxPermSize | <=1.7 64M | 永久代最大值 |
 | **MetaspaceSize** | >1.7 | 初始元空间大小 |
 | **MaxMetaspaceSize** | 默认不限制 | 最大元空间大小 |
-| MinMetaspaceFreeRatio | 40 | 在GC之后，最小的Metaspace剩余空间容量的百分比，减少为分配空间所导致的垃圾收集  |
-| MaxMetaspaceFreeRatio | 70 | 在GC之后，最大的Metaspace剩余空间容量的百分比，减少为释放空间所导致的垃圾收集 |
 
 - 调试参数
 
