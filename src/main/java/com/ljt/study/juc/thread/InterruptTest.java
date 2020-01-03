@@ -1,8 +1,12 @@
 package com.ljt.study.juc.thread;
 
+import com.ljt.study.juc.ThreadUtils;
+
 import java.util.Date;
 
 /**
+ * 打断线程
+ *
  * @author LiJingTang
  * @date 2020-01-02 19:58
  */
@@ -14,11 +18,7 @@ public class InterruptTest {
         t1.start();
         t2.start();
 
-        try {
-            Thread.sleep(10000); // 主线程睡10秒 (在哪个线程里调用睡眠哪个线程)
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        ThreadUtils.sleepSeconds(5); // // 主线程睡10秒 (在哪个线程里调用睡眠哪个线程)
 
         t1.interrupt();
         t2.flag = false;

@@ -1,7 +1,11 @@
 package com.ljt.study.lang.collection;
 
 import com.ljt.study.juc.ThreadUtils;
+import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -34,5 +38,28 @@ public class FailFastTest {
         t2.start();
     }
 
+    @Test
+    public void testIterator() {
+        Collection<String> collection = new ArrayList<>(3);
+        collection.add("MSG-01");
+        collection.add("MSG-02");
+        collection.add("MSG-03");
+
+        Iterator<String> it = collection.iterator();
+
+        while (it.hasNext()) {
+            System.out.println("enter loop...");
+            String message = it.next();
+
+            // MSG-01、MSG-02、MSG-03 对应的执行结果都不一致(与hasNext()、next()实现有关)
+            if (("MSG-01").equals(message)) {
+                collection.remove(message);
+            }
+
+            System.out.println(message);
+        }
+
+        System.out.println(collection.size());
+    }
 
 }
