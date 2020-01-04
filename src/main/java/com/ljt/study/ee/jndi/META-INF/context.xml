@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Context>
+    <Resource name="jdbc/TEST" auth="Container" type="javax.sql.DataSource"
+		driverClassName="com.mysql.jdbc.Driver"
+		url="jdbc:mysql://localhost:3306/TEST?useUnicode=true&amp;characterEncoding=UTF-8"
+		username="root" password="admin" 
+		maxActive="100" maxIdle="30" maxWait="10000" JtaManaged="true" />
+		
+    <Resource name="jdbc/TEST_JTA" auth="Container" type="javax.sql.DataSource"
+		driverClassName="com.mysql.jdbc.Driver"
+		url="jdbc:mysql://localhost:3306/TEST_JTA?useUnicode=true&amp;characterEncoding=UTF-8"
+		username="root" password="admin" 
+		maxActive="100" maxIdle="30" maxWait="10000" JtaManaged="true" />
+		
+  	<!-- <Transaction factory="org.objectweb.jotm.UserTransactionFactory" jotm.timeout="60" /> -->
+	
+</Context>

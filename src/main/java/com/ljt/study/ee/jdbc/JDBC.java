@@ -10,7 +10,7 @@ import java.sql.SQLException;
  * @author LiJingTang
  * @date 2020-01-04 15:15
  */
-public class JDBCUtil {
+public class JDBC {
 
     public static void closeConnection(Connection conn) {
         if (null != conn) {
