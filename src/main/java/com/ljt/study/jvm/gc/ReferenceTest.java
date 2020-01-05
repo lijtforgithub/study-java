@@ -1,4 +1,4 @@
-package com.ljt.study.jvm.gc.ref;
+package com.ljt.study.jvm.gc;
 
 import com.ljt.study.juc.ThreadUtils;
 import org.junit.jupiter.api.Test;

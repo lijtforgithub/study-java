@@ -1,13 +1,9 @@
-### Java虚拟机
+## Java虚拟机
+#### Java：与平台无关的语言
+#### JVM：与语言无关的平台
+ Java语言中的各种变量、关键字和运算符号的语义最终都是由多条字节码命令组合而成的，因此字节码命令所能提供的语义描述能力肯定会比Java语言本身更加强大。因此，有一些Java语言本身无法有效支持的语言特性不代表字节码无法有效支持，这也为其他语言实现一些有别于Java的语言特性提供了基础。
 
-- Java：与平台无关的语言。
-
-- JVM：与语言无关的平台。
-
-> Java语言中的各种变量、关键字和运算符号的语义最终都是由多条字节码命令组合而成的，因此字节码命令所能提供的语义描述能力肯定会比Java语言本身更加强大。因此，有一些Java语言本身无法有效支持的语言特性不代表字节码无法有效支持，这也为其他语言实现一些有别于Java的语言特性提供了基础。
-
-#### 类文件结构
-
+## 类文件结构
 class文件是一组以8位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑的排列在class文件之中，中间没有任何分隔符，这使得整个class文件中存储的内容几乎全部是程序运行的必要数据，没有空隙存在。当遇到需要占用8位字节以上空间的数据项时，则会按照高位在前的方式分割成若干个8位字节进行存储。
 
 Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接”这一步骤，而是在虚拟机加载class文件的时候进行 **动态连接** 。也就是说，在class文件中不会保存各个方法、字段的最终内存布局信息，因此这些字段、方法的符号引用不经过运行期转换的话无法得到真正的内存入口地址，也就无法直接被虚拟机使用。当虚拟机运行时，需要从常量池获取对应的符号引用，再在类创建时或运行时解析、翻译到具体的内存地址之中。
@@ -23,7 +19,8 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 ## 命令
 - java1.6以后默认把当前目录设置为classpath
 - jar文件 = 路径(文件夹)
-#### java
+#### Java
+[java -开头标准参数](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html)
 ```
 -ea 指明了开启断言检测  
 -cp 指明了执行这个class文件所需要的所有类的包路径-即系统类加载器的路径  
@@ -31,8 +28,7 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
     :gc GC信息
     :class 与 java -verbose 一样（显示加载了哪些类）
 -D 设置系统属性 -D<名称>=<值> eg: java -Denv=test
--X 输出非标准选项的帮助
-
+-X 非标准选项的帮助
 ```
 | 参数 | 默认值 | 说明 |
 |---|---|---|
@@ -43,7 +39,7 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 | -Xmixed | 开启 | 混合模式执行 |
 | -Xint |  | 解释模式执行（启动快/执行慢） |
 | -Xcomp |  | 编译模式执行（执行快/启动慢） |
-###### java -XX:
+##### java -XX: 不稳定参数
 ```
 -XX:+PrintFlagsFinal 输出所有参数的名称及默认值
 
@@ -59,8 +55,8 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 | ExplicitGCInvokesConcurrent | 关闭 | 当收到System.gc()方法提交的垃圾收集申请时，使用CMS收集器进行收集 |
 | **UseSerialGC** | Client模式开启/其他关闭 | **Client模式下的默认值**；开启后，使用Serial+Serial Old的收集器组合进行内存回收 |
 | **UseParNewGC** | 关闭 | 开启后，使用ParNew+Serial Old的收集器组合进行内存回收 |
-| **UseParallelGC** | Server模式开启/其他关闭 | **Server模式下的默认值**；开启后，使用Parallel Scavenge+Serial Old的收集器组合进行内存回收 |
-| **UseParallelOldGC** | 关闭 | 开启后，使用Parallel Scavenge+Parallel Old的收集器组合进行内存回收 |
+| **UseParallelGC** | Server模式开启/其他关闭 | 开启后，使用Parallel Scavenge+Serial Old的收集器组合进行内存回收 |
+| **UseParallelOldGC** | 关闭 | **Server模式下的默认值**；开启后，使用Parallel Scavenge+Parallel Old的收集器组合进行内存回收 |
 | **UseConcMarkSweepGC** | 关闭 | 开启后，使用ParNew+CMS+Serial Old的收集器组合进行内存回收，如果CMS收集器出现Concurrent Mode Failure，则Serial Old作为后备收集器 |
 | SurvivorRatio | 8 | 新生代中Eden区域与Survivor区域的容量比值 |
 | PretenureSizeThreshold | 0 | 直接晋升到老年代的对象大小，设置这个参数后，大于这个参数的对象将直接在老年代分配。0的意思时不管多大都是先在eden中分配内存。 |
@@ -70,7 +66,7 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 | ParallelGCThreads | <=8默认CPU数量/>8小于CPU数量 | 设置并行GC时进行内存回收的线程数 |
 | GCTimeRatio | 99 | GC时间占总时间的比率；仅在使用Parallel Scavenge收集器时生效 |
 | MaxGCPauseMillis | - | 设置GC的最大停顿时间；仅在使用Parallel Scavenge收集器时生效 |
-| CMSInitiatingOccupancyFraction | 68 | 设置CMS收集器在老年代空间被使用多少后触发的垃圾回收；仅在使用CMS收集器时生效 |
+| CMSInitiatingOccupancyFraction | -1 | 设置CMS收集器在老年代空间被使用多少后触发的垃圾回收；仅在使用CMS收集器时生效 |
 | UseCMSCompactAtFullCollection | 开启 | 设置CMS收集器在完成垃圾收集后是否要进行一次内存碎片整理；仅在使用CMS收集器时生效 |
 | CMSFullGCsBeforeCompaction | 0 | 设置CMS收集器在进行若干次垃圾收集后再启动一次内存碎片整理；仅在使用CMS收集器时生效。0的意思是每次都整理 |
 | ScavengeBeforeFullGC | 开启 | 再Full GC发生之前触发一次MinorGC |
@@ -81,6 +77,7 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 | MaxPermSize | <=1.7 64M | 永久代最大值 |
 | **MetaspaceSize** | >1.7 | 初始元空间大小 |
 | **MaxMetaspaceSize** | 默认不限制 | 最大元空间大小 |
+| **NewRatio** | 2 | 老年代与新生代比值 |
 
 - 调试参数
 
