@@ -19,8 +19,10 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 ## 命令
 - java1.6以后默认把当前目录设置为classpath
 - jar文件 = 路径(文件夹)
-#### Java
-[java -开头标准参数](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html)
+#### [Java](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html)
+- 标准： - 开头，所有的HotSpot都支持
+- 非标准：-X 开头，特定版本HotSpot支持特定命令
+- 不稳定：-XX 开头，下个版本可能取消
 ```
 -ea 指明了开启断言检测  
 -cp 指明了执行这个class文件所需要的所有类的包路径-即系统类加载器的路径  
@@ -39,7 +41,7 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 | -Xmixed | 开启 | 混合模式执行 |
 | -Xint |  | 解释模式执行（启动快/执行慢） |
 | -Xcomp |  | 编译模式执行（执行快/启动慢） |
-##### java -XX: 不稳定参数
+##### java -XX
 ```
 -XX:+PrintFlagsFinal 输出所有参数的名称及默认值
 
@@ -54,7 +56,7 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 | DisableExplicitGC | 关闭 | 忽略来自System.gc()方法触发的垃圾回收 |
 | ExplicitGCInvokesConcurrent | 关闭 | 当收到System.gc()方法提交的垃圾收集申请时，使用CMS收集器进行收集 |
 | **UseSerialGC** | Client模式开启/其他关闭 | **Client模式下的默认值**；开启后，使用Serial+Serial Old的收集器组合进行内存回收 |
-| **UseParNewGC** | 关闭 | 开启后，使用ParNew+Serial Old的收集器组合进行内存回收 |
+| **UseParNewGC** | 关闭 | 开启后，使用ParNew+PS Old(Ps MarkSweep)的收集器组合进行内存回收 |
 | **UseParallelGC** | Server模式开启/其他关闭 | 开启后，使用Parallel Scavenge+Serial Old的收集器组合进行内存回收 |
 | **UseParallelOldGC** | 关闭 | **Server模式下的默认值**；开启后，使用Parallel Scavenge+Parallel Old的收集器组合进行内存回收 |
 | **UseConcMarkSweepGC** | 关闭 | 开启后，使用ParNew+CMS+Serial Old的收集器组合进行内存回收，如果CMS收集器出现Concurrent Mode Failure，则Serial Old作为后备收集器 |
@@ -114,21 +116,25 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 | UseBiasedLocking | 开启 | 是否使用偏向锁 |
 | UseFastAccessorMethods | >=1.7关闭 | 当频繁反射执行某个方法时，生成字节码来加快反射的执行速度 |
 
-#### jps
+#### jps 虚拟机进程状况
 ```
-jps -lv
+-q：只显示PID，不显示class名称，jar文件名和传递给 main 方法的参数
+-m：输出传递给 main 方法的参数，在嵌入式JVM上可能是null
 ```
-#### jstat
+#### jstack
+线程堆栈信息
 #### jmap
 ```
 jmap -histo:live PID | head -n 20**
 ```
+#### jstat
+可以查看堆内存各部分的使用量，以及加载类的数量。
 #### jinfo
 ```
 jinfo -flag UseParallelGC PID
 ```
 #### javap
-jdk自带的反解析工具
+JDK 自带的反解析工具
 ```
 javap -v <CLASS>
 ```
