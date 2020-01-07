@@ -79,7 +79,7 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 | MaxPermSize | <=1.7 64M | 永久代最大值 |
 | **MetaspaceSize** | >1.7 | 初始元空间大小 |
 | **MaxMetaspaceSize** | 默认不限制 | 最大元空间大小 |
-| **NewRatio** | 2 | 老年代与新生代比值 |
+| **NewRatio** | 2 | 新生代内存容量与老生代内存容量的比例 |
 
 - 调试参数
 
@@ -117,25 +117,72 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 | UseFastAccessorMethods | >=1.7关闭 | 当频繁反射执行某个方法时，生成字节码来加快反射的执行速度 |
 
 #### jps 虚拟机进程状况
+可以查看 Java 进程的启动类、传入参数和虚拟机参数等信息  
+**jps -lv**
 ```
--q：只显示PID，不显示class名称，jar文件名和传递给 main 方法的参数
--m：输出传递给 main 方法的参数，在嵌入式JVM上可能是null
+-q：只显示进程ID
+-m：main 方法的参数，在嵌入式JVM上可能是null
+-l：main class的完成package名或者应用程序的jar文件完整路径名
+-v：JVM 参数
 ```
-#### jstack
-线程堆栈信息
-#### jmap
+#### jstack Java线程堆栈跟踪
+可以查看或导出 Java 应用程序中线程堆栈信息  
+**jstack PID**
 ```
-jmap -histo:live PID | head -n 20**
+-l：长列表. 打印关于锁的附加信息，例如属于java.util.concurrent 的 ownable synchronizers列表
+-F：没有相应的时候强制打印栈信息
+-m：打印java和native c/c++框架的所有栈信息
 ```
-#### jstat
-可以查看堆内存各部分的使用量，以及加载类的数量。
-#### jinfo
+#### jmap 内存映像
+可以生成 java 程序的 dump 文件， 也可以查看堆内对象示例的统计信息、查看 ClassLoader 的信息以及 finalizer 队列  
+**jmap -histo:live PID | head -20**  
+**jmap -dump:format=b,file=xxx PID**
 ```
-jinfo -flag UseParallelGC PID
+-histo[:live]：显示堆中对象的统计信息
+-dump:<dump-options>：生成堆转储快照
+    live子选项是可选的。如果指定了live子选项，堆中只有活动的对象会被转储
+    heap如果比较大的话，就会导致这个过程比较耗时，并且执行的过程中为了保证dump的信息是可靠的，所以会暂停应用， 线上系统慎用
+-heap：显示Java堆详细信息
+-clstats：打印类加载器信息
+-finalizerinfo：显示在F-Queue队列等待Finalizer线程执行finalizer方法的对象
+-F：当-dump没有响应时，使用-dump或者-histo参数。在这个模式下live子参数无效
+```
+#### jstat 虚拟机统计信息监视
+可以查看堆内存各部分的使用量，以及加载类的数量  
+**jstat -gc PID**
+```
+-class：显示ClassLoad的相关信息
+-compiler：显示JIT编译的相关信息
+-gc：显示和gc相关的堆信息
+-gccapacity：显示各个代的容量以及使用情况
+-gcutil：显示垃圾收集信息
+-gccause：显示垃圾回收的相关信息（通-gcutil）,同时显示最后一次或当前正在发生的垃圾回收的诱因；
+-gcnew：显示新生代信息
+-gcnewcapacity：显示新生代大小和使用情况
+-gcold：显示老年代的信息
+-gcoldcapacity：显示老年代的大小
+-gcmetacapacity：显示元空间的信息
+-printcompilation：输出JIT编译的方法信息
+还可以同时加上 两个数字。如：jstat -printcompilation -h3 PID 250 6是每250毫秒打印一次，一共打印6次，-h3每三行显示标题。
+```
+#### jhat 虚拟机堆转储快照分析
+#### jinfo Java配置信息
+可以查看正在运行的 java 应用程序的扩展参数，包括Java System属性和JVM命令行参数；也可以动态的修改正在运行的 JVM 一些参数  
+**jinfo PID**
+**-flag UseParallelGC PID**
+```
+-flag name：输出对应名称的参数
+-flag [+|-]name：开启或者关闭对应名称的参数
+-flag name=value：设定对应名称的参数
+-flags：输出全部的参数
+-sysprops：输出系统属性
 ```
 #### javap
-JDK 自带的反解析工具
+根据class字节码文件，反解析出当前类对应的code区（汇编指令）、本地变量表、异常表和代码行偏移量映射表、常量池等等信息  
+**javap -v CLASS**
 ```
-javap -v <CLASS>
+-v 不仅会输出行号、本地变量表信息、反编译汇编代码，还会输出当前类用到的常量池等信息。
+-l：会输出行号和本地变量表信息。
+-c：会对当前class字节码进行反编译生成汇编代码。
 ```
 
