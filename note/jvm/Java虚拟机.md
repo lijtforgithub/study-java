@@ -86,6 +86,7 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 | 参数 | 默认值 | 说明 |
 |---|---|---|
 | HeapDumpOnOutOfMemoryError | 关闭 | 发生OOM时是否生成堆转储快照 |
+| HeapDumpPath=path | - | 堆转储快照文件路径 |
 | OnOutOfMemoryError | - | 发生OOM时执行指定的命令 |
 | OnError | - | 虚拟机抛出ERROR时执行指定的命令 |
 | PrintConcurrentLocks | 关闭 | 打印JUC中锁的状态 |
@@ -129,40 +130,40 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 可以查看或导出 Java 应用程序中线程堆栈信息  
 **jstack PID**
 ```
--l：长列表. 打印关于锁的附加信息，例如属于java.util.concurrent 的 ownable synchronizers列表
+-l：长列表。打印关于锁的附加信息，例如属于java.util.concurrent 的 ownable synchronizers列表
 -F：没有相应的时候强制打印栈信息
 -m：打印java和native c/c++框架的所有栈信息
 ```
 #### jmap 内存映像
 可以生成 java 程序的 dump 文件， 也可以查看堆内对象示例的统计信息、查看 ClassLoader 的信息以及 finalizer 队列  
 **jmap -histo:live PID | head -20**  
-**jmap -dump:format=b,file=xxx PID**
+**jmap -dump:format=b,file=xxx.hprof PID**
 ```
--histo[:live]：显示堆中对象的统计信息
+-histo[:live]：堆中对象的统计信息
 -dump:<dump-options>：生成堆转储快照
     live子选项是可选的。如果指定了live子选项，堆中只有活动的对象会被转储
     heap如果比较大的话，就会导致这个过程比较耗时，并且执行的过程中为了保证dump的信息是可靠的，所以会暂停应用， 线上系统慎用
--heap：显示Java堆详细信息
--clstats：打印类加载器信息
--finalizerinfo：显示在F-Queue队列等待Finalizer线程执行finalizer方法的对象
+-heap：Java堆详细信息
+-clstats：类加载器信息
+-finalizerinfo：在F-Queue队列等待Finalizer线程执行finalizer方法的对象
 -F：当-dump没有响应时，使用-dump或者-histo参数。在这个模式下live子参数无效
 ```
 #### jstat 虚拟机统计信息监视
 可以查看堆内存各部分的使用量，以及加载类的数量  
 **jstat -gc PID**
 ```
--class：显示ClassLoad的相关信息
--compiler：显示JIT编译的相关信息
--gc：显示和gc相关的堆信息
--gccapacity：显示各个代的容量以及使用情况
--gcutil：显示垃圾收集信息
--gccause：显示垃圾回收的相关信息（通-gcutil）,同时显示最后一次或当前正在发生的垃圾回收的诱因；
--gcnew：显示新生代信息
--gcnewcapacity：显示新生代大小和使用情况
--gcold：显示老年代的信息
--gcoldcapacity：显示老年代的大小
--gcmetacapacity：显示元空间的信息
--printcompilation：输出JIT编译的方法信息
+-class：ClassLoad的相关信息
+-compiler：JIT编译的相关信息
+-gc：gc相关的堆信息
+-gccapacity：各个代的容量以及使用情况
+-gcutil：统计gc信息
+-gccause：垃圾回收的相关信息（通-gcutil）,同时显示最后一次或当前正在发生的垃圾回收的诱因
+-gcnew：新生代信息
+-gcnewcapacity：新生代大小和使用情况
+-gcold：老年代的信息
+-gcoldcapacity：老年代的大小
+-gcmetacapacity：元空间的信息
+-printcompilation：JIT编译的方法信息
 还可以同时加上 两个数字。如：jstat -printcompilation -h3 PID 250 6是每250毫秒打印一次，一共打印6次，-h3每三行显示标题。
 ```
 #### jhat 虚拟机堆转储快照分析
@@ -171,11 +172,11 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 **jinfo PID**
 **-flag UseParallelGC PID**
 ```
--flag name：输出对应名称的参数
--flag [+|-]name：开启或者关闭对应名称的参数
--flag name=value：设定对应名称的参数
+-flag NAME：对应名称的参数
+-flag [+|-]NAME：开启或者关闭对应名称的参数
+-flag NAME=VALUE：设定对应名称的参数
 -flags：输出全部的参数
--sysprops：输出系统属性
+-sysprops：系统属性
 ```
 #### javap
 根据class字节码文件，反解析出当前类对应的code区（汇编指令）、本地变量表、异常表和代码行偏移量映射表、常量池等等信息  
