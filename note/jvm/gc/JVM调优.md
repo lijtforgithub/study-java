@@ -3,7 +3,7 @@
 ```
 -Xloggc:/xxx/xxx-gc-%t.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=20M
     -XX:+PrintGCDetails -XX:+PrintGCDateStamps
-     -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/xxx/xxx-%t.hprof
+     -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/xxx/xxx-%t.dump
 ```
 ## 调优是什么
 #### 1.根据需求进行JVM规划和预调优
@@ -16,18 +16,19 @@
 4. 设定年代大小、升级年龄
 5. 设定GC日志参数
 6. 观察GC日志情况
-> 大流量的处理方法：分而治之
 #### 2.优化运行JVM运行环境（慢，卡顿）
-1. 有一个50万PV的资料类网站（从磁盘提取文档到内存）原服务器32位，1.5G的堆，用户反馈网站比较缓慢，因此公司决定升级，新的服务器为64位，16G的堆内存，结果用户反馈卡顿十分严重，反而比以前效率更低了。
+1. 有一个50万PV的资料类网站（从磁盘提取文档到内存）原服务器32位，1.5G的堆，用户反馈网站比较缓慢，  
+因此公司决定升级，新的服务器为64位，16G的堆内存，结果用户反馈卡顿十分严重，反而比以前效率更低了。
    1. 为什么原网站慢：很多用户浏览数据，很多数据load到内存，内存不足，频繁GC，STW长，响应时间变慢
    2. 为什么会更卡顿：内存越大，FGC时间越长
    3. 咋办：PS -> PN + CMS 或者 G1
-2. 系统CPU经常100%，如何调优
-   1. 找出哪个进程CPU高（top/jps）
-   2. 导出该线程的堆栈（jstack）
-   4. 查找哪个方法（栈帧）消耗时间 （jstack）
+2. **CPU飙高**
+   1. top 找出CPU高的进程ID PID
+   2. top -Hp PID 找出该进程高的线程ID，转成16进制
+   3. jstack PID > temp 导出该进程的线程堆栈信息 temp
+   4. 用16进制线程ID 在temp 文件查询；定位到方法
    5. 工作线程占比高 | 垃圾回收线程占比高
-3. 系统内存飙高，如何查找问题
+3. **内存飙高**
    1. 导出堆内存 （jmap）
    2. 分析 （jhat/jvisualvm/mat/jprofiler）
 4. 如何监控JVM

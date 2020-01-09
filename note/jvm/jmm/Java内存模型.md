@@ -1,17 +1,17 @@
-### 硬件层数据一致性
+## 硬件层数据一致性
 - 总线锁
 - 一致性协议。  
 *intel用[MESI](https://www.cnblogs.com/z00377750/p/9180644.html)（Modified Exclusive Shared Invalid）  
 CPU中每个缓存行（cache line）使用4种状态进行标记（使用额外的两位(bit)表示）* **读取缓存以cache line为基本单位，目前64字节；使用缓存行的对齐能够提高效率。**
 > 现代CPU的数据一致性实现 = 缓存锁(MESI ...) + 总线锁（数据很大，缓存不了）
-### 乱序问题
+#### 乱序问题
 CPU为了提高指令执行效率，会在一条指令执行过程中（比如去内存读数据（慢100倍）），去同时执行另一条指令，前提是，两条指令没有依赖关系。
 - [合并写技术](https://www.cnblogs.com/liushaodong/p/4777308.html)  
 WCBuffer：比L1、L2还快；CPU中只有4个字节。
 #### as-if-serial
 所有的动作(Action)都可以为了优化而被重排序，但是必须保证它们重排序后的结果和程序代码本身的应有结果是一致的。Java编译器、运行时和处理器都会保证单线程下的as-if-serial语义。
 > 为了保证这一语义，重排序不会发生在有数据依赖的操作之中。
-### 如何保障有序性
+## 如何保障有序性
 #### 1.硬件级别
 - 原子指令，如x86上的"lock …" 指令是一个Full Barrier，执行时会锁住内存子系统来确保执行顺序，甚至跨多个CPU。Software Locks通常使用了内存屏障或原子指令来实现变量可见性和保持程序顺序。
 - 硬件CPU内存屏障（X86）：在两条指令直接加内存屏障。
@@ -38,7 +38,7 @@ WCBuffer：比L1、L2还快；CPU中只有4个字节。
 语句：Store1; StoreLoad; Load2  
 在Load2及后续所有读取操作执行前，保证Store1的写入对所有处理器可见。  
 它的开销是四种屏障中最大的。在大多数处理器的实现中，这个屏障是个万能屏障，兼具其它三种内存屏障的功能。
-1. volatile
+1. **volatile**
     1. 字节码层面：ACC_VOLATILE
     2. JVM层面：volatile内存区的读写都加屏障
        ``` 
@@ -53,13 +53,13 @@ WCBuffer：比L1、L2还快；CPU中只有4个字节。
     3. [OS和硬件层面](https://blog.csdn.net/qq_26222859/article/details/52235930)
    hsdis: HotSpot Dis Assembler  
    windows: lock 指令实现
-2. synchronized
+2. **synchronized**
     1. 字节码层面：ACC_SYNCHRONIZED 和 monitorenter monitorexit
     2. JVM层面：C/C++ 调用了操作系统提供的同步机制
     3. [OS和硬件层面](https://blog.csdn.net/21aspnet/article/details/88571740)  
        x86: lock cmpxchg / xxx
        
-### 对象
+## 对象生命周期
 1. 创建过程
     1. class loading
     2. class linking

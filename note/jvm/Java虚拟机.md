@@ -128,7 +128,7 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 ```
 #### jstack Java线程堆栈跟踪
 可以查看或导出 Java 应用程序中线程堆栈信息  
-**jstack PID**
+**jstack -l PID**
 ```
 -l：长列表。打印关于锁的附加信息，例如属于java.util.concurrent 的 ownable synchronizers列表
 -F：没有相应的时候强制打印栈信息
@@ -143,14 +143,14 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 -dump:<dump-options>：生成堆转储快照
     live子选项是可选的。如果指定了live子选项，堆中只有活动的对象会被转储
     heap如果比较大的话，就会导致这个过程比较耗时，并且执行的过程中为了保证dump的信息是可靠的，所以会暂停应用， 线上系统慎用
--heap：Java堆详细信息
+-heap：堆详细信息
 -clstats：类加载器信息
 -finalizerinfo：在F-Queue队列等待Finalizer线程执行finalizer方法的对象
 -F：当-dump没有响应时，使用-dump或者-histo参数。在这个模式下live子参数无效
 ```
 #### jstat 虚拟机统计信息监视
 可以查看堆内存各部分的使用量，以及加载类的数量  
-**jstat -gc PID**
+**jstat -gcutil 10000 6 PID**
 ```
 -class：ClassLoad的相关信息
 -compiler：JIT编译的相关信息
