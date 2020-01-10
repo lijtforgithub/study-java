@@ -187,4 +187,21 @@ jstat -gccapacity -h3 PID 250 6是每250毫秒打印一次，一共打印6次，
 -l：会输出行号和本地变量表信息。
 -c：会对当前class字节码进行反编译生成汇编代码。
 ```
+#### jcmd
+JDK1.7新增的命令行工具。他是一个多功能的工具，可以用它来导出堆、查看Java进程、导出线程信息、执行GC、还可以进行采样分析。
+```
+jcmd [-l]：查看Java进程；相当于jps
+jcmd PID help：Java 进程可以执行的操作
+         VM.version：查看目标jvm进程的版本信息
+         VM.uptime：查看 JVM 的启动时长
+         VM.system_properties：查看 JVM 的属性信息
+         VM.flags：查看 JVM 的启动参数
+         VM.command_line：查看 JVM 的启动命令行
+         Thread.print：查看线程堆栈信息；和 jstack PID 一样
+         GC.class_histogram：查看系统中类统计信息；jmap -histo PID 一样
+         GC.heap_dump：查看 JVM 的Heap Dump；和jmap -dump:format=b,file=xxx.dump PID 一样
+         GC.run：对 JVM 执行 java.lang.System.gc()
+         GC.run_finalization：对 JVM 执行 java.lang.System.runFinalization()
+         PerfCounter.print：查看 JVM 性能相关的参数
+```
 

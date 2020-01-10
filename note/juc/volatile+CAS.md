@@ -1,6 +1,81 @@
 ## volatile
+#### 可见性
+指一条线程修改了这个变量的值，新值对于其他线程来说是可以立即得知的。  
+不能保证原子性。如果需要采用synchronized、Lock、AtomicInteger。运用场景：
+1. 运算结果并不依赖变量的当前值，或者能够确保只有单一的线程修改变量的值
+2. 变量不需要与其他的状态变量共同参与不变约束
+```
+volatile boolean shutdownRequested;
 
+public void shutdown() {
+    shutdownRequested = true
+}
 
+public void doWork() {
+    while (!shutdownRequested) {
+        // do stuff
+    }
+}
+```
+当shutdown() 方法被调用时，能保证所有线程中执行的 doWork() 方法都立即停下来
+#### 禁止指令重排优化
+普通的变量仅仅会保证在该方法的执行过程中所有依赖赋值结果的地方都能获取到正确的结果，而不能保证变量赋值操作的顺序与程序代码中执行顺序一致。  
+因为在一个线程的方法执行过程中无法感知到这点。线程内表现未串行的语义。
+```
+char[] configText;
+// 此变量必须定义为 volatile
+volatile boolean initialized = false;
+
+// 假设以下代码在线程 A 中执行。模拟读取配置信息；读取完成后将 initialized 设置为 true 以通知其他线程配置可用
+configText = readConfigFile();
+initialized = true;
+
+// 假设以下代码在线程 B 中执行
+
+while (!initialized) {
+    sleep();
+}
+
+// 使用线程 A 中初始化好的配置信息
+doSomethingWithConfig();
+```
+如果没有 volatile 修饰，就可能会由于指令重排优化，导致线程 A 中最后一句代码 initialized = true 被提前执行，这样在线程 B 中使用配置信息的代码就可能出错。
+```
+/**
+ * 双重检锁
+ */
+import java.util.Objects;
+ 
+public class DCLSingleton {
+
+    /**
+     * volatile 是必须的保持可见性和禁止指令重排
+     */
+    private static volatile DCLSingleton instance = null;
+
+    private DCLSingleton() { }
+
+    public static DCLSingleton getInstance() {
+        if (Objects.isNull(instance)) {
+            synchronized (DCLSingleton.class) {
+                if (Objects.isNull(instance)) {
+                    instance = new DCLSingleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
+```
+双重检索必须加 volatile 如果没有，高并发下就会出问题。因为 instance = new DCLSingleton() 有3个步骤：
+1. 分配内存
+2. 初始化对象
+3. 设置变量指向刚分配的地址
+
+编译器运行时，可能会出现重排序 从1-2-3 排序为1-3-2
+有2个线程 A 和 B；线程 A 在执行 instance = new DCLSingleton()，B 线程进来，而此时 A 执行了1和3，没有执行2，此时B线程判断instance不为null 直接返回一个未初始化的对象，就会出现问题。
+
+> volatile 的读性能消耗与普通变量几乎相同，但是写操作稍慢，因为它需要在本地代码中插入许多内存屏障指令来保证处理器不发生乱序执行。
 ## CAS
 compare and swap 比较并交换。  
 CAS 操作包含三个操作数 —— 内存位置（V）、预期原值（A）和新值(B)。 如果内存位置的值与预期原值相匹配，那么处理器会自动将该位置值更新为新值 。否则，处理器不做任何操作。  
