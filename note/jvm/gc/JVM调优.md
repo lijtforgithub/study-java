@@ -3,7 +3,7 @@
 ```
 -Xloggc:/xxx/xxx-gc-%t.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=20M
     -XX:+PrintGCDetails -XX:+PrintGCDateStamps
-     -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/xxx/xxx-%t.dump
+    -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/xxx/xxx-%t.dump
 ```
 ## 调优是什么
 #### 1.根据需求进行JVM规划和预调优
@@ -23,10 +23,12 @@
    2. 为什么会更卡顿：内存越大，FGC时间越长
    3. 咋办：PS -> PN + CMS 或者 G1
 2. **CPU飙高**
-   1. top 找出CPU高的进程ID PID
-   2. top -Hp PID 找出该进程高的线程ID，转成16进制
-   3. jstack PID > temp 导出该进程的线程堆栈信息 temp
-   4. 用16进制线程ID 在temp 文件查询；定位到方法
+   1. top 找出CPU高的进程 PID
+   2. top -Hp PID 找出该进程高的线程 TID
+   3. printf "%x\n" TID 线程ID转成16进制 0X-TID
+   4. jstack PID > temp 导出该进程的线程堆栈信息 temp
+        1. jstack PID | grep 0X-TID -A 50 堆栈信息匹配16进制线程ID后的 50 行
+        2. jstack PID > temp 导出该进程的线程堆栈信息到文件 temp 然后文件里匹配0X-TID
    5. 工作线程占比高 | 垃圾回收线程占比高
 3. **内存飙高**
    1. 导出堆内存 （jmap）

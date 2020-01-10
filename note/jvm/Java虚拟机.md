@@ -87,6 +87,7 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 |---|---|---|
 | HeapDumpOnOutOfMemoryError | 关闭 | 发生OOM时是否生成堆转储快照 |
 | HeapDumpPath=path | - | 堆转储快照文件路径 |
+| PrintHeapAtGC | 关闭 | GC后打印堆信息 |
 | OnOutOfMemoryError | - | 发生OOM时执行指定的命令 |
 | OnError | - | 虚拟机抛出ERROR时执行指定的命令 |
 | PrintConcurrentLocks | 关闭 | 打印JUC中锁的状态 |
@@ -137,13 +138,13 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 #### jmap 内存映像
 可以生成 java 程序的 dump 文件， 也可以查看堆内对象示例的统计信息、查看 ClassLoader 的信息以及 finalizer 队列  
 **jmap -histo:live PID | head -20**  
-**jmap -dump:format=b,file=xxx.hprof PID**
+**jmap -dump:format=b,file=xxx.dump PID**
 ```
--histo[:live]：堆中对象的统计信息
+-histo[:live]：堆中对象的统计信息，包含类、实例数量、合计容量
 -dump:<dump-options>：生成堆转储快照
     live子选项是可选的。如果指定了live子选项，堆中只有活动的对象会被转储
     heap如果比较大的话，就会导致这个过程比较耗时，并且执行的过程中为了保证dump的信息是可靠的，所以会暂停应用， 线上系统慎用
--heap：堆详细信息
+-heap：堆详细信息。如使用哪种回收器、参数配置、分代状况等
 -clstats：类加载器信息
 -finalizerinfo：在F-Queue队列等待Finalizer线程执行finalizer方法的对象
 -F：当-dump没有响应时，使用-dump或者-histo参数。在这个模式下live子参数无效
@@ -152,19 +153,19 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 可以查看堆内存各部分的使用量，以及加载类的数量  
 **jstat -gcutil 10000 6 PID**
 ```
--class：ClassLoad的相关信息
--compiler：JIT编译的相关信息
--gc：gc相关的堆信息
--gccapacity：各个代的容量以及使用情况
--gcutil：统计gc信息
--gccause：垃圾回收的相关信息（通-gcutil）,同时显示最后一次或当前正在发生的垃圾回收的诱因
--gcnew：新生代信息
--gcnewcapacity：新生代大小和使用情况
--gcold：老年代的信息
--gcoldcapacity：老年代的大小
--gcmetacapacity：元空间的信息
--printcompilation：JIT编译的方法信息
-还可以同时加上 两个数字。如：jstat -printcompilation -h3 PID 250 6是每250毫秒打印一次，一共打印6次，-h3每三行显示标题。
+-class：监视类装载、卸载数量、总空间以及类装载所耗费的时间
+-compiler：JIT编译过的方法、耗时等信息
+-gc：监视 Java 堆状况，包括 Eden 区、两个 survivor 区、老年代、永久代等的容量、已用空间、GC 时间合计等信息
+-gccapacity：与gc基本相同，主要关注各个区域使用到的最大、最小空间
+-gcutil：与gc基本相同，主要关注已经使用空间占总空间的百分比
+-gccause：与gcutil一样，但是会输出导致上一次GC产生的原因
+-gcnew：新生代GC状况
+-gcnewcapacity：与gcnew基本相同，主要关注使用到的最大、最小空间
+-gcold：老年代GC状况
+-gcoldcapacity：与gcold基本相同，主要关注使用到的最大、最小空间
+-gcmetacapacity：元空间使用到的最大、最小空间
+-printcompilation：JIT编译的方法
+jstat -gccapacity -h3 PID 250 6是每250毫秒打印一次，一共打印6次，-h3每三行显示标题。
 ```
 #### jhat 虚拟机堆转储快照分析
 #### jinfo Java配置信息

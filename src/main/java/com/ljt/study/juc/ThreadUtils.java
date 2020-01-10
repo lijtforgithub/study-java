@@ -48,13 +48,15 @@ public class ThreadUtils {
         ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
         ThreadInfo[] threadInfos = threadMXBean.dumpAllThreads(false, false);
 
+        System.out.println("----------- 打印线程状态开始 ----------");
         for (ThreadInfo threadInfo : threadInfos) {
-            if (!names.isEmpty() && names.contains(threadInfo.getThreadName())) {
+            if (!names.isEmpty() && !names.contains(threadInfo.getThreadName())) {
                 continue;
             }
 
-            System.out.println("[" + threadInfo.getThreadName() + "] " + threadInfo.getThreadState());
+            System.out.println(threadInfo.getThreadName() + " is " + threadInfo.getThreadState());
         }
+        System.out.println("----------- 打印线程状态结束 ----------");
     }
 
 }
