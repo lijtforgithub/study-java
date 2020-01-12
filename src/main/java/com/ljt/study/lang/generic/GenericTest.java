@@ -54,6 +54,7 @@ public class GenericTest {
 
     @Test
     public <T> void test() {
+        // 不能使用泛型类型参数创建实例
         // T obj = new T();
         // T[] objArray = new T[5];
         T[] objs = (T[]) new Object[]{"hello", "world", 1L};
@@ -63,6 +64,7 @@ public class GenericTest {
         ArrayList<String>[] list = new ArrayList[10];
     }
 
+    // 异常类不能是泛型的
     private <T extends Exception> void testGenericException() throws T {
         try {
 
@@ -71,6 +73,7 @@ public class GenericTest {
         }
     }
 
+    // 在静态环境下不允许类的参数是泛型类型
     // public class Test<E>{
     // public static void m(E o1){};
     //

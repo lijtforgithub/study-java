@@ -1,20 +1,13 @@
 #### JNDI
 JNDI(Java Naming and Directory Interface，Java命名和目录接口)是一组在Java应用中访问命名和目录服务的API。命名服务将名称和对象联系起来，使得我们可以用名称访问对象。目录服务是一种命名服务，在这种服务里，对象不但有名称，还有属性。
 
-TOMCAT配置jndi有全局配置和局部配置。大致的有以下三种[配置方式](http://blog.csdn.net/lgm277531070/article/details/6711177)：
-```
-<Resource name="jdbc/TEST" auth="Container" 
-    type="javax.sql.DataSource"
-    driverClassName="com.mysql.jdbc.Driver"
-    url="jdbc:mysql://localhost:3306/TEST?useUnicode=true&amp;characterEncoding=UTF-8"
-    username="root" password="admin"
-    maxActive="100" maxIdle="30" maxWait="10000" />
-```
+TOMCAT配置jndi有全局配置和局部配置。大致的有以下三种[配置方式](http://blog.csdn.net/lgm277531070/article/details/6711177)：  
+`<Resource name="jdbc/TEST" auth="Container" type="javax.sql.DataSource" driverClassName="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/TEST?useUnicode=true&amp;characterEncoding=UTF-8" username="root" password="admin" maxActive="100" maxIdle="30" maxWait="10000" />`
 1. 全局配置-在Tomcat的conf/context.xml配置文件中加入<Resource .../>
-2. 局部配置(不推荐)-在Tomcat的server.xml的<Host><Context>标签内添加<Resource .../>
+2. 局部配置(不推荐)-在Tomcat的server.xml的`<Host><Context>`标签内添加<Resource .../>
 3. 局部配置-在项目的WebRoot下面的META-INF文件夹下面创建context.xml文件，加入<Resource .../>
 
-总结：如果要配置局部的话，推荐使用第三种方式，这样不依赖tomcat了。但是还是推荐使用第一种方式好，虽然依赖tomat，但是是全局的，而且可以配置 多个。对于以后切换使用方便。在项目的web.xml中添加的资源引用可有可无。
+总结：如果要配置局部的话，推荐使用第三种方式，这样不依赖tomcat了。但是还是推荐使用第一种方式好，虽然依赖tomcat，但是是全局的，而且可以配置 多个。对于以后切换使用方便。在项目的web.xml中添加的资源引用可有可无。
 #### JTA
 JTA，即Java Transaction API，JTA允许应用程序执行分布式事务处理——在两个或多个网络计算机资源上访问并且更新数据。
 - JOTM  
@@ -24,17 +17,14 @@ JTA，即Java Transaction API，JTA允许应用程序执行分布式事务处理
 
 不设置JtaManaged="true"的数据源TomEEDataSource设置之后的数据源 org.apache.openejb.resource.jdbc.managed.local.ManagedDataSource
 		
-\<Transaction>是Tomcat 5中的新标记，对于不支持此标记的老版本，需要使用以下语句代替事务资源的声明：
-```
-<Resource name="UserTransaction" auth="Container" type="javax.transaction.UserTransaction" 
- factory = "org.objectweb.jotm.UserTransactionFactory"  jotm.timeout = "60" />
-```
-需要注意的是，使用\<Resource>节点声明的资源默认上下文前缀"java:comp/env"，
-而使用\<Transaction>节点时则是"java:comp"。  
+`<Transaction>`是Tomcat 5中的新标记，对于不支持此标记的老版本，需要使用以下语句代替事务资源的声明：  
+`<Resource name="UserTransaction" auth="Container" type="javax.transaction.UserTransaction" factory = "org.objectweb.jotm.UserTransactionFactory"  jotm.timeout = "60" />`  
+需要注意的是，使用`<Resource>`节点声明的资源默认上下文前缀"java:comp/env"，
+而使用`<Transaction>`节点时则是"java:comp"。  
 因此，当使用4.2的方式声明用户事务时，相应的JNDI查找代码也应该改为 UserTransaction ut = (UserTransaction)initCtx.lookup("java:comp/env/UserTransaction");
-#### RMI和WebSerivce
-- RMI的客户端和服务端都必须是Java，WebSerivce没有这个限制。
-- WebSerivce是在HTTP协议上传递XML文本文件，与语言和平台无关。
+#### RMI和WebService
+- RMI的客户端和服务端都必须是Java，WebService没有这个限制。
+- WebService是在HTTP协议上传递XML文本文件，与语言和平台无关。
 - RMI是在TCP协议上传递可序列化的Java对象，只能用在Java虚拟机上，绑定语言。
 - RMI是EJB远程调用的基础，仅用RMI技术就可以实现远程调用，使用EJB是为了实现组件，事物，资源池，集群等功能。
 - WebService是通过XML来传输数据，可用HTTP等协议因此可在异构系统间传递，并且可以穿过防火墙，可在公网上远程调用。
@@ -48,4 +38,4 @@ JTA，即Java Transaction API，JTA允许应用程序执行分布式事务处理
 #### RPC与RMI
 - RPC 跨语言，而 RMI只支持Java。
 - RMI 调用远程对象方法，允许方法返回 Java 对象以及基本数据类型，而RPC 不支持对象的概念，传送到 RPC 服务的消息由外部数据表示 (External Data Representation, XDR) 语言表示，这种语言抽象了字节序类和数据类型结构之间的差异。只有由 XDR 定义的数据类型才能被传递， 可以说 RMI是面向对象方式的 Java RPC 。
-- 在方法调用上，RMI中，远程接口使每个远程方法都具有方法签名。如果一个方法在服务器上执行，但是没有相匹配的签名被添加到这个远程接口上，那么这个新方法就不能被RMI客户方所调用。在RPC中，当一个请求到达RPC服务器时，这个请求就包含了一个参数集和一个文本值，通常形成classname.methodname的形式。这就向RPC服务器表明，被请求的方法在为 classname的类中，名叫methodname。然后RPC服务器就去搜索与之相匹配的类和方法，并把它作为那种方法参数类型的输入。这里的参数类型是与RPC请求中的类型是匹配的。一旦匹配成功，这个方法就被调用了，其结果被编码后返回客户方。
+- 在方法调用上，RMI中，远程接口使每个远程方法都具有方法签名。如果一个方法在服务器上执行，但是没有相匹配的签名被添加到这个远程接口上，那么这个新方法就不能被RMI客户方所调用。在RPC中，当一个请求到达RPC服务器时，这个请求就包含了一个参数集和一个文本值，通常形成className.methodName的形式。这就向RPC服务器表明，被请求的方法在为 className的类中，名叫methodName。然后RPC服务器就去搜索与之相匹配的类和方法，并把它作为那种方法参数类型的输入。这里的参数类型是与RPC请求中的类型是匹配的。一旦匹配成功，这个方法就被调用了，其结果被编码后返回客户方。

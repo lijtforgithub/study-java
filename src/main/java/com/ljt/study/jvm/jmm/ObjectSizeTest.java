@@ -17,14 +17,17 @@ public class ObjectSizeTest {
         System.out.println(ObjectSize.sizeOf(new Obj()));
     }
 
+    //一个Object占多少个字节
+    // -XX:+UseCompressedClassPointers -XX:+UseCompressedOops
+    // Oops = ordinary object pointers
     private static class Obj {
         // markword            4
         // ClassPointer        4
         // 数组长度             4
         private byte b;     // 1
         private int i;      // 4
-        private String s;   // 4
-        private Object o;   // 4
+        private String s;   // 4 | Oops
+        private Object o;   // 4 | Oops
     }
 
 }
