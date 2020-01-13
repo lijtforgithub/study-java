@@ -168,6 +168,10 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 jstat -gccapacity -h3 PID 250 6是每250毫秒打印一次，一共打印6次，-h3每三行显示标题。
 ```
 #### jhat 虚拟机堆转储快照分析
+虚拟机自带的一种虚拟机堆转储快照分析工具  
+**jhat -J-mx512M xxx.dump**
+1. http://localhoost:7000
+2. 页面底部对应链接可以使用OQL查找特定问题对象
 #### jinfo Java配置信息
 可以查看正在运行的 java 应用程序的扩展参数，包括Java System属性和JVM命令行参数；也可以动态的修改正在运行的 JVM 一些参数  
 **jinfo PID**
