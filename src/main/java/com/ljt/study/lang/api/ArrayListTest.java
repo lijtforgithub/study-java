@@ -42,6 +42,8 @@ public class ArrayListTest {
         System.out.println(Arrays.toString(array));
         System.arraycopy(arrayList.toArray(), 0, array, 0, arrayList.size());
         System.out.println(Arrays.toString(array));
+        array[2] = "Java";
+        array[4] = "PP";
         String[] toArray = arrayList.toArray(array);
 
         System.out.println(array == toArray);
