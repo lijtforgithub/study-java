@@ -73,22 +73,22 @@ public class LambdaTest {
 
         private static final long serialVersionUID = 2248982748978775231L;
 
-        private int id;
+        private Integer id;
         private String name;
         private int age;
 
-        public User(int id, String name, int age) {
+        public User(Integer id, String name, int age) {
             super();
             this.id = id;
             this.name = name;
             this.age = age;
         }
 
-        public int getId() {
+        public Integer getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(Integer id) {
             this.id = id;
         }
 
