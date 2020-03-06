@@ -21,7 +21,7 @@ public class LRU {
 
         IntStream.rangeClosed(1, cacheSize * 2).forEach(i -> {
             if (i == cacheSize) {
-                System.out.println(cache.get(1).toString() + "被访问" + cache);
+                System.out.println(cache.get(1).toString() + "被访问 " + cache);
             }
             cache.put(i, (char) (64 + i));
             System.out.println(cache);
@@ -97,17 +97,21 @@ public class LRU {
             Node<K, V> node = getNode(key);
 
             if (Objects.nonNull(node)) {
-                if (Objects.nonNull(node.prev)) {
-                    node.prev.next = node.next;
+                final Node<K, V> prev = node.prev;
+                final Node<K, V> next = node.next;
+
+                if (Objects.isNull(prev)) {
+                    first = next;
+                } else {
+                    prev.next = next;
+                    node.prev = null;
                 }
-                if (Objects.nonNull(node.next)) {
-                    node.next.prev = node.prev;
-                }
-                if (first == node) {
-                    first = node.next;
-                }
-                if (last == node) {
-                    last = node.prev;
+
+                if (Objects.isNull(next)) {
+                    last = prev;
+                } else {
+                    next.prev = prev;
+                    node.next = null;
                 }
 
                 hashMap.remove(key);
@@ -131,19 +135,22 @@ public class LRU {
             if (first == node) {
                 return;
             }
-            if (last == node) {
-                last = last.prev;
-            }
             if (Objects.isNull(first) || Objects.isNull(last)) {
                 first = last = node;
                 return;
             }
 
-            if (Objects.nonNull(node.prev)) {
-                node.prev.next = node.next;
+            final Node<K, V> prev = node.prev;
+            final Node<K, V> next = node.next;
+
+            if (Objects.nonNull(prev)) {
+                prev.next = next;
             }
-            if (Objects.nonNull(node.next)) {
-                node.next.prev = node.prev;
+            if (Objects.nonNull(next)) {
+                next.prev = prev;
+            }
+            if (last == node) {
+                last = prev;
             }
 
             node.next = first;
@@ -154,7 +161,9 @@ public class LRU {
 
         private void removeLast() {
             if (Objects.nonNull(last)) {
-                last = last.prev;
+                final Node<K, V> prev = last.prev;
+                last.prev = null;
+                last = prev;
 
                 if (Objects.isNull(last)) {
                     first = null;
