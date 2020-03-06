@@ -55,8 +55,8 @@ public class LRU {
     private static class LRUCache1<K, V> {
 
         private final int CACHE_SIZE;
-        private Node head;
-        private Node tail;
+        private Node first;
+        private Node last;
         private HashMap<K, Node<K, V>> hashMap;
 
         public LRUCache1(int cacheSize) {
@@ -69,8 +69,8 @@ public class LRU {
 
             if (Objects.isNull(node)) {
                 if (hashMap.size() >= CACHE_SIZE) {
-                    hashMap.remove(tail.key);
-                    removeTail();
+                    hashMap.remove(last.key);
+                    removeLast();
                 }
 
                 node = new Node<>();
@@ -78,7 +78,7 @@ public class LRU {
             }
 
             node.value = value;
-            moveToHead(node);
+            moveToFirst(node);
             hashMap.put(key, node);
         }
 
@@ -89,7 +89,7 @@ public class LRU {
                 return null;
             }
 
-            moveToHead(node);
+            moveToFirst(node);
             return node.value;
         }
 
@@ -97,17 +97,17 @@ public class LRU {
             Node<K, V> node = getNode(key);
 
             if (Objects.nonNull(node)) {
-                if (Objects.nonNull(node.pre)) {
-                    node.pre.next = node.next;
+                if (Objects.nonNull(node.prev)) {
+                    node.prev.next = node.next;
                 }
                 if (Objects.nonNull(node.next)) {
-                    node.next.pre = node.pre;
+                    node.next.prev = node.prev;
                 }
-                if (head == node) {
-                    head = node.next;
+                if (first == node) {
+                    first = node.next;
                 }
-                if (tail == node) {
-                    tail = node.pre;
+                if (last == node) {
+                    last = node.prev;
                 }
 
                 hashMap.remove(key);
@@ -117,49 +117,49 @@ public class LRU {
         @Override
         public String toString() {
             StringBuilder strBuilder = new StringBuilder("{");
-            Node<K, V> node = tail;
+            Node<K, V> node = last;
 
             while (Objects.nonNull(node)) {
                 strBuilder.append(String.format("%s=%s ", node.key, node.value));
-                node = node.pre;
+                node = node.prev;
             }
 
             return strBuilder.append("}").toString();
         }
 
-        private void moveToHead(Node<K, V> node) {
-            if (head == node) {
+        private void moveToFirst(Node<K, V> node) {
+            if (first == node) {
                 return;
             }
-            if (tail == node) {
-                tail = tail.pre;
+            if (last == node) {
+                last = last.prev;
             }
-            if (Objects.isNull(head) || Objects.isNull(tail)) {
-                head = tail = node;
+            if (Objects.isNull(first) || Objects.isNull(last)) {
+                first = last = node;
                 return;
             }
 
-            if (Objects.nonNull(node.pre)) {
-                node.pre.next = node.next;
+            if (Objects.nonNull(node.prev)) {
+                node.prev.next = node.next;
             }
             if (Objects.nonNull(node.next)) {
-                node.next.pre = node.pre;
+                node.next.prev = node.prev;
             }
 
-            node.next = head;
-            head.pre = node;
-            node.pre = null;
-            head = node;
+            node.next = first;
+            first.prev = node;
+            node.prev = null;
+            first = node;
         }
 
-        private void removeTail() {
-            if (Objects.nonNull(tail)) {
-                tail = tail.pre;
+        private void removeLast() {
+            if (Objects.nonNull(last)) {
+                last = last.prev;
 
-                if (Objects.isNull(tail)) {
-                    head = null;
+                if (Objects.isNull(last)) {
+                    first = null;
                 } else {
-                    tail.next = null;
+                    last.next = null;
                 }
             }
         }
@@ -171,7 +171,7 @@ public class LRU {
         private static class Node<K, V> {
             K key;
             V value;
-            Node pre;
+            Node prev;
             Node next;
         }
     }
