@@ -56,7 +56,7 @@ WCBuffer：比L1、L2还快；CPU中只有4个字节。
 ## 如何保障有序性
 #### 1.硬件级别
 - 原子指令，如x86上的"lock …" 指令是一个Full Barrier，执行时会锁住内存子系统来确保执行顺序，甚至跨多个CPU。Software Locks通常使用了内存屏障或原子指令来实现变量可见性和保持程序顺序。
-- 硬件CPU内存屏障（X86）：在两条指令直接加内存屏障。
+- 硬件CPU内存屏障（X86）：在两条指令之间加内存屏障。
     1. sfence: store | 在sfence指令前的写操作当必须在sfence指令后的写操作前完成。
     2. lfence：load | 在lfence指令前的读操作当必须在lfence指令后的读操作前完成。
     3. mfence：mix | 在mfence指令前的读写操作当必须在mfence指令后的读写操作前完成。
