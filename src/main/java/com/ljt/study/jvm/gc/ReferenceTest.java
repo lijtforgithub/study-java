@@ -3,8 +3,8 @@ package com.ljt.study.jvm.gc;
 import com.ljt.study.juc.ThreadUtils;
 import org.junit.jupiter.api.Test;
 
-import java.lang.ref.SoftReference;
-import java.lang.ref.WeakReference;
+import java.lang.ref.*;
+import java.lang.reflect.Field;
 
 /**
  * @author LiJingTang
@@ -65,6 +65,44 @@ public class ReferenceTest {
             super.finalize();
             System.out.println(this.getClass().getName() + "：finalize");
         }
+    }
+
+
+    private static volatile boolean isRun = true;
+
+
+    /**
+     * 虚引用：一个对象是否有虚引用的存在，完全不会对其生存时间构成影响，也无法通过虚引用来取得一个对象实例。
+     * 为一个对象设置虚引用关联的唯一目的只是为了能在这个对象被收集器回收时收到一个系统通知。
+     */
+    @Test
+    public void testPhantom() {
+        String str = new String("XXOO");
+        System.out.println(str.getClass() + "@" + str.hashCode());
+        final ReferenceQueue<String> referenceQueue = new ReferenceQueue<>();
+
+        new Thread(() -> {
+            while (isRun) {
+                Object o = referenceQueue.poll();
+                if (o != null) {
+                    try {
+                        Field referent = Reference.class.getDeclaredField("referent");
+                        referent.setAccessible(true);
+                        Object result = referent.get(o);
+                        System.out.println("gc will collect：" + result.getClass() + "@" + result.hashCode() + "\t" + result.toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+
+        PhantomReference<String> pf = new PhantomReference<>(str, referenceQueue);
+        str = null;
+        ThreadUtils.sleepSeconds(3);
+        System.gc();
+        ThreadUtils.sleepSeconds(10);
+        isRun = false;
     }
 
 }
