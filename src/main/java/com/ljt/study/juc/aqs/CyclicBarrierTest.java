@@ -54,17 +54,17 @@ public class CyclicBarrierTest {
         for (int i = 0; i < 3; i++) {
             Runnable command = () -> {
                 try {
-                    Thread.sleep((long)(Math.random() * 10000));
+                    Thread.sleep((long) (Math.random() * 10000));
                     System.out.println("线程" + Thread.currentThread().getName() + "即将到达集合地点1，当前已有"
                             + (phaser.getArrivedParties() + 1) + "个已经到达，" + (2 == phaser.getArrivedParties() ? "都到齐了，继续走啊" : "正在等候"));
                     phaser.arriveAndAwaitAdvance();
 
-                    Thread.sleep((long)(Math.random() * 10000));
+                    Thread.sleep((long) (Math.random() * 10000));
                     System.out.println("线程" + Thread.currentThread().getName() + "即将到达集合地点2，当前已有"
                             + (phaser.getArrivedParties() + 1) + "个已经到达，" + (2 == phaser.getArrivedParties() ? "都到齐了，继续走啊" : "正在等候"));
                     phaser.arriveAndAwaitAdvance();
 
-                    Thread.sleep((long)(Math.random() * 10000));
+                    Thread.sleep((long) (Math.random() * 10000));
                     System.out.println("线程" + Thread.currentThread().getName() + "即将到达集合地点3，当前已有"
                             + (phaser.getArrivedParties() + 1) + "个已经到达，" + (2 == phaser.getArrivedParties() ? "都到齐了，继续走啊" : "正在等候"));
                     phaser.arriveAndAwaitAdvance();

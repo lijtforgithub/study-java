@@ -62,6 +62,7 @@ public class SecurityTest {
     public void testAES_encrypt() {
         System.out.println(AES.encrypt(TEST_DATA));
     }
+
     @Test
     public void testAES_decrypt() {
         System.out.println(AES.decrypt(AES.encrypt(TEST_DATA)));
@@ -71,6 +72,7 @@ public class SecurityTest {
     public void testBASE64_encrypt() {
         System.out.println(TEST_DATA + " encrypt：" + BASE64.encrypt(TEST_DATA));
     }
+
     @Test
     public void testBASE64_decrypt() {
         String encryptData = BASE64.encrypt(TEST_DATA);
@@ -81,6 +83,7 @@ public class SecurityTest {
     public void testDES_encrypt() {
         System.out.println(DES.encrypt(TEST_DATA));
     }
+
     @Test
     public void testDES_decrypt() {
         String key = DES.initKey();
@@ -94,6 +97,7 @@ public class SecurityTest {
         byte[] salt = PBE.initSalt();
         System.out.println(PBE.encrypt(TEST_DATA, salt));
     }
+
     @Test
     public void testPBE_decrypt() {
         byte[] salt = PBE.initSalt();

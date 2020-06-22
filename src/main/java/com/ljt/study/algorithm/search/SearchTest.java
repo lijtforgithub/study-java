@@ -29,7 +29,7 @@ public class SearchTest {
     /**
      * 二分/折半查找（有序）
      *
-     * @param array 有序
+     * @param array  有序
      * @param target
      * @return
      */
@@ -57,7 +57,7 @@ public class SearchTest {
     /**
      * 顺序查找（无序、有序）
      *
-     * @param array 无序、有序
+     * @param array  无序、有序
      * @param target
      * @return
      */

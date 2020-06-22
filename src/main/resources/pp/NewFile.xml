@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catchTasks xmlns="http://www.example.org/catchTaskXML"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.example.org/catchTaskXML catchTaskXML.xsd ">
-	<task name="部门数据" class="com.ving.newWeb.department.CatchDepartmentDataImpl"
-		taskCarrierImpl="自己实现的采集情况" dataProviderNode="1" dataModelNode="7"
-		targetNode="7 ,3,4 " frequency="10" priority="1">
-		<dbVist>
-			<platformDBAlias>exchangeBase</platformDBAlias>
-		</dbVist>
-	</task>
-	<task name="办件数据" class="com.ving.newWeb.department.CatchCaseDataImpl"
-		taskCarrierImpl="自己实现的采集情况" dataProviderNode="1" dataModelNode="7"
-		targetNode="7,3,4" frequency="10" priority="1">
-		<jmsVist>
-			<jmsURL>http://192.168.0.125:61616</jmsURL>
-			<queueName>demoQueue</queueName>
-		</jmsVist>
-	</task>
-	<task name="补办件数据" class="com.ving.newWeb.department.CatchCaseDataImpl"
-		taskCarrierImpl="自己实现的采集情况" dataProviderNode="1" dataModelNode="7"
-		targetNode="7,3,4" frequency="10" priority="1">
-		<wsVist>
-			<webservice>http://192.168.0.125:8088/ExchangeDataWS?wsdl</webservice>
-		</wsVist>
-	</task>
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://www.example.org/catchTaskXML catchTaskXML.xsd ">
+    <task name="部门数据" class="com.ving.newWeb.department.CatchDepartmentDataImpl"
+          taskCarrierImpl="自己实现的采集情况" dataProviderNode="1" dataModelNode="7"
+          targetNode="7 ,3,4 " frequency="10" priority="1">
+        <dbVist>
+            <platformDBAlias>exchangeBase</platformDBAlias>
+        </dbVist>
+    </task>
+    <task name="办件数据" class="com.ving.newWeb.department.CatchCaseDataImpl"
+          taskCarrierImpl="自己实现的采集情况" dataProviderNode="1" dataModelNode="7"
+          targetNode="7,3,4" frequency="10" priority="1">
+        <jmsVist>
+            <jmsURL>http://192.168.0.125:61616</jmsURL>
+            <queueName>demoQueue</queueName>
+        </jmsVist>
+    </task>
+    <task name="补办件数据" class="com.ving.newWeb.department.CatchCaseDataImpl"
+          taskCarrierImpl="自己实现的采集情况" dataProviderNode="1" dataModelNode="7"
+          targetNode="7,3,4" frequency="10" priority="1">
+        <wsVist>
+            <webservice>http://192.168.0.125:8088/ExchangeDataWS?wsdl</webservice>
+        </wsVist>
+    </task>
 </catchTasks>

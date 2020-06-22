@@ -2,7 +2,7 @@ package com.ljt.study.lang.type.clazz;
 
 /**
  * 类构造器和实例构造器
- *
+ * <p>
  * 对象实例化过程
  * 1.申请对象内存
  * 2.成员变量赋默认值

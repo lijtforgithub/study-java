@@ -63,7 +63,7 @@ public class InterfaceTest {
 
     /**
      * Supplier<R> 供给型接口（无参数 有返回值）
-     *
+     * <p>
      * R 返回值类型
      */
     @Test
@@ -74,7 +74,7 @@ public class InterfaceTest {
 
     /**
      * Function<T,R> 函数型接口（接受一个参数 有返回值）
-     *
+     * <p>
      * T 传入参数
      * R 返回值类型
      */
@@ -86,7 +86,7 @@ public class InterfaceTest {
 
     /**
      * Predicate<T> 断定型接口（接受一个参数 返回Boolean型值）
-     *
+     * <p>
      * T 传入参数
      * Boolean 返回一个Boolean型值
      */

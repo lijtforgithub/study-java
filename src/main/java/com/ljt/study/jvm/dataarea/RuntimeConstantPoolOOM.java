@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *  VM args：-Xmx6M -XX:-UseGCOverheadLimit
+ * VM args：-Xmx6M -XX:-UseGCOverheadLimit
  *
  * @author LiJingTang
  * @date 2020-01-22 10:20

@@ -37,8 +37,10 @@ public class MIDispatch {
         }
     }
 
-    private static class QQ {}
+    private static class QQ {
+    }
 
-    private static class _360 {}
+    private static class _360 {
+    }
 
 }

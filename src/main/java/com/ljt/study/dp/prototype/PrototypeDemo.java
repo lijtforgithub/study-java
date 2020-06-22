@@ -12,7 +12,7 @@ public class PrototypeDemo {
         InItem in = new InItem();
         in.setId(1L);
         System.out.println(in.getId());
-        System.out.println(((InItem)in.clone()).getId());
+        System.out.println(((InItem) in.clone()).getId());
     }
 
     private static class InItem extends AbstractItem {
@@ -29,6 +29,7 @@ public class PrototypeDemo {
         public int getInId() {
             return inId;
         }
+
         public void setInId(int inId) {
             this.inId = inId;
         }
@@ -43,6 +44,7 @@ public class PrototypeDemo {
         public int getOutId() {
             return outId;
         }
+
         public void setOutId(int outId) {
             this.outId = outId;
         }
@@ -62,36 +64,47 @@ public class PrototypeDemo {
         public Long getId() {
             return id;
         }
+
         public void setId(Long id) {
             this.id = id;
         }
+
         public String getName() {
             return name;
         }
+
         public void setName(String name) {
             this.name = name;
         }
+
         public String getCreator() {
             return creator;
         }
+
         public void setCreator(String creator) {
             this.creator = creator;
         }
+
         public Long getCreateTime() {
             return createTime;
         }
+
         public void setCreateTime(Long createTime) {
             this.createTime = createTime;
         }
+
         public String getUpdater() {
             return updater;
         }
+
         public void setUpdater(String updater) {
             this.updater = updater;
         }
+
         public Long getUpdateTime() {
             return updateTime;
         }
+
         public void setUpdateTime(Long updateTime) {
             this.updateTime = updateTime;
         }

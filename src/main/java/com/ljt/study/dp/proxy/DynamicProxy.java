@@ -46,29 +46,29 @@ public class DynamicProxy {
 
             for (Method method : methods) {
                 methodStr += sep +
-                nTab(1) + "@Override" + sep +
-                nTab(1) + "public void " + method.getName() + "() {" + sep +
-                nTab(2) + "try {" + sep +
-                nTab(3) + "Method m = " + inter.getName() + ".class.getMethod(\"" + method.getName() + "\");" + sep +
-                nTab(3) + "h.invoke(this, m);" + sep +
-                nTab(2) + "} catch (Exception e) {" + sep +
-                nTab(3) + "e.printStackTrace();" + sep +
-                nTab(2) + "}" + sep +
-                nTab(1) + "}";
+                        nTab(1) + "@Override" + sep +
+                        nTab(1) + "public void " + method.getName() + "() {" + sep +
+                        nTab(2) + "try {" + sep +
+                        nTab(3) + "Method m = " + inter.getName() + ".class.getMethod(\"" + method.getName() + "\");" + sep +
+                        nTab(3) + "h.invoke(this, m);" + sep +
+                        nTab(2) + "} catch (Exception e) {" + sep +
+                        nTab(3) + "e.printStackTrace();" + sep +
+                        nTab(2) + "}" + sep +
+                        nTab(1) + "}";
             }
 
             String src =
-                "import java.lang.reflect.Method;" + sep +
-                "import " + InvocationHandler.class.getPackage().getName() + "." +
-                    InvocationHandler.class.getSimpleName() + ";" + sep + sep +
-                "public class " + className + " implements " + inter.getName() + " {" + sep +
-                nTab(1) + "private InvocationHandler h;" + sep +
-                nTab(1) + "public " + className + "(InvocationHandler h) {" + sep +
-                nTab(2) + "super();" + sep +
-                nTab(2) + "this.h = h;" + sep +
-                nTab(1) + "}" + sep +
-                nTab(1) + methodStr + sep +
-                "}";
+                    "import java.lang.reflect.Method;" + sep +
+                            "import " + InvocationHandler.class.getPackage().getName() + "." +
+                            InvocationHandler.class.getSimpleName() + ";" + sep + sep +
+                            "public class " + className + " implements " + inter.getName() + " {" + sep +
+                            nTab(1) + "private InvocationHandler h;" + sep +
+                            nTab(1) + "public " + className + "(InvocationHandler h) {" + sep +
+                            nTab(2) + "super();" + sep +
+                            nTab(2) + "this.h = h;" + sep +
+                            nTab(1) + "}" + sep +
+                            nTab(1) + methodStr + sep +
+                            "}";
 
 
             String path = "D:/Workspace/IDEA/study/test/proxy/";

@@ -28,6 +28,7 @@ public class Item39 {
         public Date getStart() {
             return new Date(start.getTime());
         }
+
         public Date getEnd() {
             return new Date(end.getTime());
         }

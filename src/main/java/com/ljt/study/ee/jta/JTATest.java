@@ -13,7 +13,7 @@ import java.io.IOException;
  * @author LiJingTang
  * @date 2020-01-04 16:29
  */
-@WebServlet(description = "全局事物测试", urlPatterns = { "/lijt/javaee/jta.htm" })
+@WebServlet(description = "全局事物测试", urlPatterns = {"/lijt/javaee/jta.htm"})
 public class JTATest extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

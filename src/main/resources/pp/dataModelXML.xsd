@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	targetNamespace="http://www.example.org/dataModelXML" xmlns="http://www.example.org/dataModelXML"
-	elementFormDefault="qualified">
-	<xsd:group name="dataUnitGrp">
-		<xsd:sequence>
-			<xsd:element name="Datatype" type="xsd:string" />
-			<xsd:element name="MaximumSize"/>
-			<xsd:element name="MinimumSize"/>
-		</xsd:sequence>
-	</xsd:group>
-	<xsd:element name="dataModel">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="dataCatchMiddleTable">
-					<xsd:complexType>
-						<xsd:all>
-							<xsd:element name="frequency" type="xsd:int" />
-							<xsd:element name="beforeDataCatchSql" type="xsd:string" />
-							<xsd:element name="delOptCatchSql" type="xsd:string" />
-							<xsd:element name="afterDataCatchSql" type="xsd:string" />
-						</xsd:all>
-					</xsd:complexType>
-				</xsd:element>
-				<xsd:element name="modelItem" maxOccurs="unbounded">
-					<xsd:complexType>
-						<xsd:sequence>
-							<xsd:element name="Identifier" />
-							<xsd:element name="DisplayName" type="xsd:string" />
-							<xsd:element name="modelItemNo" type="xsd:int" />
-							<xsd:element name="dataUnit" maxOccurs="unbounded">
-								<xsd:complexType>
-									<xsd:sequence>
-										<xsd:element name="IDName" type="xsd:string" />
-										<xsd:element name="DisplayName" type="xsd:string" />
-										<xsd:choice>
-											<xsd:group ref="dataUnitGrp" />
-											<xsd:element name="embededModelItem" type="xsd:int" />
-										</xsd:choice>
-									</xsd:sequence>
-								</xsd:complexType>
-							</xsd:element>
-							<xsd:element name="sqlStr" type="xsd:string" />
-						</xsd:sequence>
-					</xsd:complexType>
-				</xsd:element>
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
+            targetNamespace="http://www.example.org/dataModelXML" xmlns="http://www.example.org/dataModelXML"
+            elementFormDefault="qualified">
+    <xsd:group name="dataUnitGrp">
+        <xsd:sequence>
+            <xsd:element name="Datatype" type="xsd:string"/>
+            <xsd:element name="MaximumSize"/>
+            <xsd:element name="MinimumSize"/>
+        </xsd:sequence>
+    </xsd:group>
+    <xsd:element name="dataModel">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="dataCatchMiddleTable">
+                    <xsd:complexType>
+                        <xsd:all>
+                            <xsd:element name="frequency" type="xsd:int"/>
+                            <xsd:element name="beforeDataCatchSql" type="xsd:string"/>
+                            <xsd:element name="delOptCatchSql" type="xsd:string"/>
+                            <xsd:element name="afterDataCatchSql" type="xsd:string"/>
+                        </xsd:all>
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="modelItem" maxOccurs="unbounded">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Identifier"/>
+                            <xsd:element name="DisplayName" type="xsd:string"/>
+                            <xsd:element name="modelItemNo" type="xsd:int"/>
+                            <xsd:element name="dataUnit" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="IDName" type="xsd:string"/>
+                                        <xsd:element name="DisplayName" type="xsd:string"/>
+                                        <xsd:choice>
+                                            <xsd:group ref="dataUnitGrp"/>
+                                            <xsd:element name="embededModelItem" type="xsd:int"/>
+                                        </xsd:choice>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element name="sqlStr" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
 </xsd:schema>
