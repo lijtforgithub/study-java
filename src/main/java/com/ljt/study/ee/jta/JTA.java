@@ -68,8 +68,9 @@ public class JTA {
             ps2.setString(2, "password_jta");
             ps2.executeUpdate();
 
-            if (!flag)
+            if (!flag) {
                 exception();
+            }
             userTx.commit();
         } catch (Exception e) {
             try {
@@ -136,8 +137,9 @@ public class JTA {
 
             ret1 = xaResource1.prepare(xid1);
 
-            if (!flag)
+            if (!flag) {
                 exception();
+            }
 
             if (ret1 == XAResource.XA_OK && ret2 == XAResource.XA_OK) {
                 xaResource1.commit(xid1, false);
@@ -190,8 +192,9 @@ public class JTA {
             ps.setString(2, "password_main");
             ps.executeUpdate();
 
-            if (!flag)
+            if (!flag) {
                 exception();
+            }
             conn.commit(); // 提交时保存数据 commit 之后数据无法再回滚 所以此句一定要在最后 异常之后
         } catch (Exception e) {
             try {
