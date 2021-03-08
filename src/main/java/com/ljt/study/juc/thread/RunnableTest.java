@@ -7,7 +7,8 @@ package com.ljt.study.juc.thread;
 public class RunnableTest {
 
     public static void main(String[] args) {
-        Runner r = new Runner(); // 一个线程任务也可以启动两个线程
+        // 一个线程任务也可以启动两个线程
+        Runner r = new Runner();
         Thread thread1 = new Thread(r);
         Thread thread2 = new Thread(r);
 
