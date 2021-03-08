@@ -22,19 +22,19 @@ public class VolatileTest {
         t.start();
         ThreadUtils.sleepSeconds(1);
         System.out.println("wakeup");
-        test.stop = true;
+        test.running = false;
     }
 
     private
     volatile
-    boolean stop;
+    boolean running = true;
 
     private class VolatileThread extends Thread {
 
         @Override
         public void run() {
             System.out.println("start");
-            while (!stop) {
+            while (running) {
                 // 如果加了打印语句 不加 volatile 也会终止 CPU调度发生了上下文切换 也会刷新缓存
 //                System.out.println("OK");
             }
@@ -58,7 +58,7 @@ public class VolatileTest {
         }
 
         latch.await();
-        System.out.println(notAtomic.count);
+        System.out.println(NotAtomic.count);
     }
 
     /**
