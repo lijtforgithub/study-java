@@ -4,6 +4,7 @@ import com.ljt.study.juc.ThreadUtils;
 
 /**
  * CPU读取缓存以cache line为基本单位 64byte
+ * @Contended -XX:-RestrictContended
  *
  * @author LiJingTang
  * @date 2019-11-10 21:02
