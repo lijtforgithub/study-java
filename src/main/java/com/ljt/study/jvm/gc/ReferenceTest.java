@@ -74,11 +74,15 @@ public class ReferenceTest {
     /**
      * 虚引用：一个对象是否有虚引用的存在，完全不会对其生存时间构成影响，也无法通过虚引用来取得一个对象实例。
      * 为一个对象设置虚引用关联的唯一目的只是为了能在这个对象被收集器回收时收到一个系统通知。
+     * 常用于堆外内存的引用，引用为null后因为内存不在JVM，无法回收；引用放到队列，从队列获取到通知。Unsafe回收堆外内存。
      */
     @Test
     public void testPhantom() {
         String str = new String("XXOO");
         System.out.println(str.getClass() + "@" + str.hashCode());
+        /*
+         * 没有引用后放到此队列
+         */
         final ReferenceQueue<String> referenceQueue = new ReferenceQueue<>();
 
         new Thread(() -> {
@@ -89,7 +93,7 @@ public class ReferenceTest {
                         Field referent = Reference.class.getDeclaredField("referent");
                         referent.setAccessible(true);
                         Object result = referent.get(o);
-                        System.out.println("gc will collect：" + result.getClass() + "@" + result.hashCode() + "\t" + result.toString());
+                        System.out.println("通知回收此对象：" + result.getClass() + "@" + result.hashCode() + "\t" + result.toString());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -98,6 +102,10 @@ public class ReferenceTest {
         }).start();
 
         PhantomReference<String> pf = new PhantomReference<>(str, referenceQueue);
+        /*
+         * get 不到 主要是为了有个通知
+         */
+        System.out.println(pf.get());
         str = null;
         ThreadUtils.sleepSeconds(3);
         System.gc();
