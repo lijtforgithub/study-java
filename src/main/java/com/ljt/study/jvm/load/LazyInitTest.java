@@ -35,6 +35,11 @@ public class LazyInitTest {
         Class.forName("com.ljt.study.jvm.load.LazyInitTest$Child");
     }
 
+    @Test
+    public void testClassForNameFalse() throws ClassNotFoundException {
+        Class.forName("com.ljt.study.jvm.load.LazyInitTest$Child", false, LazyInitTest.class.getClassLoader());
+    }
+
 
     private static class Parent {
 
