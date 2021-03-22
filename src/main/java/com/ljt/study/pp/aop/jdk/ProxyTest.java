@@ -25,14 +25,14 @@ public class ProxyTest {
         ClassLoader classLoader = ProxyTest.class.getClassLoader();
         // 代理接口 否则有异常 is not an interface
         BusinessService businessService = new BusinessServiceImpl();
+        // Proxy.newProxyInstance(classLoader, businessService.getClass().getInterfaces(), new LoggerInvocationHandler(businessService))
         BusinessService proxy = (BusinessService) Proxy.newProxyInstance(classLoader,
                 new Class[]{BusinessService.class}, new ProxyTest.LoggerInvocationHandler(businessService));
-//		BusinessService proxy = (BusinessService) Proxy.newProxyInstance(classLoader,
-//				businessService.getClass().getInterfaces(), new LoggerInvocationHandler(businessService));
 
         System.out.println(businessService);
         System.out.println(proxy);
-        System.out.println(businessService == proxy); // hashcode一样 但是不是一个对象
+        // hashcode一样 但是不是一个对象
+        System.out.println(businessService == proxy);
         proxy.save();
     }
 
@@ -57,7 +57,10 @@ public class ProxyTest {
         proxy.add("Proxy");
         proxy.add("LiJingTang");
         System.out.println(proxy.size());
-        System.out.println(proxy.getClass().getName()); // getClass() native方法没有被代理
+        /*
+         * getClass() native方法没有被代理
+         */
+        System.out.println(proxy.getClass().getName());
     }
 
     private static class LoggerInvocationHandler implements InvocationHandler {
@@ -71,9 +74,23 @@ public class ProxyTest {
             methodNames = Stream.of(methods).map(Method::getName).collect(Collectors.toSet());
         }
 
+        /**
+         * public final class $Proxy0 extends Proxy implements BusinessService
+         *
+         *      public final void save() throws  {
+         *         try {
+         *             super.h.invoke(this, m4, (Object[])null);
+         *         } catch (RuntimeException | Error var2) {
+         *             throw var2;
+         *         } catch (Throwable var3) {
+         *             throw new UndeclaredThrowableException(var3);
+         *         }
+         *      }
+         */
+
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            Object obj = null;
+            Object obj;
             // 为了过滤继承过来的toString()等方法
             if (methodNames.contains(method.getName())) {
                 System.out.println(proxy.getClass());

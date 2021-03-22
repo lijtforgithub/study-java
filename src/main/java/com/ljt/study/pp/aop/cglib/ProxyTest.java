@@ -18,9 +18,7 @@ public class ProxyTest {
         BusinessServiceImpl businessService = new BusinessServiceImpl();
         System.out.println(businessService);
         BusinessServiceImpl proxy = (BusinessServiceImpl) new ProxyTest.CglibProxy().getProxyInstance(businessService);
-        // 不能对final修饰的类进行代理
-//        new CglibProxy().getProxyInstance(new String());
-
+        // 不能对final修饰的类进行代理 new CglibProxy().getProxyInstance(new String())
         System.out.println(proxy.delete());
     }
 
@@ -29,8 +27,10 @@ public class ProxyTest {
         public Object getProxyInstance(Object obj) {
             Enhancer enhancer = new Enhancer();
             enhancer.setSuperclass(obj.getClass());
-            enhancer.setCallback(this);  // 回调方法
-            return enhancer.create();  // 创建代理对象
+            // 回调方法
+            enhancer.setCallback(this);
+            // 创建代理对象
+            return enhancer.create();
         }
 
         @Override

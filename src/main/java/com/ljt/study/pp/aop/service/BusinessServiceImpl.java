@@ -10,12 +10,12 @@ public class BusinessServiceImpl implements BusinessService {
 
     @Override
     public void save() {
-        System.out.println("save()");
+        System.out.println(this.getClass() + ".save()");
     }
 
     @Override
     public String delete() {
-        System.out.println("delete()");
+        System.out.println(this.getClass() + ".delete()");
         return "OK";
     }
 
