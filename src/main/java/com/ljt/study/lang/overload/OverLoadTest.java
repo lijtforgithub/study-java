@@ -107,6 +107,7 @@ public class OverLoadTest {
          */
         @Override
         public void method2() {
+            System.out.println(super.equals(this));
             System.out.println("Beer -> method2() this = " + this.getClass().getName());
         }
 
