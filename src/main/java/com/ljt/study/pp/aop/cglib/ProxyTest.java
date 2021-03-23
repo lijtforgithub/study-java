@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 public class ProxyTest {
 
     public static void main(String[] args) {
+//        System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "C:\\Users\\Administrator\\Desktop");
         // 代理实现类 如果是私有静态内部类 必须显示声明无参构造方法
         BusinessServiceImpl businessService = new BusinessServiceImpl();
         System.out.println(businessService);

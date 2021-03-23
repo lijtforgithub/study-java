@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 public class ProxyTest {
 
     public static void main(String[] args) {
-        System.getProperties().put("sun.misc.ProxyGenerator.saveGeneratedFiles", "true");
+//        System.setProperty("sun.misc.ProxyGenerator.saveGeneratedFiles", "true");
 
         ClassLoader classLoader = ProxyTest.class.getClassLoader();
         // 代理接口 否则有异常 is not an interface
