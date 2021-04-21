@@ -3,9 +3,6 @@ package com.ljt.study.pp.aop.cglib;
 import com.ljt.study.pp.aop.service.BusinessServiceImpl;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
-
-import java.lang.reflect.Method;
 
 /**
  * @author LiJingTang
@@ -16,32 +13,27 @@ public class ProxyTest {
     public static void main(String[] args) {
 //        System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "C:\\Users\\Administrator\\Desktop");
         // 代理实现类 如果是私有静态内部类 必须显示声明无参构造方法
-        BusinessServiceImpl businessService = new BusinessServiceImpl();
-        System.out.println(businessService);
-        BusinessServiceImpl proxy = (BusinessServiceImpl) new ProxyTest.CglibProxy().getProxyInstance(businessService);
+        BusinessServiceImpl proxy = (BusinessServiceImpl) new ProxyTest.CglibProxy().getProxyInstance();
         // 不能对final修饰的类进行代理 new CglibProxy().getProxyInstance(new String())
         System.out.println(proxy.delete());
     }
 
-    private static class CglibProxy implements MethodInterceptor {
+    private static class CglibProxy {
 
-        public Object getProxyInstance(Object obj) {
+        public Object getProxyInstance() {
             Enhancer enhancer = new Enhancer();
-            enhancer.setSuperclass(obj.getClass());
+            enhancer.setSuperclass(BusinessServiceImpl.class);
             // 回调方法
-            enhancer.setCallback(this);
+            enhancer.setCallback((MethodInterceptor) (obj, method, args, proxy) -> {
+                System.out.println(obj.getClass());
+
+                Object retVal = proxy.invokeSuper(obj, args);
+                System.out.println(method.getName() + "() | after...");
+
+                return retVal;
+            });
             // 创建代理对象
             return enhancer.create();
-        }
-
-        @Override
-        public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-            System.out.println(obj.getClass());
-
-            Object retVal = proxy.invokeSuper(obj, args);
-            System.out.println(method.getName() + "() | after...");
-
-            return retVal;
         }
     }
 
