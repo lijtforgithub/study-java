@@ -12,7 +12,7 @@ public class InvokeDynamic {
         I i3 = C::n;
 
         i1.m();
-        // Lambda表达式动态产生类（不要放在循环体内）
+        // Lambda表达式动态产生类
         System.out.println(i1.getClass());
         System.out.println(i2.getClass());
         System.out.println(i3.getClass());

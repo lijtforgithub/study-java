@@ -1,5 +1,7 @@
 package com.ljt.study;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 /**
  * @author LiJingTang
  * @date 2021-03-08 14:28
@@ -7,8 +9,8 @@ package com.ljt.study;
 public class TempTest {
 
     public static void main(String[] args) {
-        String s = "010201";
-        System.out.println(s.replaceFirst("01", "xxoo"));
+        System.out.println(RandomStringUtils.randomAlphabetic(8));
+        System.out.println(RandomStringUtils.random(20, 97, 122, true, false));
     }
 
 }
