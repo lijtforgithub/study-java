@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class LoadAgent {
 
-    private static final String AGENT_PATH = "D:/Workspace/IDEA/study/target/artifacts/agent/agent-agentmain.jar";
+    private static final String AGENT_PATH = "D:/WorkSpace/Study/out/agent/AgentMain.jar";
 
     public static void main(String[] args) throws Exception {
         List<VirtualMachineDescriptor> vmList = VirtualMachine.list();

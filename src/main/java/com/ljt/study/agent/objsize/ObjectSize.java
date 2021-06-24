@@ -16,13 +16,8 @@ public class ObjectSize {
 
     private static Instrumentation instrumentation;
 
-    /**
-     * 该方法在main方法之前运行，与main方法运行在同一个JVM中 并被同一个System ClassLoader装载
-     *
-     * @param agentArgs javaagent = 后的参数
-     * @param inst
-     */
     public static void premain(String agentArgs, Instrumentation inst) {
+        System.out.println("JVM 载入 agent：" + ObjectSize.class.toString());
         instrumentation = inst;
     }
 

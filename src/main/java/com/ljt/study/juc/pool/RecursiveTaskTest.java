@@ -20,7 +20,7 @@ public class RecursiveTaskTest {
     private static class CalcRecursiveTask extends RecursiveTask<Integer> {
         private static final long serialVersionUID = -3611254198265061729L;
 
-        public static final int threshold = 2;
+        public static final int threshold = 30;
         private int start;
         private int end;
 
@@ -36,18 +36,21 @@ public class RecursiveTaskTest {
             // 如果任务足够小就计算任务
             boolean canCompute = (end - start) <= threshold;
             if (canCompute) {
+                System.out.println("任务线程：" + Thread.currentThread().getName());
                 for (int i = start; i <= end; i++) {
                     sum += i;
                 }
             } else {
+                System.out.println("分配线程：" + Thread.currentThread().getName());
                 // 如果任务大于阈值，就分裂成两个子任务计算
                 int middle = (start + end) / 2;
                 CalcRecursiveTask leftTask = new CalcRecursiveTask(start, middle);
                 CalcRecursiveTask rightTask = new CalcRecursiveTask(middle + 1, end);
 
                 // 执行子任务
-                leftTask.fork();
-                rightTask.fork();
+                invokeAll(leftTask, rightTask);
+//                leftTask.fork();
+//                rightTask.fork();
 
                 // 等待任务执行结束合并其结果
                 int leftResult = leftTask.join();

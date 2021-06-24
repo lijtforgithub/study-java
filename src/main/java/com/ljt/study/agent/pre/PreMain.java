@@ -26,10 +26,11 @@ public class PreMain {
      * 该方法在main方法之前运行，与main方法运行在同一个JVM中 并被同一个System ClassLoader装载
      *
      * @param agentArgs javaagent = 后的参数
-     * @param inst
+     * @param inst 仪表
      */
     public static void premain(String agentArgs, Instrumentation inst) {
-        System.out.printf("%s => 两个参数的premain方法：agentArgs = %s \n", PreMain.class.toString(), agentArgs);
+        System.out.println("JVM 载入 agent：" + PreMain.class.toString());
+        System.out.println("两个参数的premain方法：agentArgs = " + agentArgs);
 
         inst.addTransformer(new MethodTimeTransformer());
     }
@@ -39,7 +40,8 @@ public class PreMain {
      * 则会执行 premain(String agentArgs)
      */
     public static void premain(String agentArgs) {
-        System.out.printf("%s => 一个参数的premain方法：agentArgs = %s \n", PreMain.class.toString(), agentArgs);
+        System.out.println("JVM 载入 agent：" + PreMain.class.toString());
+        System.out.println("一个参数的premain方法：agentArgs = " + agentArgs);
     }
 
 
@@ -66,9 +68,10 @@ public class PreMain {
 
         @Override
         public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
-                                ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
+                                ProtectionDomain protectionDomain, byte[] classFileBuffer) throws IllegalClassFormatException {
             className = className.replace("/", ".");
-            if (!METHOD_MAP.containsKey(className)) {
+            Set<String> methods = METHOD_MAP.get(className);
+            if (Objects.isNull(methods)) {
                 return null;
             }
 
@@ -77,12 +80,12 @@ public class PreMain {
             try {
                 ctClass = CLASS_POLL.getCtClass(className);
 
-                for (String methodName : METHOD_MAP.get(className)) {
-                    CtMethod ctMethod = ctClass.getDeclaredMethod(methodName);
+                for (String methodName : methods) {
+                    CtMethod method = ctClass.getDeclaredMethod(methodName);
                     String newMethodName = methodName + "$old";
-                    ctMethod.setName(newMethodName);
+                    method.setName(newMethodName);
 
-                    CtMethod newMethod = CtNewMethod.copy(ctMethod, methodName, ctClass, null);
+                    CtMethod newMethod = CtNewMethod.copy(method, methodName, ctClass, null);
 
                     String body = "{" + SYS_LINE +
                             "long startTime = " + SYS_TIME + SYS_LINE +

@@ -23,7 +23,8 @@ public class AgentMain {
     }
 
     public static void agentmain(String agentArgs, Instrumentation inst) throws UnmodifiableClassException {
-        System.out.printf("%s => agentmain方法：agentArgs = %s \n", AgentMain.class.toString(), agentArgs);
+        System.out.println("JVM 载入 agent：" + AgentMain.class.toString());
+        System.out.println("agentmain方法：agentArgs = " + agentArgs);
 
         inst.addTransformer(new MethodTransformer(), true);
         Class<?>[] classes = inst.getAllLoadedClasses();
@@ -37,11 +38,11 @@ public class AgentMain {
     }
 
     private static boolean matchClass(String className) {
-        return className.equals("com.ljt.study.agent.AgentTest");
+        return "com.ljt.study.agent.AgentTest".equals(className);
     }
 
     private static boolean matchMethod(String methodName) {
-        return methodName.equals("sayHello");
+        return "sayHello".equals(methodName);
     }
 
 
@@ -54,7 +55,7 @@ public class AgentMain {
 
         @Override
         public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
-                                ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
+                                ProtectionDomain protectionDomain, byte[] classFileBuffer) throws IllegalClassFormatException {
             className = className.replace("/", ".");
             CtClass ctClass = null;
 
