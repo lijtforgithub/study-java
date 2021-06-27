@@ -15,7 +15,6 @@ public class SystemTest {
     @Test
     public void testMethod() {
         System.out.println("当前时间戳（毫秒）：" + System.currentTimeMillis());
-        System.out.println("移除系统属性  user.dir ：" + System.clearProperty("user.dir"));
         System.out.println("哈希码值： " + System.identityHashCode(new Object()));
         System.console().flush();
 

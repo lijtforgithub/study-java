@@ -32,6 +32,24 @@ aspectJ 是编译的时候直接编译入切面，属于静态织入，原理是
 #### Spring AOP
 Spring 只是使用了与 AspectJ 一样的注解，没有使用 AspectJ 的编译器 ，转向采用动态代理技术的实现原理来构建 Spring AOP 的内部机制（动态织入），这是与 AspectJ（静态织入）最根本的区别。
 
+#### 内部调用情况区别
+```
+delete()内部调用save()
+
+JDK: 代理对象持有被代理对象的引用，内部调用的this还是被代理对象，所以没有执行代理逻辑
+
+delete() | before...
+class com.ljt.study.pp.aop.service.BusinessServiceImpl.save()
+class com.ljt.study.pp.aop.service.BusinessServiceImpl.delete()
+
+CGLIB: 内部调用的this是代理对象，所以执行了代理逻辑
+
+class com.ljt.study.pp.aop.service.BusinessServiceImpl$$EnhancerByCGLIB$$ba527248.save()
+save() | after...
+class com.ljt.study.pp.aop.service.BusinessServiceImpl$$EnhancerByCGLIB$$ba527248.delete()
+delete() | after...
+```
+
 ## agent
 提供了一种虚拟机级别支持的 AOP 实现方式。
 

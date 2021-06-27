@@ -15,6 +15,7 @@ public class BusinessServiceImpl implements BusinessService {
 
     @Override
     public String delete() {
+        save();
         System.out.println(this.getClass() + ".delete()");
         return "OK";
     }

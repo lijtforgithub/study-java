@@ -33,7 +33,7 @@ public class ProxyTest {
         System.out.println(proxy);
         // hashcode一样 因为调用的就是持有对象的方法 但是不是一个对象
         System.out.println(businessService == proxy);
-        proxy.save();
+        proxy.delete();
     }
 
     @Test
