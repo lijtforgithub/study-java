@@ -1,5 +1,8 @@
 package com.ljt.study.juc.aqs;
 
+import com.ljt.study.juc.ThreadUtils;
+
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
@@ -14,32 +17,27 @@ import java.util.concurrent.Semaphore;
 public class SemaphoreTest {
 
     public static void main(String[] args) {
-        ExecutorService service = Executors.newCachedThreadPool();
-        final Semaphore semaphore = new Semaphore(3);
+        ExecutorService executor = Executors.newCachedThreadPool();
+        final int num = 3;
+        final Semaphore semaphore = new Semaphore(num);
 
+        // 10个线程过来 限流3个
         for (int i = 0; i < 10; i++) {
-            Runnable command = () -> {
+            executor.execute(() -> {
                 try {
                     semaphore.acquire();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
-                System.out.println("线程" + Thread.currentThread().getName() + "进入，当前已有" + (3 - semaphore.availablePermits()) + "并发");
+                System.out.println(Thread.currentThread().getName() + " 进入，当前已有" + (3 - semaphore.availablePermits()) + "并发");
+                ThreadUtils.sleepSeconds(new Random().nextInt(10));
 
-                try {
-                    Thread.sleep((long) Math.random() * 10000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                System.out.println("线程" + Thread.currentThread().getName() + "即将离开");
+                System.out.println(Thread.currentThread().getName() + " 即将离开");
                 semaphore.release();
                 // 下面代码有时候执行不正确，因为没有和上面的代码合成原子
-                System.out.println("线程" + Thread.currentThread().getName() + "已离开，当前已有" + (3 - semaphore.availablePermits()) + "并发");
-            };
-
-            service.execute(command);
+                System.out.println(Thread.currentThread().getName() + " 已离开，当前已有" + (3 - semaphore.availablePermits()) + "并发");
+            });
         }
     }
 

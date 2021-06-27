@@ -1,5 +1,8 @@
 package com.ljt.study.juc.aqs;
 
+import com.ljt.study.juc.ThreadUtils;
+
+import java.util.Random;
 import java.util.concurrent.Exchanger;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -13,34 +16,34 @@ import java.util.concurrent.Executors;
 public class ExchangerTest {
 
     public static void main(String[] args) {
-        ExecutorService service = Executors.newCachedThreadPool();
-        final Exchanger<String> exchanger = new Exchanger<String>();
+        ExecutorService executor = Executors.newCachedThreadPool();
+        final Exchanger<String> exchanger = new Exchanger<>();
 
-        service.execute(() -> {
+        executor.execute(() -> {
             try {
                 String originData = "一千万美金";
-                System.out.println("线程" + Thread.currentThread().getName() + "要交换的数据: " + originData);
-                Thread.sleep((long) (Math.random() * 10000));
+                System.out.println(Thread.currentThread().getName() + " 要交换的数据: " + originData);
+                ThreadUtils.sleepSeconds(new Random().nextInt(10));
                 String data = exchanger.exchange(originData);
-                System.out.println("线程" + Thread.currentThread().getName() + "交换回的数据: " + data);
+                System.out.println(Thread.currentThread().getName() + " 交换回的数据: " + data);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         });
 
-        service.execute(() -> {
+        executor.execute(() -> {
             try {
                 String originData = "一栋豪华别墅外送十个美女";
-                System.out.println("线程" + Thread.currentThread().getName() + "要交换的数据: " + originData);
-                Thread.sleep((long) (Math.random() * 10000));
+                System.out.println(Thread.currentThread().getName() + " 要交换的数据: " + originData);
+                ThreadUtils.sleepSeconds(new Random().nextInt(10));
                 String data = exchanger.exchange(originData);
-                System.out.println("线程" + Thread.currentThread().getName() + "交换回的数据: " + data);
+                System.out.println(Thread.currentThread().getName() + " 交换回的数据: " + data);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         });
 
-        service.shutdown();
+        executor.shutdown();
     }
 
 }

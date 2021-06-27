@@ -3,7 +3,10 @@ package com.ljt.study.juc.aqs;
 import com.ljt.study.juc.ThreadUtils;
 import org.junit.jupiter.api.Test;
 
+import java.util.Random;
 import java.util.concurrent.*;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * 栅栏
@@ -14,68 +17,59 @@ import java.util.concurrent.*;
 public class CyclicBarrierTest {
 
     public static void main(String[] args) {
-        ExecutorService service = Executors.newCachedThreadPool();
-        final CyclicBarrier cb = new CyclicBarrier(3);
+        ExecutorService executor = Executors.newCachedThreadPool();
+        final int num = 3;
+        final CyclicBarrier barrier = new CyclicBarrier(num);
 
-        for (int i = 0; i < 3; i++) {
-            Runnable command = () -> {
+        Function<CyclicBarrier, String> fun = cb -> (cb.getNumberWaiting() + 1) + " 个已经到达，"
+                + (num == cb.getNumberWaiting() + 1 ? "都到齐了，继续走啊" : "正在等候");
+
+        for (int i = 0; i < num; i++) {
+            executor.execute(() -> {
                 try {
-                    Thread.sleep((long) (Math.random() * 10000));
-                    System.out.println("线程" + Thread.currentThread().getName() + "即将到达集合地点1，当前已有"
-                            + (cb.getNumberWaiting() + 1) + "个已经到达，" + (2 == cb.getNumberWaiting() ? "都到齐了，继续走啊" : "正在等候"));
-                    cb.await();
+                    ThreadUtils.sleepSeconds(new Random().nextInt(10));
+                    System.out.println(Thread.currentThread().getName() + " 即将到达集合地点1，当前已有 " + fun.apply(barrier));
+                    barrier.await();
 
-                    Thread.sleep((long) (Math.random() * 10000));
-                    System.out.println("线程" + Thread.currentThread().getName() + "即将到达集合地点2，当前已有"
-                            + (cb.getNumberWaiting() + 1) + "个已经到达，" + (2 == cb.getNumberWaiting() ? "都到齐了，继续走啊" : "正在等候"));
-                    cb.await();
-
-                    Thread.sleep((long) (Math.random() * 10000));
-                    System.out.println("线程" + Thread.currentThread().getName() + "即将到达集合地点3，当前已有"
-                            + (cb.getNumberWaiting() + 1) + "个已经到达，" + (2 == cb.getNumberWaiting() ? "都到齐了，继续走啊" : "正在等候"));
-                    cb.await();
+                    ThreadUtils.sleepSeconds(new Random().nextInt(10));
+                    System.out.println(Thread.currentThread().getName() + " 即将到达集合地点2，当前已有 " + fun.apply(barrier));
+                    // 可以再次使用 循环障碍
+                    barrier.await();
                 } catch (BrokenBarrierException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            };
-            service.execute(command);
+            });
         }
 
-        service.shutdown();
+        executor.shutdown();
     }
 
     @Test
-    public void testPhaser() {
-        ExecutorService service = Executors.newCachedThreadPool();
-        final Phaser phaser = new Phaser(3);
+    void usePhaser() {
+        ExecutorService executor = Executors.newCachedThreadPool();
+        final int num = 3;
+        final Phaser phaser = new Phaser(num);
 
-        for (int i = 0; i < 3; i++) {
-            Runnable command = () -> {
-                try {
-                    Thread.sleep((long) (Math.random() * 10000));
-                    System.out.println("线程" + Thread.currentThread().getName() + "即将到达集合地点1，当前已有"
-                            + (phaser.getArrivedParties() + 1) + "个已经到达，" + (2 == phaser.getArrivedParties() ? "都到齐了，继续走啊" : "正在等候"));
-                    phaser.arriveAndAwaitAdvance();
+        Supplier<String> supplier = () -> (phaser.getArrivedParties() + 1) + " 个已经到达，"
+                + (num == phaser.getArrivedParties() + 1 ? "都到齐了，继续走啊" : "正在等候");
 
-                    Thread.sleep((long) (Math.random() * 10000));
-                    System.out.println("线程" + Thread.currentThread().getName() + "即将到达集合地点2，当前已有"
-                            + (phaser.getArrivedParties() + 1) + "个已经到达，" + (2 == phaser.getArrivedParties() ? "都到齐了，继续走啊" : "正在等候"));
-                    phaser.arriveAndAwaitAdvance();
+        for (int i = 0; i < num; i++) {
+            executor.execute(() -> {
+                ThreadUtils.sleepSeconds(new Random().nextInt(10));
+                System.out.println(Thread.currentThread().getName() + " 即将到达集合地点1，当前已有" + supplier.get());
+                phaser.arriveAndAwaitAdvance();
 
-                    Thread.sleep((long) (Math.random() * 10000));
-                    System.out.println("线程" + Thread.currentThread().getName() + "即将到达集合地点3，当前已有"
-                            + (phaser.getArrivedParties() + 1) + "个已经到达，" + (2 == phaser.getArrivedParties() ? "都到齐了，继续走啊" : "正在等候"));
-                    phaser.arriveAndAwaitAdvance();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            };
-            service.execute(command);
+                ThreadUtils.sleepSeconds(new Random().nextInt(10));
+                System.out.println(Thread.currentThread().getName() + " 即将到达集合地点2，当前已有" + supplier.get());
+                phaser.arriveAndAwaitAdvance();
+            });
         }
 
-        service.shutdown();
+        executor.shutdown();
+
+        // 测试线程会提前结束
         ThreadUtils.sleepSeconds(30);
     }
 

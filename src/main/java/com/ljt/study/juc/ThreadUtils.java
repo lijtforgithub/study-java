@@ -45,8 +45,8 @@ public class ThreadUtils {
 
     public static void printThreadStatus(String... threadNames) {
         Set<String> names = Stream.of(threadNames).collect(Collectors.toSet());
-        ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-        ThreadInfo[] threadInfos = threadMXBean.dumpAllThreads(false, false);
+        ThreadMXBean threadMxBean = ManagementFactory.getThreadMXBean();
+        ThreadInfo[] threadInfos = threadMxBean.dumpAllThreads(false, false);
 
         System.out.println("----------- 打印线程状态开始 ----------");
         for (ThreadInfo threadInfo : threadInfos) {
