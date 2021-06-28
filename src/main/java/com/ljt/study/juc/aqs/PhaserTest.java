@@ -1,7 +1,6 @@
 package com.ljt.study.juc.aqs;
 
 import com.ljt.study.juc.ThreadUtils;
-import lombok.AllArgsConstructor;
 
 import java.util.Random;
 import java.util.concurrent.Phaser;
@@ -12,40 +11,41 @@ import java.util.concurrent.Phaser;
  */
 public class PhaserTest {
 
-    private static final MarriagePhaser PHASER = new MarriagePhaser();
-
     public static void main(String[] args) {
-        final int num = 3;
-        PHASER.bulkRegister(num + 2);
+        final int num = 4;
+        GamePhaser phaser = new GamePhaser();
+
+        // 注册一次表示phaser维护的线程个数
+        phaser.register();
 
         for (int i = 0; i < num; i++) {
-            new Thread(new Person("p-" + i)).start();
+            phaser.register();
+            new Thread(new Runner(phaser)).start();
         }
 
-        new Thread(new Person("新郎")).start();
-        new Thread(new Person("新娘")).start();
+        // 后续阶段主线程就不参加了
+        phaser.arriveAndDeregister();
     }
 
+    /**
+     * 比赛阶段器
+     */
+    private static class GamePhaser extends Phaser {
 
-    private static class MarriagePhaser extends Phaser {
-
+        /**
+         * 当一个阶段的所有线程都到达时 , 执行该方法, 此时 phase自动加1
+         */
         @Override
         protected boolean onAdvance(int phase, int registeredParties) {
             switch (phase) {
                 case 0:
-                    System.out.println("所有人到齐了 " + registeredParties);
-                    System.out.println();
+                    System.out.println("预赛完成 " + registeredParties);
                     return false;
                 case 1:
-                    System.out.println("所有人吃完了 " + registeredParties);
-                    System.out.println();
+                    System.out.println("初赛完成 " + registeredParties);
                     return false;
                 case 2:
-                    System.out.println("所有人离开了 " + registeredParties);
-                    System.out.println();
-                    return false;
-                case 3:
-                    System.out.println("婚礼结束 新郎新娘抱抱 " + registeredParties);
+                    System.out.println("决赛完成 " + registeredParties);
                     return true;
                 default:
                     return true;
@@ -53,46 +53,34 @@ public class PhaserTest {
         }
     }
 
-    @AllArgsConstructor
-    private static class Person implements Runnable {
+    /**
+     * 运动员类
+     */
+    private static class Runner implements Runnable {
 
-        private final String name;
+        private final Phaser phaser;
 
-        public void arrive() {
-            ThreadUtils.sleepSeconds(new Random().nextInt(10));
-            System.out.println(name + " 到达现场");
-            PHASER.arriveAndAwaitAdvance();
-        }
-
-        public void eat() {
-            ThreadUtils.sleepSeconds(new Random().nextInt(10));
-            System.out.println(name + " 吃完");
-            PHASER.arriveAndAwaitAdvance();
-        }
-
-        public void leave() {
-            ThreadUtils.sleepSeconds(new Random().nextInt(10));
-            System.out.println(name + " 离开");
-            PHASER.arriveAndAwaitAdvance();
-        }
-
-        private void hug() {
-            if ("新郎".equals(name) || "新娘".equals(name)) {
-                ThreadUtils.sleepSeconds(new Random().nextInt(10));
-                System.out.println(name + " 洞房");
-                PHASER.arriveAndAwaitAdvance();
-            } else {
-                PHASER.arriveAndDeregister();
-                //phaser.register()
-            }
+        public Runner(Phaser phaser) {
+            this.phaser = phaser;
         }
 
         @Override
         public void run() {
-            arrive();
-            eat();
-            leave();
-            hug();
+            ThreadUtils.sleepSeconds(new Random().nextInt(10));
+            System.out.println(Thread.currentThread().getName() + " 参加预赛");
+            phaser.arriveAndAwaitAdvance();
+
+            ThreadUtils.sleepSeconds(new Random().nextInt(10));
+            System.out.println(Thread.currentThread().getName() + " 参加初赛");
+            // 淘汰一个
+            if (Thread.currentThread().getName().contains("1")) {
+                phaser.arriveAndDeregister();
+            } else {
+                phaser.arriveAndAwaitAdvance();
+                ThreadUtils.sleepSeconds(new Random().nextInt(10));
+                System.out.println(Thread.currentThread().getName() + " 参加决赛");
+                phaser.arriveAndAwaitAdvance();
+            }
         }
     }
 
