@@ -11,20 +11,20 @@ import java.util.concurrent.Phaser;
  */
 public class PhaserTest {
 
+    private static final String NAME = "张三";
+
     public static void main(String[] args) {
         final int num = 4;
         GamePhaser phaser = new GamePhaser();
 
-        // 注册一次表示phaser维护的线程个数
         phaser.register();
+        new Thread(new SportsMan(phaser, NAME)).start();
 
-        for (int i = 0; i < num; i++) {
+        for (int i = 1; i < num; i++) {
+            // 注册一次表示phaser维护的线程个数
             phaser.register();
-            new Thread(new Runner(phaser)).start();
+            new Thread(new SportsMan(phaser, "某-" + i)).start();
         }
-
-        // 后续阶段主线程就不参加了
-        phaser.arriveAndDeregister();
     }
 
     /**
@@ -56,29 +56,31 @@ public class PhaserTest {
     /**
      * 运动员类
      */
-    private static class Runner implements Runnable {
+    private static class SportsMan implements Runnable {
 
         private final Phaser phaser;
+        private final String name;
 
-        public Runner(Phaser phaser) {
+        public SportsMan(Phaser phaser, String name) {
             this.phaser = phaser;
+            this.name = name;
         }
 
         @Override
         public void run() {
             ThreadUtils.sleepSeconds(new Random().nextInt(10));
-            System.out.println(Thread.currentThread().getName() + " 参加预赛");
+            System.out.println(name + " 参加预赛");
             phaser.arriveAndAwaitAdvance();
 
             ThreadUtils.sleepSeconds(new Random().nextInt(10));
-            System.out.println(Thread.currentThread().getName() + " 参加初赛");
+            System.out.println(name + " 参加初赛");
             // 淘汰一个
-            if (Thread.currentThread().getName().contains("1")) {
+            if (NAME.equals(name)) {
                 phaser.arriveAndDeregister();
             } else {
                 phaser.arriveAndAwaitAdvance();
                 ThreadUtils.sleepSeconds(new Random().nextInt(10));
-                System.out.println(Thread.currentThread().getName() + " 参加决赛");
+                System.out.println(name + " 参加决赛");
                 phaser.arriveAndAwaitAdvance();
             }
         }
