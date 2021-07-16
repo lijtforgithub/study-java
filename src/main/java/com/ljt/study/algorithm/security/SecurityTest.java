@@ -20,12 +20,11 @@ import java.util.Random;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-
 /**
  * @author LiJingTang
  * @date 2019-12-29 20:09
  */
-public class SecurityTest {
+class SecurityTest {
 
     private static final String TEST_DATA = "LiJingTang";
 

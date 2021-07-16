@@ -17,6 +17,10 @@ public class ThreadUtils {
     private ThreadUtils() {
     }
 
+    public static void main(String[] args) {
+        System.out.println(TimeUnit.MINUTES.toMillis(1));
+    }
+
     public static void sleepSeconds(long i) {
         try {
             TimeUnit.SECONDS.sleep(i);
