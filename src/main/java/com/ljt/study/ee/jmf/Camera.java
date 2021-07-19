@@ -9,16 +9,16 @@ import java.util.Vector;
  * @author LiJingTang
  * @date 2020-01-04 15:16
  */
-public class CameraUtil extends JFrame {
+public class Camera extends JFrame {
 
     public static void main(String[] args) {
-        CameraUtil cameraUtil = new CameraUtil();
-        cameraUtil.initCapture();
+        Camera camera = new Camera();
+        camera.initCapture();
         // 设置窗体属性
-        cameraUtil.setTitle("CaptureTest");
-        cameraUtil.setBounds(500, 100, 800, 500);
-        cameraUtil.setVisible(true);
-        cameraUtil.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        camera.setTitle("摄像头");
+        camera.setBounds(500, 100, 800, 500);
+        camera.setVisible(true);
+        camera.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     private static final long serialVersionUID = 8160948676188570043L;
@@ -56,8 +56,9 @@ public class CameraUtil extends JFrame {
 
             // 将播放器加入窗体
             Component comp = null;
-            if ((comp = player.getVisualComponent()) != null)
+            if ((comp = player.getVisualComponent()) != null) {
                 add(comp, BorderLayout.CENTER);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

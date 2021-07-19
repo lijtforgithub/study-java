@@ -7,7 +7,7 @@ import java.util.Properties;
  * @author LiJingTang
  * @date 2019-11-21 16:17
  */
-public class DerbyTest {
+class DerbyTest {
 
     public static void main(String[] args) throws Exception {
         // load the driver
