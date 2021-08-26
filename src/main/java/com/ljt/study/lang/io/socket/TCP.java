@@ -8,10 +8,15 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
+ * 在io包中，提供了两个与平台无关的数据操作流：
+ * 数据输出流（DataOutputStream）
+ * 数据输入流 （DataInputStream）
+ * 使用DataOutputStream写入的数据要使用DataInputStream读取进来
+ *
  * @author LiJingTang
  * @date 2019-11-28 10:09
  */
-public class TCPTest {
+class TCP {
 
     public static void main(String[] args) {
         int port = 8888;
@@ -27,6 +32,7 @@ public class TCPTest {
         ThreadUtils.sleepSeconds(30);
         System.exit(0);
     }
+
 
     private static class Server implements Runnable {
 
@@ -44,21 +50,18 @@ public class TCPTest {
 
                 while (true) {
                     Socket client = server.accept();
-                    InputStream in = client.getInputStream();
-                    OutputStream out = client.getOutputStream();
-                    DataInputStream dis = new DataInputStream(in);
-                    DataOutputStream dos = new DataOutputStream(out);
+                    DataInputStream input = new DataInputStream(client.getInputStream());
+                    DataOutputStream output = new DataOutputStream(client.getOutputStream());
 
-                    String msg = dis.readUTF();
-
+                    String msg = input.readUTF();
                     if (StringUtils.isNotBlank(msg)) {
                         System.out.println("Server：" + msg);
                         System.out.println("Server：" + "FROM -> " + client.getInetAddress() + ":" + client.getPort());
                     }
+                    output.writeUTF("I am Server");
 
-                    dos.writeUTF("I am Server");
-                    dis.close();
-                    dos.close();
+                    input.close();
+                    output.close();
                     client.close();
                 }
             } catch (IOException e) {
@@ -84,20 +87,17 @@ public class TCPTest {
         public void run() {
             try {
                 Socket client = new Socket(host, port);
-                InputStream in = client.getInputStream();
-                OutputStream out = client.getOutputStream();
-                DataInputStream dis = new DataInputStream(in);
-                DataOutputStream dos = new DataOutputStream(out);
+                DataInputStream input = new DataInputStream(client.getInputStream());
+                DataOutputStream output = new DataOutputStream(client.getOutputStream());
 
-                dos.writeUTF("I am Client " + name);
-                String msg = dis.readUTF();
-
+                output.writeUTF("I am Client " + name);
+                String msg = input.readUTF();
                 if (StringUtils.isNotBlank(msg)) {
                     System.out.println("Client：" + msg);
                 }
 
-                dis.close();
-                dos.close();
+                input.close();
+                output.close();
                 client.close();
             } catch (IOException e) {
                 e.printStackTrace();

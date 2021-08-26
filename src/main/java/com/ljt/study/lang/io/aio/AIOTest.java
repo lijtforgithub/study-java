@@ -1,7 +1,6 @@
 package com.ljt.study.lang.io.aio;
 
 import com.ljt.study.juc.ThreadUtils;
-import com.ljt.study.lang.io.bio.BIOTest;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -20,7 +19,7 @@ public class AIOTest {
 
     public static void main(String[] args) {
         new Thread(new Server()).start();
-        new Thread(new BIOTest.Client()).start();
+//        new Thread(new BIOTest.Client()).start();
 
         ThreadUtils.sleepSeconds(30);
         System.exit(0);

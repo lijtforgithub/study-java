@@ -10,7 +10,9 @@ import java.lang.reflect.Field;
  * @author LiJingTang
  * @date 2019-11-28 09:53
  */
-public class ReferenceTest {
+public class
+
+ReferenceTest {
 
     /**
      * 强引用：没有引用才会被回收

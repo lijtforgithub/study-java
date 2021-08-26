@@ -11,7 +11,7 @@ import java.net.InetSocketAddress;
  * @author LiJingTang
  * @date 2019-11-28 10:18
  */
-public class UDPTest {
+class UDP {
 
     public static void main(String[] args) {
         int port = 9999;
@@ -47,12 +47,12 @@ public class UDPTest {
 
                 while (true) {
                     server.receive(packet);
-                    ByteArrayInputStream in = new ByteArrayInputStream(buf);
+                    ByteArrayInputStream input = new ByteArrayInputStream(buf);
                     System.out.println(new String(buf));
-                    DataInputStream dis = new DataInputStream(in);
+                    DataInputStream dataInput = new DataInputStream(input);
 
                     System.out.println("Server：" + "FROM ->" + packet.getAddress() + ":" + packet.getPort());
-                    System.out.println("Server：" + dis.readUTF());
+                    System.out.println("Server：" + dataInput.readUTF());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -66,7 +66,6 @@ public class UDPTest {
         private int port;
         private String name;
 
-
         public Client(String host, int port, String name) {
             super();
             this.host = host;
@@ -77,10 +76,10 @@ public class UDPTest {
         @Override
         public void run() {
             try {
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                DataOutputStream dos = new DataOutputStream(out);
-                dos.writeBytes("Client " + name);
-                byte[] buf = out.toByteArray();
+                ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+                DataOutputStream dataOutput = new DataOutputStream(byteOutput);
+                dataOutput.writeBytes("Client " + name);
+                byte[] buf = byteOutput.toByteArray();
 
                 DatagramSocket client = new DatagramSocket(6789);
                 DatagramPacket packet = new DatagramPacket(buf, buf.length, new InetSocketAddress(host, port));
