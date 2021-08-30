@@ -6,16 +6,17 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Objects;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import static com.ljt.study.lang.io.DemoUtils.*;
 
 /**
- * 非阻塞IO模型（没有使用多路复用器） + 单线程
- * QPS = 2
+ * 非阻塞IO模型（没有使用多路复用器） + 多线程
+ *
  * @author LiJingTang
  * @date 2021-08-24 16:46
  */
-class HttpServerNIO {
+class HttpServerNIOMultiThread {
 
     public static void main(String[] args) throws IOException {
         ServerSocketChannel server = ServerSocketChannel.open();
@@ -24,6 +25,8 @@ class HttpServerNIO {
         server.bind(new InetSocketAddress(DEF_PORT), BACK_LOG);
         printStart(server.getLocalAddress());
 
+        ThreadPoolExecutor executor = buildExecutor();
+
         for (; ; ) {
             try {
                 SocketChannel client = server.accept();
@@ -31,10 +34,29 @@ class HttpServerNIO {
                 if (Objects.nonNull(client)) {
                     client.configureBlocking(false);
                     printAccept(client.getRemoteAddress());
-
-                    ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
-                    handleRequest(client, buffer, HttpServerNIO.class);
+                    executor.submit(new SocketHandler(client));
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    private static class SocketHandler implements Runnable {
+
+        private SocketChannel socketChannel;
+
+        public SocketHandler(SocketChannel socketChannel) {
+            super();
+            this.socketChannel = socketChannel;
+        }
+
+        @Override
+        public void run() {
+            try {
+                ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
+                handleRequest(socketChannel, buffer, HttpServerNIOMultiThread.class);
             } catch (IOException e) {
                 e.printStackTrace();
             }

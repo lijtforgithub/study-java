@@ -7,8 +7,8 @@ import java.net.Socket;
 import static com.ljt.study.lang.io.DemoUtils.*;
 
 /**
- * 阻塞IO模型
- *
+ * 阻塞IO模型：单线程
+ * QPS = 2
  * @author LiJingTang
  * @date 2021-08-24 16:44
  */
@@ -16,12 +16,13 @@ class HttpServerBIO {
 
     public static void main(String[] args) throws IOException {
         ServerSocket server = new ServerSocket(DEF_PORT, BACK_LOG);
-        System.out.println("服务启动成功：" + server.getLocalPort());
+        printStart(server.getLocalSocketAddress());
 
         while (true) {
             try {
                 Socket client = server.accept();
-                System.out.printf("[%s] 进来一个客户端：%s %n", Thread.currentThread().getName(), client.getRemoteSocketAddress());
+                printAccept(client.getRemoteSocketAddress());
+
                 handleRequest(client, HttpServerBIO.class);
             } catch (IOException e) {
                 e.printStackTrace();

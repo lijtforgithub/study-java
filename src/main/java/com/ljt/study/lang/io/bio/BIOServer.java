@@ -5,8 +5,7 @@ import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import static com.ljt.study.lang.io.DemoUtils.BACK_LOG;
-import static com.ljt.study.lang.io.DemoUtils.DEF_PORT;
+import static com.ljt.study.lang.io.DemoUtils.*;
 
 /**
  * 阻塞IO模型
@@ -18,32 +17,37 @@ class BIOServer {
 
     public static void main(String[] args) throws IOException {
         ServerSocket server = new ServerSocket(DEF_PORT, BACK_LOG);
-        System.out.println("服务启动成功：" + server.getLocalPort());
+        printStart(server.getLocalSocketAddress());
 
         while (true) {
             try {
                 // accept 阻塞
                 Socket client = server.accept();
-                System.out.printf("[%s] 进来一个客户端：%s %n", Thread.currentThread().getName(), client.getRemoteSocketAddress());
-
-                StringBuilder msg = new StringBuilder();
+                printAccept(client.getRemoteSocketAddress());
                 InputStream input = client.getInputStream();
+
                 // read 方法阻塞
                 int i = input.read();
-                System.out.println("验证read方法阻塞:" + i);
-                msg.append((char) i);
+                char c = (char) i;
+                System.out.printf("read 方法阻塞：%d = %c %n", i, c);
 
-                byte[] buf = new byte[128];
+                byte[] buf = new byte[1024];
                 int len;
-                /*
-                 * 客户端的输出流必须调用 output.close() 才会有-1 不然不会跳出循环
-                 * 用浏览器不会结束循环配合 BIOClient 调试使用
-                 */
-                while ((len = input.read(buf, 0, buf.length)) != -1) {
-                    msg.append(new String(buf, 0, len));
+                while (true) {
+                    // read 方法阻塞
+                    len = input.read(buf, 0, buf.length);
+                    System.out.println(len);
+
+                    if (len > 0) {
+                        String msg = new String(buf, 0, len);
+                        printRead(client.getRemoteSocketAddress(), msg);
+                    } else if (len == -1) {
+                        // 客户端close
+                        printClose(client.getRemoteSocketAddress());
+                        break;
+                    }
                 }
 
-                System.out.println(msg);
             } catch (IOException e) {
                 e.printStackTrace();
             }

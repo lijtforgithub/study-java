@@ -8,6 +8,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import static com.ljt.study.lang.io.DemoUtils.*;
 
 /**
+ * BIO + 多线程（开辟线程过多 上下文切换 消耗资源）
+ *
  * @author LiJingTang
  * @date 2021-08-24 16:44
  */
@@ -15,13 +17,13 @@ class HttpServerBIOMultiThread {
 
     public static void main(String[] args) throws IOException {
         ServerSocket server = new ServerSocket(DEF_PORT, BACK_LOG);
-        System.out.println("服务启动成功：" + server.getLocalPort());
+        printStart(server.getLocalSocketAddress());
         ThreadPoolExecutor executor = buildExecutor();
 
         while (true) {
             try {
                 Socket client = server.accept();
-                System.out.printf("[%s] 进来一个客户端：%s %n", Thread.currentThread().getName(), client.getRemoteSocketAddress());
+                printAccept(client.getRemoteSocketAddress());
 
                 executor.submit(new SocketHandler(client));
             } catch (IOException e) {
