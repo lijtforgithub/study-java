@@ -35,3 +35,30 @@ FileChannel 是不支持非阻塞的。
  > RocketMQ 中就是使用的 mmap 来提升磁盘文件的读写性能。
 3. sendfile 是将读到内核空间的数据，转到网络协议引擎，进行网络发送，适合大文件传输，只需要 2 次上下文切换（用户态 -> 内核态 -> 用户态）和 2 次拷贝（磁盘文件 DMA 拷贝到内核缓冲区，内核缓冲区 DMA 拷贝到协议引擎）。只需要从内核缓冲区拷贝一些 offset 和 length 到 Socket 缓冲区。
  > Kafka 和 Tomcat 内部使用就是 sendFile 这种零拷贝。
+#### 硬中断和软中断
+1. 输入设备触发硬中断
+2. 程序读硬盘或者网卡 发送系统调用 需要软中断 int0x80(sysenter原语 intel CPU)
+
+```
+;hello.asm
+;write(int fd, const void *buffer, size_t nbytes)
+;fd 文件描述符 file descriptor - linux下一切皆文件
+​
+section data
+    msg db "Hello", 0xA
+    len equ $ - msg
+​
+section .text
+global _start
+_start:
+​
+    mov edx, len
+    mov ecx, msg
+    mov ebx, 1 ;文件描述符1 std_out
+    mov eax, 4 ;write函数系统调用号 4
+    int 0x80
+​
+    mov ebx, 0
+    mov eax, 1 ;exit函数系统调用号
+    int 0x80
+```

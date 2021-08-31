@@ -14,7 +14,7 @@ import java.util.concurrent.CountDownLatch;
  * @author LiJingTang
  * @date 2020-01-03 09:00
  */
-public class VolatileTest {
+class VolatileTest {
 
     public static void main(String[] args) {
         VolatileTest test = new VolatileTest();

@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
  * @author LiJingTang
  * @date 2020-03-04 19:08
  */
-public class LRU {
+class LRU {
 
     public static void main(String[] args) {
         int cacheSize = 5;
@@ -33,12 +33,14 @@ public class LRU {
      */
     private static class LRUCache<K, V> extends LinkedHashMap<K, V> {
 
-        private final int CACHE_SIZE;
+        private static final long serialVersionUID = 481593440827393240L;
+
+        private final int cacheSize;
 
         private LRUCache(int cacheSize) {
             // LinkedHashMap的一个构造函数，当参数accessOrder为true时，即会按照访问顺序排序，最近访问的放在最前，最早访问的放在后面
             super((int) ((float) cacheSize / 0.75F + 1.0F), 0.75f, true);
-            this.CACHE_SIZE = cacheSize;
+            this.cacheSize = cacheSize;
         }
 
         /**
@@ -47,20 +49,20 @@ public class LRU {
          */
         @Override
         protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
-            return size() > CACHE_SIZE;
+            return size() > cacheSize;
         }
     }
 
 
     private static class LRUCache1<K, V> {
 
-        private final int CACHE_SIZE;
-        private Node first;
-        private Node last;
-        private HashMap<K, Node<K, V>> hashMap;
+        private final int cacheSize;
+        private final HashMap<K, Node<K, V>> hashMap;
+        private Node<K, V> first;
+        private Node<K, V> last;
 
         public LRUCache1(int cacheSize) {
-            this.CACHE_SIZE = cacheSize;
+            this.cacheSize = cacheSize;
             hashMap = new HashMap<>();
         }
 
@@ -68,7 +70,7 @@ public class LRU {
             Node<K, V> node = getNode(key);
 
             if (Objects.isNull(node)) {
-                if (hashMap.size() >= CACHE_SIZE) {
+                if (hashMap.size() >= cacheSize) {
                     hashMap.remove(last.key);
                     removeLast();
                 }
@@ -180,8 +182,8 @@ public class LRU {
         private static class Node<K, V> {
             K key;
             V value;
-            Node prev;
-            Node next;
+            Node<K, V> prev;
+            Node<K, V> next;
         }
     }
 

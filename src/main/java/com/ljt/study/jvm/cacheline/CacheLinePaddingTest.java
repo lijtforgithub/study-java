@@ -1,17 +1,16 @@
-package com.ljt.study.juc.cacheline;
+package com.ljt.study.jvm.cacheline;
 
 import com.ljt.study.juc.ThreadUtils;
 
+import static com.ljt.study.jvm.cacheline.CacheLineTest.COUNT;
+
 /**
- * CPU读取缓存以cache line为基本单位 64byte
- * @Contended -XX:-RestrictContended
+ * 填充缓存行
  *
  * @author LiJingTang
- * @date 2019-11-10 21:02
+ * @date 2019-11-10 21:32
  */
-public class CacheLineTest {
-
-    static long COUNT = 1000_0000L;
+public class CacheLinePaddingTest {
 
     public static void main(String[] args) throws InterruptedException {
         Thread t1 = new Thread(() -> {
@@ -21,7 +20,7 @@ public class CacheLineTest {
         });
 
         Thread t2 = new Thread(() -> {
-            for (int i = 0; i < COUNT; i++) {
+            for (long i = 0; i < COUNT; i++) {
                 array[1].x = i;
             }
         });
@@ -40,11 +39,16 @@ public class CacheLineTest {
         array[1] = new T();
     }
 
-    /**
-     * 位于同一缓存行的两个不同数据，被两个不同CPU锁定，产生互相影响的伪共享问题
-     */
-    private static class T {
+    private static class T extends Padding {
         volatile long x = 0L;
+    }
+
+    /**
+     * 用7个long类型56byte填充/对齐能够提高效率
+     * 一个数据占用一个缓存行
+     */
+    private static class Padding {
+        private volatile long p1, p2, p3, p4, p5, p6, p7;
     }
 
 }
