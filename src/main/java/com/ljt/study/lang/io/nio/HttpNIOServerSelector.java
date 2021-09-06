@@ -16,7 +16,7 @@ import static com.ljt.study.lang.io.DemoUtils.*;
  * @author LiJingTang
  * @date 2021-08-24 16:46
  */
-class HttpServerNIOSelector {
+class HttpNIOServerSelector {
 
     public static void main(String[] args) throws IOException {
         ServerSocketChannel server = ServerSocketChannel.open();
@@ -52,9 +52,7 @@ class HttpServerNIOSelector {
                         } else if (key.isReadable()) {
                             SocketChannel client = (SocketChannel) key.channel();
                             ByteBuffer buffer = (ByteBuffer) key.attachment();
-                            handleRequest(client, buffer, HttpServerNIOSelector.class);
-                        } else {
-                            System.out.println("事件：" + key);
+                            handleRequest(client, buffer, HttpNIOServerSelector.class);
                         }
                     }
                 }

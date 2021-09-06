@@ -13,7 +13,7 @@ import static com.ljt.study.lang.io.DemoUtils.*;
  * @author LiJingTang
  * @date 2021-08-24 16:44
  */
-class HttpServerBIOMultiThread {
+class HttpBIOServerMultiThread {
 
     public static void main(String[] args) throws IOException {
         ServerSocket server = new ServerSocket(DEF_PORT, BACK_LOG);
@@ -43,7 +43,7 @@ class HttpServerBIOMultiThread {
         @Override
         public void run() {
             try {
-                handleRequest(socket, HttpServerBIOMultiThread.class);
+                handleRequest(socket, HttpBIOServerMultiThread.class);
             } catch (IOException e) {
                 e.printStackTrace();
             }

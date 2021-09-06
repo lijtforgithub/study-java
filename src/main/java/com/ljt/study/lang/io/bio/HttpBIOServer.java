@@ -12,7 +12,7 @@ import static com.ljt.study.lang.io.DemoUtils.*;
  * @author LiJingTang
  * @date 2021-08-24 16:44
  */
-class HttpServerBIO {
+class HttpBIOServer {
 
     public static void main(String[] args) throws IOException {
         ServerSocket server = new ServerSocket(DEF_PORT, BACK_LOG);
@@ -23,7 +23,7 @@ class HttpServerBIO {
                 Socket client = server.accept();
                 printAccept(client.getRemoteSocketAddress());
 
-                handleRequest(client, HttpServerBIO.class);
+                handleRequest(client, HttpBIOServer.class);
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -15,8 +15,27 @@ import static com.ljt.study.lang.io.DemoUtils.*;
  */
 class BIOServer {
 
+    // server socket listen property
+    private static final int RECEIVE_BUFFER = 10;
+    private static final int SO_TIMEOUT = 0;
+    private static final boolean REUSE_ADDR = false;
+    private static final int BACK_LOG = 2;
+    // client socket listen property on server endpoint
+    private static final boolean CLI_KEEPALIVE = false;
+    private static final boolean CLI_OOB = false;
+    private static final int CLI_REC_BUF = 20;
+    private static final boolean CLI_REUSE_ADDR = false;
+    private static final int CLI_SEND_BUF = 20;
+    private static final boolean CLI_LINGER = true;
+    private static final int CLI_LINGER_N = 0;
+    private static final int CLI_TIMEOUT = 0;
+    private static final boolean CLI_NO_DELAY = false;
+
     public static void main(String[] args) throws IOException {
         ServerSocket server = new ServerSocket(DEF_PORT, BACK_LOG);
+        server.setReceiveBufferSize(RECEIVE_BUFFER);
+        server.setReuseAddress(REUSE_ADDR);
+        server.setSoTimeout(SO_TIMEOUT);
         printStart(server.getLocalSocketAddress());
 
         while (true) {

@@ -16,6 +16,10 @@ class NIOClient {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         SocketChannel client = SocketChannel.open(new InetSocketAddress(DEF_PORT));
+        // 这里设置客户端read会不会阻塞
+        client.configureBlocking(false);
+
+        client.read(ByteBuffer.allocate(10));
 
         TimeUnit.SECONDS.sleep(5);
         System.out.printf("开始给服务器 %s 发送消息 %n", client.getRemoteAddress());

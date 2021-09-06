@@ -16,6 +16,9 @@ class BIOClient {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         Socket client = new Socket(LOCAL_HOST, DEF_PORT);
+        // 不开启攒包优化
+        client.setTcpNoDelay(true);
+        client.setOOBInline(true);
 
         TimeUnit.SECONDS.sleep(5);
         System.out.printf("开始给服务器 %s 发送消息 %n", client.getRemoteSocketAddress());

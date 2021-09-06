@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
@@ -21,10 +22,19 @@ import static com.ljt.study.lang.io.DemoUtils.*;
  */
 class NIOServer {
 
+    /**
+     * StandardSocketOptions.TCP_NODELAY
+     * StandardSocketOptions.SO_KEEPALIVE
+     * StandardSocketOptions.SO_LINGER
+     * StandardSocketOptions.SO_RCVBUF
+     * StandardSocketOptions.SO_SNDBUF
+     * StandardSocketOptions.SO_REUSEADDR
+     */
     public static void main(String[] args) throws IOException {
         ServerSocketChannel server = ServerSocketChannel.open();
-        // 非阻塞 server.setOption(StandardSocketOptions.TCP_NODELAY, true)
+        // 非阻塞
         server.configureBlocking(false);
+        server.setOption(StandardSocketOptions.SO_REUSEADDR, false);
         server.bind(new InetSocketAddress(DEF_PORT), BACK_LOG);
         printStart(server.getLocalAddress());
 

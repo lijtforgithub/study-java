@@ -15,7 +15,7 @@ import static com.ljt.study.lang.io.DemoUtils.*;
  * @author LiJingTang
  * @date 2021-08-24 16:46
  */
-class HttpServerNIO {
+class HttpNIOServer {
 
     public static void main(String[] args) throws IOException {
         ServerSocketChannel server = ServerSocketChannel.open();
@@ -33,7 +33,7 @@ class HttpServerNIO {
                     printAccept(client.getRemoteAddress());
 
                     ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
-                    handleRequest(client, buffer, HttpServerNIO.class);
+                    handleRequest(client, buffer, HttpNIOServer.class);
                 }
             } catch (IOException e) {
                 e.printStackTrace();

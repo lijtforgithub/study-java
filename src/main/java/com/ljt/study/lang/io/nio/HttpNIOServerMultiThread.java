@@ -16,7 +16,7 @@ import static com.ljt.study.lang.io.DemoUtils.*;
  * @author LiJingTang
  * @date 2021-08-24 16:46
  */
-class HttpServerNIOMultiThread {
+class HttpNIOServerMultiThread {
 
     public static void main(String[] args) throws IOException {
         ServerSocketChannel server = ServerSocketChannel.open();
@@ -56,7 +56,7 @@ class HttpServerNIOMultiThread {
         public void run() {
             try {
                 ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
-                handleRequest(socketChannel, buffer, HttpServerNIOMultiThread.class);
+                handleRequest(socketChannel, buffer, HttpNIOServerMultiThread.class);
             } catch (IOException e) {
                 e.printStackTrace();
             }
