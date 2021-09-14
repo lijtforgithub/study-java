@@ -1,5 +1,7 @@
 package com.ljt.study.lang.io.nio;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -48,6 +50,8 @@ class NIOServerSelector {
                  * epoll内核epoll_wait()
                  * 参数可以带时间：没有时间0(阻塞，有时间设置一个超时)
                  * selector.wakeup() 结果返回0
+                 * 懒加载：在select()调用的时候触发了epoll_ctl的调用 意思是上面的register没有立即执行epoll_ctl
+                 * 可以在register后面加个打印 查看系统调用来验证
                  */
                 while (selector.select() > 0) {
                     Set<SelectionKey> selectedKeys = selector.selectedKeys();
@@ -58,47 +62,87 @@ class NIOServerSelector {
                      */
                     while (it.hasNext()) {
                         SelectionKey key = it.next();
-                        it.remove();
 
                         if (key.isAcceptable()) {
-                            ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
-                            /*
-                             * accept接受连接且返回新连接的fd
-                             * select/poll 因为他们内核没有空间，那么在JVM中保存和前边的fd4那个listen的一起
-                             * epoll通过epoll_ctl把新的客户端fd注册到内核空间
-                             */
-                            SocketChannel client = serverChannel.accept();
-                            client.configureBlocking(false);
-                            printAccept(client.getRemoteAddress());
-                            /*
-                             * select/poll：JVM里开辟一个数组 fd7 放进去
-                             * epoll：epoll_ctl(fd3,ADD,fd7,EPOLLIN
-                             */
-                            client.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE, ByteBuffer.allocateDirect(1024));
-                        } else if (key.isReadable()) {
+                            acceptHandler(key, true);
+                        }else if (key.isReadable()) {
+                            readHandler(key);
+                        } else if (key.isValid() && key.isWritable()) {
+                        /*
+                         * 写事件 只要send-queue是空的就一定会返回可以写的事件 就会调用写的逻辑
+                         * 什么时候写 不是依赖send-queue是不是有空间
+                         * 1. 准备好写什么
+                         * 2. send-queue是否有空间
+                         * 3. 所以读事件一开始就要注册 但是写事件依赖以上关系 什么时候用 什么时候写
+                         * 4. 如果一开始就注册了写事件 就会一直调起
+                         */
+                            System.out.println("W");
                             SocketChannel client = (SocketChannel) key.channel();
-                            ByteBuffer buffer = (ByteBuffer) key.attachment();
-                            String msg = readBuffer(buffer);
-                            printRead(client.getRemoteAddress(), msg);
-                        } else if (key.isWritable()) {
-                            SocketChannel client = (SocketChannel) key.channel();
-                            ByteBuffer buffer = (ByteBuffer) key.attachment();
-                            if (buffer.hasRemaining()) {
-                                client.write(buffer);
-                            } else {
-                                // 发送完了就取消写事件，否则下次还会进入写事件分支（因为只要还可写，就会进入）
-                                key.interestOps(key.interestOps() & ~SelectionKey.OP_WRITE);
-                            }
-                        } else if (!key.isValid()) {
-                            SocketChannel client = (SocketChannel) key.channel();
-                            key.cancel();
-                            System.out.println("关闭：" + client.getRemoteAddress());
+                            client.write(ByteBuffer.wrap("Server W".getBytes()));
+                            // 发送完了就取消写事件，否则下次还会进入写事件分支（因为只要还可写，就会进入）
+                            key.interestOps(key.interestOps() & ~SelectionKey.OP_WRITE);
                         }
+
+                        // 必须要remove
+                        it.remove();
                     }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    static void acceptHandler(SelectionKey key, boolean registryWrite) {
+        try {
+            ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
+            /*
+             * accept接受连接且返回新连接的fd
+             * select/poll 因为他们内核没有空间，那么在JVM中保存和前边的fd4那个listen的一起
+             * epoll通过epoll_ctl把新的客户端fd注册到内核空间
+             */
+            SocketChannel client = serverChannel.accept();
+            client.configureBlocking(false);
+            printAccept(client.getRemoteAddress());
+            /*
+             * select/poll：JVM里开辟一个数组 fd7 放进去
+             * epoll：epoll_ctl(fd3,ADD,fd7,EPOLLIN
+             */
+            int opt = registryWrite ? SelectionKey.OP_READ | SelectionKey.OP_WRITE : SelectionKey.OP_READ;
+            client.register(key.selector(), opt, ByteBuffer.allocateDirect(1024));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void readHandler(SelectionKey key) {
+        try {
+            System.out.println("R");
+            SocketChannel client = (SocketChannel) key.channel();
+            ByteBuffer buffer = (ByteBuffer) key.attachment();
+            buffer.clear();
+            StringBuilder msg = new StringBuilder();
+
+            while (true) {
+                int len = client.read(buffer);
+
+                if (len > 0) {
+                    msg.append(readBuffer(buffer));
+                } else if (len == 0) {
+                    break;
+                } else if (len == -1) {
+                    printClose(client.getRemoteAddress());
+                    client.close();
+                    key.cancel();
+                    break;
+                }
+            }
+
+            if (StringUtils.isNotBlank(msg)) {
+                printRead(client.getRemoteAddress(), msg.toString());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

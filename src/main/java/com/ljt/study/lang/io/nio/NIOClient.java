@@ -18,7 +18,6 @@ class NIOClient {
         SocketChannel client = SocketChannel.open(new InetSocketAddress(DEF_PORT));
         // 这里设置客户端read会不会阻塞
         client.configureBlocking(false);
-
         client.read(ByteBuffer.allocate(10));
 
         TimeUnit.SECONDS.sleep(5);
@@ -27,14 +26,14 @@ class NIOClient {
         ByteBuffer buffer = ByteBuffer.wrap("Hello NIO".getBytes());
         client.write(buffer);
 
-        TimeUnit.SECONDS.sleep(5);
+        TimeUnit.SECONDS.sleep(10);
         buffer.clear();
         buffer.put("NIO GO ON".getBytes());
         buffer.flip();
         client.write(buffer);
 
         System.out.println("消息发送完毕");
-        TimeUnit.SECONDS.sleep(10);
+        TimeUnit.SECONDS.sleep(5);
         client.close();
     }
 

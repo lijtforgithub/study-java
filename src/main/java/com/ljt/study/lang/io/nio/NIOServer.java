@@ -72,6 +72,7 @@ class NIOServer {
                         } else if (len == -1) {
                             printClose(channel.getRemoteAddress());
                             it.remove();
+                            // channel.close();
                             break;
                         }
                     }

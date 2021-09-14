@@ -1,69 +1,55 @@
 package com.ljt.study.lang.io.aio;
 
-import com.ljt.study.juc.ThreadUtils;
+import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.nio.charset.StandardCharsets;
 
+import static com.ljt.study.lang.io.DemoUtils.*;
+
 /**
  * @author LiJingTang
  * @date 2019-11-28 11:23
  */
-public class AIOTest {
+class AIOServer {
 
+    @SneakyThrows
     public static void main(String[] args) {
-        new Thread(new Server()).start();
-//        new Thread(new BIOTest.Client()).start();
+        AsynchronousServerSocketChannel server = AsynchronousServerSocketChannel.open().bind(new InetSocketAddress(DEF_PORT));
+        printStart(server.getLocalAddress());
+        Attachment attach = new Attachment();
+        attach.setServer(server);
 
-        ThreadUtils.sleepSeconds(30);
-        System.exit(0);
-    }
+        server.accept(attach, new CompletionHandler<AsynchronousSocketChannel, Attachment>() {
 
-    private static class Server implements Runnable {
+            @Override
+            public void completed(AsynchronousSocketChannel client, Attachment attachment) {
+                try {
+                    printAccept(client.getRemoteAddress());
+                    attach.getServer().accept(attach, this);
 
-        @Override
-        public void run() {
-            try {
-                AsynchronousServerSocketChannel serverSocketChannel = AsynchronousServerSocketChannel.open().bind(new InetSocketAddress(8080));
-                Attachment attach = new Attachment();
-                attach.setServer(serverSocketChannel);
+                    Attachment attach = new Attachment();
+                    attach.setServer(server);
+                    attach.setClient(client);
+                    attach.setReadMode(true);
+                    attach.setBuffer(ByteBuffer.allocate(2048));
 
-                serverSocketChannel.accept(attach, new CompletionHandler<AsynchronousSocketChannel, Attachment>() {
-
-                    @Override
-                    public void completed(AsynchronousSocketChannel client, Attachment attachment) {
-                        try {
-                            SocketAddress clientAddr = client.getRemoteAddress();
-                            System.out.println("收到新的链接：" + clientAddr);
-                            attach.getServer().accept(attach, this);
-
-                            Attachment newAttach = new Attachment();
-                            newAttach.setServer(serverSocketChannel);
-                            newAttach.setClient(client);
-                            newAttach.setReadMode(true);
-                            newAttach.setBuffer(ByteBuffer.allocate(2048));
-
-                            client.read(newAttach.getBuffer(), newAttach, new ChannelHandler());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void failed(Throwable exc, Attachment attachment) {
-                        System.out.println("accept failed");
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
+                    client.read(attach.getBuffer(), attach, new ChannelHandler());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        }
+
+            @Override
+            public void failed(Throwable exc, Attachment attachment) {
+                System.out.println("accept failed");
+            }
+        });
     }
 
     private static class Attachment {
@@ -127,8 +113,8 @@ public class AIOTest {
         }
 
         @Override
-        public void failed(Throwable exc, Attachment attachment) {
-            // TODO Auto-generated method stub
+        public void failed(Throwable e, Attachment attachment) {
+            System.out.println(e);
         }
     }
 

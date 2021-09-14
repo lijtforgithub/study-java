@@ -2,13 +2,13 @@ package com.ljt.study.lang.io.nio;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static com.ljt.study.lang.io.DemoUtils.*;
 
@@ -16,24 +16,20 @@ import static com.ljt.study.lang.io.DemoUtils.*;
  * @author LiJingTang
  * @date 2021-08-24 16:46
  */
-class HttpNIOServerSelector {
+class NIOServerSelectorMultiThread {
 
     public static void main(String[] args) throws IOException {
+        ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         ServerSocketChannel server = ServerSocketChannel.open();
-        // 非阻塞
         server.configureBlocking(false);
         server.bind(new InetSocketAddress(DEF_PORT), BACK_LOG);
         printStart(server.getLocalAddress());
 
         Selector selector = Selector.open();
-        // 注册accept事件
         server.register(selector, SelectionKey.OP_ACCEPT);
 
         for (; ; ) {
             try {
-                Set<SelectionKey> keys = selector.keys();
-                System.out.println("注册事件：" + keys.size());
-
                 while (selector.select() > 0) {
                     Set<SelectionKey> selectedKeys = selector.selectedKeys();
                     Iterator<SelectionKey> it = selectedKeys.iterator();
@@ -43,17 +39,15 @@ class HttpNIOServerSelector {
                         it.remove();
 
                         if (key.isAcceptable()) {
-                            ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
-                            SocketChannel client = serverChannel.accept();
-                            client.configureBlocking(false);
-                            printAccept(client.getRemoteAddress());
-
-                            client.register(selector, SelectionKey.OP_READ, ByteBuffer.allocateDirect(1024));
-                        }
-                        if (key.isReadable()) {
-                            SocketChannel client = (SocketChannel) key.channel();
-                            ByteBuffer buffer = (ByteBuffer) key.attachment();
-                            handleRequest(client, buffer, HttpNIOServerSelector.class);
+                            NIOServerSelector.acceptHandler(key, false);
+                        } else if (key.isReadable()) {
+                            /*
+                             * 多线程读取的时候 有可能还没读完 主线程再次循环的时候又拿到读事件
+                             * epoll_ctl(fd, del)
+                             * cancel 之后后面的消息也接收不到了 再注册也不行
+                             */
+                            key.cancel();
+                            executorService.submit(() -> NIOServerSelector.readHandler(key));
                         }
                     }
                 }

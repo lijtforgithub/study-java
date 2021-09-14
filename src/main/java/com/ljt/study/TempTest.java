@@ -3,7 +3,6 @@ package com.ljt.study;
 import lombok.SneakyThrows;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -19,11 +18,12 @@ public class TempTest {
         sets.add(2);
         sets.add(3);
 
-        final Iterator<Integer> it = sets.iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next());
-        }
-
+        sets.forEach(i -> {
+            if (i == 2) {
+                return;
+            }
+            System.out.println(i);
+        });
     }
 
 }
