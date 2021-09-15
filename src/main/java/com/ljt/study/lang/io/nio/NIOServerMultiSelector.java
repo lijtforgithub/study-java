@@ -1,10 +1,18 @@
 package com.ljt.study.lang.io.nio;
 
+import lombok.Getter;
+import lombok.SneakyThrows;
+
 import java.io.IOException;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.*;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static com.ljt.study.lang.io.DemoUtils.*;
 
 /**
  * 充分利用CPU资源 一个fd执行耗时 在一个线性里会阻塞后续的fd处理
@@ -18,35 +26,74 @@ import java.util.Set;
  */
 class NIOServerMultiSelector {
 
+    public static void main(String[] args) {
+        SelectorThreadGroup group = new SelectorThreadGroup(3);
+        group.bind(DEF_PORT);
+    }
 
 }
 
-class SelectorTaskGroup {
+class SelectorThreadGroup {
 
-}
+    private final SelectorThread[] worker;
+    private final AtomicInteger xid = new AtomicInteger();
 
-class SelectorTask implements Runnable {
-
-    private Selector selector;
-
-    public SelectorTask() {
-        try {
-            selector = Selector.open();
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
+    SelectorThreadGroup(int threadNum) {
+        if (threadNum < 1) {
+            throw new IllegalArgumentException("不能小于1");
         }
+
+        worker = new SelectorThread[threadNum];
+        for (int i = 0; i < threadNum; i++) {
+            worker[i] = new SelectorThread(this);
+            new Thread(worker[i]).start();
+        }
+    }
+
+    @SneakyThrows
+    void bind(int port) {
+        ServerSocketChannel server = ServerSocketChannel.open();
+        server.configureBlocking(false);
+        server.bind(new InetSocketAddress(port), BACK_LOG);
+        printStart(server.getLocalAddress());
+
+        addQueue(server);
+    }
+
+    SelectorThread nextWorker() {
+        if (worker.length == 1) {
+            return worker[0];
+        }
+        // 轮询就会很尴尬，倾斜
+        int index = xid.getAndIncrement() % (worker.length - 1);
+        return worker[index + 1];
+    }
+
+    void addQueue(Channel channel) {
+        SelectorThread selectorThread = channel instanceof ServerSocketChannel ? worker[0] : nextWorker();
+        selectorThread.getChannelQueue().add(channel);
+        selectorThread.getSelector().wakeup();
+    }
+}
+
+@Getter
+class SelectorThread implements Runnable {
+
+    private final Selector selector;
+    private final SelectorThreadGroup group;
+    private final LinkedBlockingQueue<Channel> channelQueue = new LinkedBlockingQueue<>();
+
+    @SneakyThrows
+    SelectorThread(SelectorThreadGroup group) {
+        selector = Selector.open();
+        this.group = group;
     }
 
     @Override
     public void run() {
         while (true) {
             try {
-                Set<SelectionKey> keys = selector.keys();
-                System.out.printf("%s | before select() | %d %n", Thread.currentThread().getName(), keys.size());
-                int num = selector.select();
-                System.out.printf("%s | after select() | %d %n", Thread.currentThread().getName(), keys.size());
-
-                if (num > 0) {
+                if (selector.select() > 0) {
                     Set<SelectionKey> selectedKeys = selector.selectedKeys();
                     Iterator<SelectionKey> it = selectedKeys.iterator();
 
@@ -55,17 +102,43 @@ class SelectorTask implements Runnable {
                         it.remove();
 
                         if (key.isAcceptable()) {
-
-                        }
-                        if (key.isReadable()) {
-
+                            acceptHandler((ServerSocketChannel) key.channel());
+                        } else if (key.isReadable()) {
+                            NIOServerSelector.readHandler(key);
                         }
                     }
                 }
 
+                if (!channelQueue.isEmpty()) {
+                    registerChannel();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @SneakyThrows
+    private void registerChannel() {
+        Channel channel = channelQueue.take();
+        if (channel instanceof ServerSocketChannel) {
+            ServerSocketChannel server = (ServerSocketChannel) channel;
+            server.register(selector, SelectionKey.OP_ACCEPT);
+        } else if (channel instanceof SocketChannel) {
+            SocketChannel client = (SocketChannel) channel;
+            ByteBuffer buffer = ByteBuffer.allocate(1024);
+            client.register(selector, SelectionKey.OP_READ, buffer);
+        }
+    }
+
+    private void acceptHandler(ServerSocketChannel serverChannel) {
+        try {
+            SocketChannel client = serverChannel.accept();
+            client.configureBlocking(false);
+            printAccept(client.getRemoteAddress());
+            this.group.addQueue(client);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

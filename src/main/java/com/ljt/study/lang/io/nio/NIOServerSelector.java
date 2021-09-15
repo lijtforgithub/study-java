@@ -93,7 +93,7 @@ class NIOServerSelector {
         }
     }
 
-    static void acceptHandler(SelectionKey key, boolean registryWrite) {
+    static void acceptHandler(SelectionKey key, boolean registerWrite) {
         try {
             ServerSocketChannel serverChannel = (ServerSocketChannel) key.channel();
             /*
@@ -108,7 +108,7 @@ class NIOServerSelector {
              * select/poll：JVM里开辟一个数组 fd7 放进去
              * epoll：epoll_ctl(fd3,ADD,fd7,EPOLLIN
              */
-            int opt = registryWrite ? SelectionKey.OP_READ | SelectionKey.OP_WRITE : SelectionKey.OP_READ;
+            int opt = registerWrite ? SelectionKey.OP_READ | SelectionKey.OP_WRITE : SelectionKey.OP_READ;
             client.register(key.selector(), opt, ByteBuffer.allocateDirect(1024));
         } catch (IOException e) {
             e.printStackTrace();

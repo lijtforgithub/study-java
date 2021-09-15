@@ -131,7 +131,7 @@ public class DemoUtils {
     }
 
     public static void printStart(SocketAddress address) {
-        System.out.println("服务启动成功：" + address);
+        System.out.printf("[%s] 服务启动成功：%s %n", Thread.currentThread().getName(), address);
     }
 
 }
