@@ -1,6 +1,6 @@
 ### NIO
 - FileChannel 是不支持非阻塞的。
-- [IO+redis](https://www.cnblogs.com/myseries/p/11733861.html)
+- [IO + Redis](https://www.cnblogs.com/myseries/p/11733861.html)
    1. 不用重复传递。我们调用epoll_wait时就相当于以往调用select/poll，但是这时却不用传递socket句柄给内核，因为内核已经在epoll_ctl中拿到了要监控的句柄列表。
    2. 在内核里，一切皆文件。epoll向内核注册了一个文件系统，用于存储上述的被监控socket。当你调用epoll_create时，就会在这个虚拟的epoll文件系统里创建一个file结点。这个file不是普通文件，它只服务于epoll。
    epoll在被内核初始化时（操作系统启动），同时会开辟出epoll自己的内核高速cache区，用于安置每一个我们想监控的socket，这些socket会以红黑树的形式保存在内核cache里，以支持快速的查找、插入、删除。

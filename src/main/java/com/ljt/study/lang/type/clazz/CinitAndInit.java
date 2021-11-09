@@ -33,8 +33,13 @@ public class CinitAndInit {
         private Attr attr1 = new Attr("父类第一个成员变量");
 
         static {
+            F = 10;
+            // 静态语句块中只能访问到定义在静态语句块之前的变量，定义在它之后的变量，在前面的静态语句块可以赋值，但是不能访问。
+//            System.out.println(F);
             System.out.println("父类静态块语句");
         }
+
+        private static Integer F;
 
         Parent() {
             super();

@@ -8,35 +8,35 @@ import org.junit.jupiter.api.Test;
  * @author LiJingTang
  * @date 2019-11-17 22:23
  */
-public class LazyInitTest {
+class LazyInitTest {
 
     @Test
-    public void test() {
+    void test() {
         Child c;
     }
 
     @Test
-    public void testNew() {
+    void testNew() {
         new Child();
     }
 
     @Test
-    public void testFinalVar() {
+    void finalVar() {
         System.out.println(Child.i);
     }
 
     @Test
-    public void testVar() {
+    void var() {
         System.out.println(Child.j);
     }
 
     @Test
-    public void testClassForName() throws ClassNotFoundException {
+    void classForName() throws ClassNotFoundException {
         Class.forName("com.ljt.study.jvm.load.LazyInitTest$Child");
     }
 
     @Test
-    public void testClassForNameFalse() throws ClassNotFoundException {
+    void classForNameFalse() throws ClassNotFoundException {
         Class.forName("com.ljt.study.jvm.load.LazyInitTest$Child", false, LazyInitTest.class.getClassLoader());
     }
 
