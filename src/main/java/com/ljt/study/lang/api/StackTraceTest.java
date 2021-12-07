@@ -1,5 +1,8 @@
 package com.ljt.study.lang.api;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 /**
  * @author LiJingTang
  * @date 2020-01-02 17:34
@@ -32,6 +35,11 @@ public class StackTraceTest {
         System.out.println("ClassName: " + getClassName());
         System.out.println("MethodName: " + getMethodName());
         System.out.println("LineNumber: " + getLineNumber());
+
+        Exception e = new NullPointerException("XXOO");
+        StringWriter sw = new StringWriter();
+        e.printStackTrace(new PrintWriter(sw));
+        System.out.println(sw);
     }
 
 }

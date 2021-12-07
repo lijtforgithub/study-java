@@ -1,9 +1,7 @@
 package com.ljt.study;
 
-import lombok.SneakyThrows;
-
-import java.util.HashSet;
-import java.util.Set;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * @author LiJingTang
@@ -11,19 +9,11 @@ import java.util.Set;
  */
 public class TempTest {
 
-    @SneakyThrows
     public static void main(String[] args) {
-        Set<Integer> sets = new HashSet<>();
-        sets.add(1);
-        sets.add(2);
-        sets.add(3);
-
-        sets.forEach(i -> {
-            if (i == 2) {
-                return;
-            }
-            System.out.println(i);
-        });
+        Exception e = new NullPointerException("XXOO");
+        StringWriter sw = new StringWriter();
+        e.printStackTrace(new PrintWriter(sw));
+        System.out.println(sw.toString());
     }
 
 }
