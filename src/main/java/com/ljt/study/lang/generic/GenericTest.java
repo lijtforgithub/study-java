@@ -9,7 +9,7 @@ import java.util.List;
  * @author LiJingTang
  * @date 2019-11-23 21:27
  */
-public class GenericTest {
+class GenericTest {
 
     @Test
     public void testGeneric() throws Exception {

@@ -17,7 +17,9 @@ public class GenericMethod {
     }
 
     private static <E> void print(E[] list) {
-        for (E e : list) System.out.print(e + " ");
+        for (E e : list) {
+            System.out.print(e + " ");
+        }
 
         System.out.println();
     }

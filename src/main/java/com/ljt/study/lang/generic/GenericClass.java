@@ -1,6 +1,7 @@
 package com.ljt.study.lang.generic;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 泛型类 模拟栈
@@ -10,12 +11,7 @@ import java.util.ArrayList;
  */
 public class GenericClass<E> {
 
-    private ArrayList<E> list = new ArrayList<>();
-
-    // 默认构造函数
-    public GenericClass() {
-    }
-
+    private final List<E> list = new ArrayList<>();
 
     /**
      * 返回这个栈的元素个数

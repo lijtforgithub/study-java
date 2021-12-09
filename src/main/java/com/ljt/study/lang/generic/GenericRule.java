@@ -6,7 +6,7 @@ package com.ljt.study.lang.generic;
  * @author LiJingTang
  * @date 2019-11-23 20:17
  */
-public class GenericRule {
+class GenericRule {
 
     public static void main(String[] args) {
         GenericClass<Integer> intStack = new GenericClass<>();
@@ -59,13 +59,15 @@ public class GenericRule {
         }
 
         private static void print(GenericClass<?> stack) {
-            while (!stack.isEmpty())
+            while (!stack.isEmpty()) {
                 System.out.print(stack.pop() + " ");
+            }
         }
 
         private static <T> void add(GenericClass<T> stack1, GenericClass<? super T> stack2) {
-            while (!stack1.isEmpty())
+            while (!stack1.isEmpty()) {
                 stack2.push(stack1.pop());
+            }
         }
     }
 
