@@ -6,28 +6,16 @@ package com.ljt.study.lang.generic;
  */
 public class MultiGeneric {
 
-    private static class AAndBGeneric extends AAndB<AB> {}
-    private static class AAndBGeneric1 extends AOrB<A1, B1> {}
+    public static void main(String[] args) {
+        A_B<AB> ab = new A_B<>();
+    }
+
+    private static class A_B<T extends A & B> {
+
+    }
+
+    interface A {}
+    interface B {}
+    private static class AB implements A,B {}
 
 }
-
-
-
-abstract class AAndB<T extends A & B> {
-
-}
-
-abstract class AOrB<T extends A, B> {
-
-}
-
-abstract class AOrC<T extends A, C> {
-
-}
-
-interface A {}
-interface B {}
-abstract class C {}
-class AB implements A,B {}
-class A1 implements A {}
-class B1 implements B {}
