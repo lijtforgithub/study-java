@@ -16,6 +16,6 @@ public class MultiGeneric {
 
     interface A {}
     interface B {}
-    private static class AB implements A,B {}
+    private static class AB implements A, B {}
 
 }
