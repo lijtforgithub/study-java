@@ -134,4 +134,26 @@ class ByteBufferTest {
         System.out.println(new String(bytes));
     }
 
+    /**
+     * 切片 改的还是原来的对象 相当于视图
+     */
+    @Test
+    void slice() {
+        byte[] bytes = {1, 2, 3, 4, 5};
+        ByteBuffer byteBuf = ByteBuffer.wrap(bytes);
+        System.out.println(byteBuf);
+        System.out.println(byteBuf.get());
+        System.out.println(byteBuf);
+
+        byteBuf.position(3);
+        ByteBuffer buf1 = byteBuf.slice();
+        System.out.println(buf1);
+        System.out.println(buf1.get());
+
+        byte b = 9;
+        byteBuf.put(4, b);
+        System.out.println(byteBuf.get(4));
+        System.out.println(buf1.get(1));
+    }
+
 }
