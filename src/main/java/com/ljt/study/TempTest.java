@@ -10,10 +10,12 @@ import java.io.StringWriter;
 public class TempTest {
 
     public static void main(String[] args) {
-        Exception e = new NullPointerException("XXOO");
+        Throwable t = new IllegalArgumentException("xxx");
+        Exception e = new Exception("XXOO", t);
         StringWriter sw = new StringWriter();
         e.printStackTrace(new PrintWriter(sw));
         System.out.println(sw.toString());
+//        System.out.println(e.getCause());
     }
 
 }
