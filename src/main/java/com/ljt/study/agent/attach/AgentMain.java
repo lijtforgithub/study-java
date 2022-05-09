@@ -23,7 +23,7 @@ public class AgentMain {
     }
 
     public static void agentmain(String agentArgs, Instrumentation inst) throws UnmodifiableClassException {
-        System.out.println("JVM 载入 agent：" + AgentMain.class.toString());
+        System.out.println("JVM 载入 agent：" + AgentMain.class);
         System.out.println("agentmain方法：agentArgs = " + agentArgs);
 
         inst.addTransformer(new MethodTransformer(), true);

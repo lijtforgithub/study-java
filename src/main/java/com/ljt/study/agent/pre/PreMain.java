@@ -29,7 +29,7 @@ public class PreMain {
      * @param inst 仪表
      */
     public static void premain(String agentArgs, Instrumentation inst) {
-        System.out.println("JVM 载入 agent：" + PreMain.class.toString());
+        System.out.println("JVM 载入 agent：" + PreMain.class);
         System.out.println("两个参数的premain方法：agentArgs = " + agentArgs);
 
         inst.addTransformer(new MethodTimeTransformer());
@@ -40,7 +40,7 @@ public class PreMain {
      * 则会执行 premain(String agentArgs)
      */
     public static void premain(String agentArgs) {
-        System.out.println("JVM 载入 agent：" + PreMain.class.toString());
+        System.out.println("JVM 载入 agent：" + PreMain.class);
         System.out.println("一个参数的premain方法：agentArgs = " + agentArgs);
     }
 
