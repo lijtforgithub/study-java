@@ -24,7 +24,7 @@ public class ArrayTest {
      * 如果是引用类型的话会兼容JDK1.4的语法，如果是字符串，打印的如：[hello, world, from, java]
      */
     @Test
-    public void asList() {
+    void asList() {
         int[] intArray = {1, 2, 3, 4, 5};
         List<int[]> intList = Arrays.asList(intArray);
         System.out.println(intList + " - " + intList.size());
@@ -40,7 +40,7 @@ public class ArrayTest {
      * 未重写，它直接抛出UnsupportedOperationException异常
      */
     @Test
-    public void asListUnmodifiable() {
+    void asListUnmodifiable() {
         Integer[] array = {1, 2, 3, 4, 5};
         List<Integer> list = Arrays.asList(array);
         list.add(6);
@@ -53,7 +53,7 @@ public class ArrayTest {
      * 如果两个数组的元素类型和维度均相同，但长度不同，那么它们还是属于同一个类。
      */
     @Test
-    public void testType() {
+    void testType() {
         int[] a = new int[10];
         int[][] b = new int[10][10];
         System.out.println(a.getClass().getName());
@@ -70,7 +70,7 @@ public class ArrayTest {
      * JVM根据元素类型和维度，创建相应的数组类。
      */
     @Test
-    public void testAttr() {
+    void testAttr() {
         int[] a = new int[10];
         Class<?> clazz = a.getClass();
         System.out.println(clazz.getDeclaredFields().length);
@@ -82,7 +82,7 @@ public class ArrayTest {
     }
 
     @Test
-    public void testLoopCost() {
+    void testLoopCost() {
         int len = 100_0000;
         Object[] array = new Object[len];
         Object obj = null;
@@ -108,7 +108,7 @@ public class ArrayTest {
 
     // 声明一个数组
     @Test
-    public void testNew() {
+    void testNew() {
         String[] aArray = new String[5];
         String[] bArray = {"a", "b", "c", "d", "e"};
         String[] cArray = new String[]{"a", "b", "c", "d", "e"};
@@ -116,7 +116,7 @@ public class ArrayTest {
 
     // 输出一个数组
     @Test
-    public void printArray() {
+    void printArray() {
         int[] array = {1, 2, 3, 4, 5};
         String s = Arrays.toString(array);
         System.out.println(array);
@@ -125,7 +125,7 @@ public class ArrayTest {
 
     // 从一个数组创建数组列表
     @Test
-    public void arrayToCollection() {
+    void arrayToCollection() {
         String[] array = {"a", "b", "c", "d", "e"};
         List<String> list = new ArrayList<>(Arrays.asList(array));
         System.out.println(list);
@@ -133,14 +133,14 @@ public class ArrayTest {
 
     // 检查一个数组是否包含某个值
     @Test
-    public void contains() {
+    void contains() {
         String[] array = {"a", "b", "c", "d", "e"};
         System.out.println(Arrays.asList(array).contains("a"));
     }
 
     // 连接两个数组
     @Test
-    public void arrayAdd() {
+    void arrayAdd() {
         int[] array1 = {1, 2, 3, 4, 5};
         int[] array2 = {6, 7, 8, 9, 10};
         System.out.println(ArrayUtils.addAll(array1, array2));
@@ -148,13 +148,13 @@ public class ArrayTest {
 
     // 把提供的数组元素放入一个字符串
     @Test
-    public void arrayToString() {
+    void arrayToString() {
         System.out.println(StringUtils.join(new String[]{"a", "b", "c"}, ", "));
     }
 
     // 将一个数组列表转换为数组
     @Test
-    public void collectionToArray() {
+    void collectionToArray() {
         String[] array = {"a", "b", "c", "d", "e"};
         List<String> list = new ArrayList<>(Arrays.asList(array));
         String[] tempArray = new String[list.size()];
@@ -166,7 +166,7 @@ public class ArrayTest {
 
     // 将一个数组转换为集（set）
     @Test
-    public void arrayToSet() {
+    void arrayToSet() {
         String[] array = {"a", "b", "c", "d", "e"};
         Set<String> set = new HashSet<>(Arrays.asList(array));
         System.out.println(set);
@@ -174,7 +174,7 @@ public class ArrayTest {
 
     // 逆向一个数组
     @Test
-    public void reverse() {
+    void reverse() {
         int[] array = {1, 2, 3, 4, 5};
         ArrayUtils.reverse(array);
         System.out.println(Arrays.toString(array));
@@ -182,7 +182,7 @@ public class ArrayTest {
 
     // 移除数组中的元素
     @Test
-    public void remove() {
+    void remove() {
         int[] array = {1, 2, 3, 4, 5};
         int[] removed = ArrayUtils.removeElement(array, 3); // create a new array
         System.out.println(Arrays.toString(removed));
@@ -190,11 +190,16 @@ public class ArrayTest {
 
     // 将整数转换为字节数组
     @Test
-    public void intToByteArray() {
-        byte[] bytes = ByteBuffer.allocate(4).putInt(8).array();
+    void intToByteArray() {
+        byte[] bytes = ByteBuffer.allocate(4).putInt(150).array();
 
-        for (byte t : bytes)
-            System.out.format("0x%x ", t);
+        for (byte b : bytes) {
+            System.out.format("0x%x ", b);
+        }
+        System.out.println();
+
+        ByteBuffer byteBuffer = ByteBuffer.wrap(bytes);
+        System.out.println(byteBuffer.getInt());
     }
 
 }
