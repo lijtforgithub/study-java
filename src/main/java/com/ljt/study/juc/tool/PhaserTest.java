@@ -1,4 +1,4 @@
-package com.ljt.study.juc.aqs;
+package com.ljt.study.juc.tool;
 
 import com.ljt.study.juc.ThreadUtils;
 
@@ -9,7 +9,7 @@ import java.util.concurrent.Phaser;
  * @author LiJingTang
  * @date 2021-06-27 22:32
  */
-public class PhaserTest {
+class PhaserTest {
 
     private static final String NAME = "张三";
 

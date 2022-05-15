@@ -1,4 +1,4 @@
-package com.ljt.study.juc.aqs;
+package com.ljt.study.juc.tool;
 
 import com.ljt.study.juc.ThreadUtils;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import java.util.concurrent.Phaser;
  * @author LiJingTang
  * @date 2020-01-03 10:35
  */
-public class CountDownLatchTest {
+class CountDownLatchTest {
 
     public static void main(String[] args) throws InterruptedException {
         ExecutorService executor = Executors.newCachedThreadPool();

@@ -1,4 +1,4 @@
-package com.ljt.study.juc.aqs;
+package com.ljt.study.juc.tool;
 
 import com.ljt.study.juc.ThreadUtils;
 
@@ -14,7 +14,7 @@ import java.util.concurrent.Semaphore;
  * @author LiJingTang
  * @date 2020-01-03 10:41
  */
-public class SemaphoreTest {
+class SemaphoreTest {
 
     public static void main(String[] args) {
         ExecutorService executor = Executors.newCachedThreadPool();

@@ -11,7 +11,7 @@ import java.util.Date;
  * @author LiJingTang
  * @date 2020-01-02 19:58
  */
-public class InterruptTest {
+class InterruptTest {
 
     public static void main(String[] args) {
         InterruptThread1 t1 = new InterruptThread1();
@@ -65,12 +65,14 @@ public class InterruptTest {
     }
 
     /**
+     * 中断协商
+     *
      * interrupt() 打断某个线程（设置标志位）
      * isInterrupted() 查询某个线程是否被打断过（查询标志位）
      * static interrupted() 查询当前线程是否被打断过 并重置打断标志
      */
     @Test
-    public void testIsInterrupted() {
+    void testIsInterrupted() {
         Thread t = new Thread(() -> {
             for(;;) {
                 if (Thread.currentThread().isInterrupted()) {
@@ -86,7 +88,7 @@ public class InterruptTest {
     }
 
     @Test
-    public void testInterrupted() {
+    void testInterrupted() {
         Thread t = new Thread(() -> {
             for(;;) {
                 if (Thread.interrupted()) {

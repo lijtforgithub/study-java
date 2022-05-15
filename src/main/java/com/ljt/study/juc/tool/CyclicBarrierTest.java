@@ -1,4 +1,4 @@
-package com.ljt.study.juc.aqs;
+package com.ljt.study.juc.tool;
 
 import com.ljt.study.juc.ThreadUtils;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import java.util.function.Supplier;
  * @author LiJingTang
  * @date 2020-01-03 10:40
  */
-public class CyclicBarrierTest {
+class CyclicBarrierTest {
 
     public static void main(String[] args) {
         ExecutorService executor = Executors.newCachedThreadPool();

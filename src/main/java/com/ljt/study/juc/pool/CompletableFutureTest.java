@@ -1,4 +1,4 @@
-package com.ljt.study.juc.api;
+package com.ljt.study.juc.pool;
 
 import com.ljt.study.juc.ThreadUtils;
 import lombok.AllArgsConstructor;
@@ -200,6 +200,15 @@ class CompletableFutureTest {
             System.out.println(v1.v + v2.v);
             return new Value(0);
         });
+
+        System.out.println(future.get());
+    }
+
+    @SneakyThrows
+    @Test
+    void thenCompose() {
+        CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> new Value(1))
+                .thenCompose(v -> CompletableFuture.completedFuture(v.v));
 
         System.out.println(future.get());
     }

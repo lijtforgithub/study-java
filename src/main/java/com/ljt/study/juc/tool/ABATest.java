@@ -1,4 +1,4 @@
-package com.ljt.study.juc.atomic;
+package com.ljt.study.juc.tool;
 
 import com.ljt.study.juc.ThreadUtils;
 
@@ -11,13 +11,13 @@ import java.util.concurrent.atomic.AtomicStampedReference;
  * @author LiJingTang
  * @date 2019-11-22 11:14
  */
-public class ABATest {
-
-    private static final AtomicInteger atomicInt = new AtomicInteger(100);
-    // 加了版本戳
-    private static final AtomicStampedReference<Integer> atomicStampedRef = new AtomicStampedReference<>(100, 0);
+class ABATest {
 
     public static void main(String[] args) {
+        final AtomicInteger atomicInt = new AtomicInteger(100);
+        // 加了版本戳
+        final AtomicStampedReference<Integer> atomicStampedRef = new AtomicStampedReference<>(100, 0);
+
         Thread t1 = new Thread(() -> {
             ThreadUtils.sleepSeconds(1);
             atomicInt.compareAndSet(100, 101);

@@ -1,4 +1,4 @@
-package com.ljt.study.juc.aqs;
+package com.ljt.study.juc.tool;
 
 import com.ljt.study.juc.ThreadUtils;
 
@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
  * @author LiJingTang
  * @date 2020-01-03 10:43
  */
-public class ExchangerTest {
+class ExchangerTest {
 
     public static void main(String[] args) {
         ExecutorService executor = Executors.newCachedThreadPool();
