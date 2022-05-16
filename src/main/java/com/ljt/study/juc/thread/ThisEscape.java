@@ -6,7 +6,7 @@ package com.ljt.study.juc.thread;
  * @author LiJingTang
  * @date 2021-03-09 10:40
  */
-public class ThisEscape {
+class ThisEscape {
 
     private String value = "";
 

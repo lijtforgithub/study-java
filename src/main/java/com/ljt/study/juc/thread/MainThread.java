@@ -1,5 +1,6 @@
 package com.ljt.study.juc.thread;
 
+import com.ljt.study.juc.ThreadUtils;
 import org.junit.jupiter.api.Test;
 
 import static com.ljt.study.juc.ThreadUtils.sleepSeconds;
@@ -8,12 +9,12 @@ import static com.ljt.study.juc.ThreadUtils.sleepSeconds;
  * @author LiJingTang
  * @date 2019-11-24 14:54
  */
-public class MainThread {
+class MainThread {
 
     public static void main(String[] args) {
         Thread t = t1();
         // 守护线程，main 方法不等线程执行完成会提前结束。
-//        t.setDaemon(true);
+        t.setDaemon(true);
         t.start();
 
         printThreadEnd();
@@ -31,10 +32,10 @@ public class MainThread {
     }
 
     @Test
-    public void test() {
+    void test() {
         Thread t = t1();
         t.start();
-//        join(t);
+        ThreadUtils.join(t);
 
         printThreadEnd();
     }

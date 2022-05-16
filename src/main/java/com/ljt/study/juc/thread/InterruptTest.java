@@ -3,7 +3,7 @@ package com.ljt.study.juc.thread;
 import com.ljt.study.juc.ThreadUtils;
 import org.junit.jupiter.api.Test;
 
-import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 打断线程 优雅的结束线程
@@ -13,93 +13,82 @@ import java.util.Date;
  */
 class InterruptTest {
 
-    public static void main(String[] args) {
-        InterruptThread1 t1 = new InterruptThread1();
-        InterruptThread2 t2 = new InterruptThread2();
-        t1.start();
-        t2.start();
-        // 主线程睡10秒 (在哪个线程里调用睡眠哪个线程)
-        ThreadUtils.sleepSeconds(5);
-
-        t1.interrupt();
-        t2.flag = false;
-    }
-
     /**
      * sleep/wait/join 调用这些方法的线程 调用interrupt会抛异常
      */
-    private static class InterruptThread1 extends Thread {
+    @Test
+    void sleep() {
+        Thread t = new Thread(() -> {
+            for (int i = 0; i < 300; i++) {
+                System.out.println(Thread.currentThread().getName() + " - " + i);
 
-        @Override
-        public void run() {
-            while (true) {
                 try {
-                    Thread.sleep(1000);
-                    System.out.println(this.getClass().getSimpleName() + " - " + new Date());
+                    Thread.sleep(1);
                 } catch (InterruptedException e) {
-                    System.out.println(this.getName() + " interrupt");
                     System.out.println("捕获了异常状态复位：" + Thread.currentThread().isInterrupted());
-                    // 结束线程
-                    return;
+                    // 如果不重新调用中断方法 循环不能预期结束
+                    Thread.currentThread().interrupt();
+                    e.printStackTrace();
+                }
+
+                if (Thread.currentThread().isInterrupted()) {
+                    System.out.println("结束循环");
+                    break;
                 }
             }
-        }
-    }
+        }, "a");
 
-    private static class InterruptThread2 extends Thread {
+        t.start();
+        ThreadUtils.sleep(20, TimeUnit.MILLISECONDS);
+        t.interrupt();
 
-        boolean flag = true;
-
-        @Override
-        public void run() {
-            while (flag) {
-                try {
-                    Thread.sleep(1000);
-                    System.out.println(this.getClass().getSimpleName() + " - " + new Date());
-                } catch (InterruptedException e) {
-                    System.out.println(this.getName() + " interrupt");
-                    return;
-                }
-            }
-        }
+        ThreadUtils.sleepSeconds(5);
     }
 
     /**
-     * 中断协商
+     * 中断协商 只是设置中断标记 线程不会停止 线程可以根据此标记判断是否stop
      *
      * interrupt() 打断某个线程（设置标志位）
      * isInterrupted() 查询某个线程是否被打断过（查询标志位）
      * static interrupted() 查询当前线程是否被打断过 并重置打断标志
      */
     @Test
-    void testIsInterrupted() {
+    void interrupt() {
         Thread t = new Thread(() -> {
+            System.out.println(Thread.currentThread().getName() + " - " + Thread.currentThread().isInterrupted());
+
             for(;;) {
                 if (Thread.currentThread().isInterrupted()) {
-                    System.out.println("Thread is interrupted");
-                    System.out.println(Thread.currentThread().isInterrupted());
+                    System.out.println("线程中断标记：" + Thread.currentThread().isInterrupted());
+                    break;
                 }
             }
-        });
+        }, "a");
 
         t.start();
-        ThreadUtils.sleepSeconds(2);
+        ThreadUtils.sleep(1, TimeUnit.MILLISECONDS);
         t.interrupt();
+
+        ThreadUtils.sleepSeconds(1);
+        // 线程已经stop
+        System.out.println(t.isInterrupted());
     }
 
     @Test
-    void testInterrupted() {
+    void interrupted() {
         Thread t = new Thread(() -> {
+            System.out.println(Thread.currentThread().getName() + " - " + Thread.currentThread().isInterrupted());
             for(;;) {
+                // 查询并重置标记位
                 if (Thread.interrupted()) {
-                    System.out.println("Thread is interrupted");
-                    System.out.println(Thread.interrupted());
+                    System.out.println("线程中断标记：" + Thread.currentThread().isInterrupted());
+                    break;
                 }
             }
-        });
+        }, "a");
 
         t.start();
-        ThreadUtils.sleepSeconds(2);
+        ThreadUtils.sleep(1, TimeUnit.MILLISECONDS);
         t.interrupt();
     }
 

@@ -6,7 +6,7 @@ package com.ljt.study.juc.thread;
  * @author LiJingTang
  * @date 2020-01-03 08:39
  */
-public class PriorityTest {
+class PriorityTest {
 
     public static void main(String[] args) {
         PriorityThread t1 = new PriorityThread("PriorityThread - 1");
