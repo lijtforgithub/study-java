@@ -6,13 +6,20 @@ import com.ljt.study.juc.ThreadUtils;
  * @author LiJingTang
  * @date 2020-01-02 19:41
  */
-public class JoinTest {
+class JoinTest {
 
     public static void main(String[] args) {
         JoinThread thread = new JoinThread("JOIN");
         thread.start();
 
         try {
+            /**
+             * 底层实现依赖wait
+             *
+             * while (isAlive()) {
+             *    wait(0);
+             * }
+             */
             thread.join(); // 在当前线程等待thread线程终止，相等于方法调用
         } catch (InterruptedException e) {
             e.printStackTrace();

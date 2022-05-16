@@ -10,7 +10,7 @@ import java.lang.management.ThreadMXBean;
  * @author LiJingTang
  * @date 2019-11-25 10:47
  */
-public class ThreadMxBeanTest {
+class ThreadMxBeanTest {
 
     public static void main(String[] args) {
         // 获取Java线程管理MXBean

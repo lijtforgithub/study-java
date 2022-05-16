@@ -4,7 +4,7 @@ package com.ljt.study.juc.thread;
  * @author LiJingTang
  * @date 2020-01-02 19:36
  */
-public class YieldTest {
+class YieldTest {
 
     public static void main(String[] args) {
         YieldThread t1 = new YieldThread("YieldThread - 1");

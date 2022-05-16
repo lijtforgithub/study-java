@@ -10,7 +10,7 @@ import java.util.concurrent.locks.LockSupport;
  * @author LiJingTang
  * @date 2020-01-09 19:50
  */
-public class ThreadStateTest {
+class ThreadStateTest {
 
     private static final Object LOCK_O = new Object();
     private static final String MAIN = "main";
@@ -21,7 +21,7 @@ public class ThreadStateTest {
      * WAITING
      */
     @Test
-    public void testWait() {
+    void testWait() {
         WaitThread waitThread = new WaitThread();
         waitThread.start();
 
