@@ -1,13 +1,28 @@
-## JMM
-Java 内存模型规定了所有的变量都存储在主内存（Main Memory）中，此外每条线程还有自己的工作内存（Working Memory）。  
+## CPU三级缓存
+![](img/CPU三级缓存.image)
+
+## JMM 规范
+Java 内存模型规定了所有的变量都存储在主内存（Main Memory）中，此外每条线程还有自己的工作内存（Working Memory）。
 线程的工作内存中保存了被该线程使用到的变量的主内存副本拷贝，线程对变量的所有操作（读取、赋值等）都必须在工作内存中进行，不能直接读写主内存中的变量。
 并且，不同的线程之间也无法直接访问对方工作内存中的变量，线程间变量值得传递均需要通过主内存来完成。  
 这里说的变量包括实例字段、静态字段和构成数组对象的元素，不包括局部变量与方法参数，因为后者是线程私有的，不会共享，也就不存在竞争的问题。  
-可以把这里的主内存与工作内存概念与JVM运行时数据区进行对应，主内存主要对应Java堆中的对象实例数据部分，工作内存对应于虚拟机栈中的部分区域。
+可以把这里的主内存与工作内存概念与JVM运行时数据区进行对应，主内存主要对应Java堆中的对象实例数据部分，工作内存对应于**虚拟机栈中的部分区域**。
 
 ![](img/JMM.png)
 
+1. 可见性
+2. 有序性
+3. 原子性
+> synchronized 能保证可见性 原子性 有序性 但是不能禁止指令重排  
+> volatile 能保证可见性 有序性 禁止指令重排优化
+#### as-if-serial
+所有的动作(Action)都可以为了优化而被重排序，但是必须保证它们重排序后的结果和程序代码本身的应有结果是一致的。Java编译器、运行时和处理器都会保证单线程下的as-if-serial语义。
+> 为了保证这一语义，重排序不会发生在有数据依赖的操作之中。指令重排可以保证串行语义一致，但没有义务保证多线程间的语义也一致，即可能产生脏读。
+
+![](img/指令重排.image)
+
 八大原子操作（最新的JSR-133已经放弃这种描述）
+在JSR-133之前的旧内存模型中，一个64位long/double型变量的读/写操作可以被拆分为两个32位的读/写操作来执行。从JSR-133内存模型开始（即从JDK5开始），仅仅只允许把一个64位long/double型变量的写操作拆分为两个32位的写操作来执行，任意的读操作在JSR-133中都必须具有原子性（即任意读操作必须要在单个读事务中执行）。
 
 | 动作 | 作用 |
 |---|---|
@@ -37,10 +52,6 @@ Java 内存模型规定了所有的变量都存储在主内存（Main Memory）�
 6. 线程中断规则：对线程interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生，可以通过Thread.interrupted()方法检测到是否有中断发生。
 7. 对象终结规则：一个对象的初始化完成先行发生于它的finalize()方法的开始。
 8. 传递性：如果操作A先行发生于操作B，操作B先行发生于操作C，那就可以得出操作A先行发生于操作C的结论。
->  Java 语言的要求，让JVM去实现。
-#### as-if-serial
-所有的动作(Action)都可以为了优化而被重排序，但是必须保证它们重排序后的结果和程序代码本身的应有结果是一致的。Java编译器、运行时和处理器都会保证单线程下的as-if-serial语义。
-> 为了保证这一语义，重排序不会发生在有数据依赖的操作之中。指令重排可以保证串行语义一致，但没有义务保证多线程间的语义也一致，即可能产生脏读。
 
 ## 硬件层数据一致性
 - 总线锁
@@ -67,31 +78,28 @@ WCBuffer：比L1、L2还快；CPU中只有4个字节。
      在指令后插入Store Barrier，能让写入缓存中的最新数据更新写入主内存，让其他线程可见。
 
 #### 2.JVM规范（JSR133）
-- LoadLoad屏障  
-语句：Load1; LoadLoad; Load2  
-在Load2及后续读取操作要读取的数据被访问前，保证Load1要读取的数据被读取完毕。
-- StoreStore屏障  
-语句：Store1; StoreStore; Store2  
-在Store2及后续写入操作执行前，保证Store1的写入操作对其它处理器可见。
-- LoadStore屏障  
-语句：Load1; LoadStore; Store2  
-在Store2及后续写入操作被刷出前，保证Load1要读取的数据被读取完毕。
-- StoreLoad屏障  
-语句：Store1; StoreLoad; Load2  
-在Load2及后续所有读取操作执行前，保证Store1的写入对所有处理器可见。  
-它的开销是四种屏障中最大的。在大多数处理器的实现中，这个屏障是个万能屏障，兼具其它三种内存屏障的功能。
+![](img/内存屏障.jpeg)
+
 1. **volatile**
     1. 字节码层面：ACC_VOLATILE
-    2. JVM层面：volatile内存区的读写都加屏障
+    2. JVM层面：volatile内存区的读写都加屏障  
+       当第二个操作是volatile写时，不管第一个操作是什么，都不能重排序。这个规则确保volatile写之前的操作不会被编译器重排序到volatile写之后。  
+       当第一个操作是volatile读时，不管第二个操作是什么，都不能重排序。这个规则确保volatile读之后的操作不会被编译器重排序到volatile读之前。  
+       当第一个操作是volatile写，第二个操作是volatile读时，不能重排序。
+   
+       ![](img/重排规则.jpeg)
        ``` 
-       StoreStoreBarrier  
+       StoreStore  
        volatile 写操作  
-       StoreLoadBarrier
-    
-       LoadLoadBarrier  
-       volatile 读操作  
-       LoadStoreBarrier  
+       StoreLoad
+       
+       volatile 读操作 
+       LoadLoad
+       LoadStore
        ```
+       ![](img/volatile写.jpeg)
+       ![](img/volatile读.jpeg)
+
     3. [OS和硬件层面](https://blog.csdn.net/qq_26222859/article/details/52235930)
    hsdis: HotSpot Dis Assembler  
    windows: lock 指令实现
