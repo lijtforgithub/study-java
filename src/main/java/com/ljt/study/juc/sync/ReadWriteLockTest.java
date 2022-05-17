@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @author LiJingTang
  * @date 2020-01-03 11:09
  */
-public class ReadWriteLockTest {
+class ReadWriteLockTest {
 
     public static void main(String[] args) {
         final LockQueue queue = new LockQueue();
