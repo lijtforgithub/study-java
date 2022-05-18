@@ -98,5 +98,23 @@ class WaitNotifyTest {
         }).start();
     }
 
+    @Test
+    void lockSupportInterrupt() {
+        Thread t = new Thread(() -> {
+            System.out.println(Thread.currentThread().getName() + " 开始阻塞");
+            LockSupport.park();
+
+            System.out.println(Thread.currentThread().getName() + " 线程结束");
+        }, "a");
+
+        t.start();
+
+        ThreadUtils.sleepSeconds(2);
+        new Thread(() -> {
+            t.interrupt();
+            System.out.println("唤醒");
+        }).start();
+    }
+
 }
 

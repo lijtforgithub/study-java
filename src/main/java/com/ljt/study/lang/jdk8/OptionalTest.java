@@ -16,6 +16,8 @@ class OptionalTest {
 
         Object o = Optional.ofNullable(obj).orElseGet(Object::new);
         System.out.println(o);
+
+        Optional.ofNullable(obj).ifPresent(System.out::println);
     }
 
 }
