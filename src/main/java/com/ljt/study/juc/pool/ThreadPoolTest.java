@@ -2,8 +2,10 @@ package com.ljt.study.juc.pool;
 
 import com.ljt.study.juc.ThreadUtils;
 
+import java.lang.reflect.Field;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -34,6 +36,35 @@ public class ThreadPoolTest {
 //		threadPool.shutdownNow();
 
         Executors.newScheduledThreadPool(3).scheduleAtFixedRate(() -> System.out.println("bombing"), 10, 2, TimeUnit.SECONDS);
+    }
+
+    private static Object getPoolTask(Runnable r) {
+        if (! (r instanceof FutureTask)) {
+            return null;
+        }
+
+        try {
+            Field callableField = FutureTask.class.getDeclaredField("callable");
+            callableField.setAccessible(true);
+            Object callableObj = callableField.get(r);
+
+            Class<?>[] classes = Executors.class.getDeclaredClasses();
+            Class<?> targetClass = null;
+            for (Class<?> cls : classes) {
+                if (cls.getName().equals("java.util.concurrent.Executors$RunnableAdapter")) {
+                    targetClass = cls;
+                    break;
+                }
+            }
+
+            Field taskField = targetClass.getDeclaredField("task");
+            taskField.setAccessible(true);
+
+            return taskField.get(callableObj);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }
