@@ -1,4 +1,5 @@
 ### NIO
+- 网络IO流InputStream.available()不能用。
 - FileChannel 是不支持非阻塞的。
 - [IO + Redis](https://www.cnblogs.com/myseries/p/11733861.html)
    1. 不用重复传递。我们调用epoll_wait时就相当于以往调用select/poll，但是这时却不用传递socket句柄给内核，因为内核已经在epoll_ctl中拿到了要监控的句柄列表。
