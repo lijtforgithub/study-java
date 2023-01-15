@@ -154,6 +154,22 @@ class CompletableFutureTest {
     @SneakyThrows
     @Test
     void thenApply() {
+        CompletableFuture<Boolean> f = CompletableFuture.supplyAsync(() -> {
+            System.out.println(1);
+            ThreadUtils.sleepSeconds(5);
+            return Boolean.TRUE;
+        }).thenApply(b -> {
+            if (b) {
+                System.out.println(2);
+                ThreadUtils.sleepSeconds(3);
+            }
+
+            return Boolean.FALSE;
+        });
+
+        System.out.println("---");
+        ThreadUtils.sleepSeconds(10);
+
         CompletableFuture<Value> future = CompletableFuture.supplyAsync(() -> {
             ThreadUtils.sleepSeconds(2);
             return new Value(1);
