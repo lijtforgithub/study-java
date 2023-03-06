@@ -6,10 +6,7 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.*;
 
 /**
  * @author LiJingTang
@@ -103,6 +100,23 @@ class ThreadLocalTest {
         CountDownLatch latch = new CountDownLatch(1);
         // 包装线程池
         executor = TtlExecutors.getTtlExecutorService(executor);
+
+        executor.submit(() -> {
+            System.out.println(Thread.currentThread().getName() + " 阿里插件线程池获取主线程的值：" + threadLocal.get());
+            latch.countDown();
+        });
+
+        latch.await();
+    }
+
+
+    @SneakyThrows
+    @Test
+    void ttlAgent() {
+        TransmittableThreadLocal<String> threadLocal = new TransmittableThreadLocal<>();
+
+        set(threadLocal);
+        CountDownLatch latch = new CountDownLatch(1);
 
         executor.submit(() -> {
             System.out.println(Thread.currentThread().getName() + " 阿里插件线程池获取主线程的值：" + threadLocal.get());
