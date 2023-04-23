@@ -4,6 +4,7 @@
 -Xloggc:/xxx/xxx-gc-%t.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=20M
     -XX:+PrintGCDetails -XX:+PrintGCDateStamps
     -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/xxx/xxx-%t.dump
+    -XX:ErrorFile=/xxx/hs_err_%p.log
 ```
 ## 调优是什么
 #### 1.根据需求进行JVM规划和预调优
