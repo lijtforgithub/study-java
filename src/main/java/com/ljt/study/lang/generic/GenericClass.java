@@ -50,4 +50,9 @@ public class GenericClass<E> {
         return list.isEmpty();
     }
 
+
+    static class GenericClassImpl extends GenericClass<String> {
+
+    }
+
 }

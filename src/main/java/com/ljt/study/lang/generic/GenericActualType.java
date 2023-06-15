@@ -40,6 +40,8 @@ public class GenericActualType {
 
     @Test
     public void getClassActualType() {
+        Type type = GenericClass.GenericClassImpl.class.getGenericSuperclass();
+        printActualType(type);
     }
 
     @Test
