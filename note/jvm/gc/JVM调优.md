@@ -26,10 +26,10 @@
 2. **CPU飙高**
    1. top 找出CPU高的进程 PID
    2. top -Hp PID 找出该进程高的线程 TID
-   3. printf "%x\n" TID 线程ID转成16进制 0X-TID
+   3. printf "%x\n" ```TID``` 线程ID转成16进制 0x```TID```
    4. jstack PID > temp 导出该进程的线程堆栈信息 temp
-        1. jstack PID | grep 0X-TID -A 50 堆栈信息匹配16进制线程ID后的 50 行
-        2. jstack PID > temp 导出该进程的线程堆栈信息到文件 temp 然后文件里匹配0X-TID
+        1. jstack PID | grep 0x```TID``` -A 50 堆栈信息匹配16进制线程ID后的 50 行
+        2. jstack PID > temp 导出该进程的线程堆栈信息到文件 temp 然后文件里匹配0x```TID```
    5. 工作线程占比高 | 垃圾回收线程占比高
 3. **内存飙高**
    1. 导出堆内存 （jmap）
