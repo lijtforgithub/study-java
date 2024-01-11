@@ -32,17 +32,22 @@ Java代码在进行**Javac编译**的时候，并不像C和C++那样有“连接
 -D 设置系统属性 -D<名称>=<值> eg: java -Denv=test
 -X 非标准选项的帮助
 ```
-| 参数 | 默认值 | 说明 |
-|---|---|---|
-| -Xms<Size> | 物理内存1/64 | 初始堆大小 |
-| -Xmx<Size> | 物理内存1/4 | 最大堆大小 |
-| -Xss<Size> | >=1.5 1M | 线程堆栈大小 |
-| -Xmn<Size> |  | 新生代大小 |
-| -Xmixed | 开启 | 混合模式执行 |
-| -Xint |  | 解释模式执行（启动快/执行慢） |
-| -Xcomp |  | 编译模式执行（执行快/启动慢） |
+| 参数 | 默认值         | 说明              |
+|---|-------------|-----------------|
+| -Xms<Size> | 物理内存1/64    | 初始堆大小           |
+| -Xmx<Size> | 物理内存1/4     | 最大堆大小           |
+| -Xss<Size> | JDK1.5之后 1M | 线程栈内存大小         |
+| -Xmn<Size> |             | 新生代大小           |
+| -Xmixed | 开启          | 混合模式执行          |
+| -Xint |             | 解释模式执行（启动快/执行慢） |
+| -Xcomp |             | 编译模式执行（执行快/启动慢） |
 ##### java -XX
 ```
+JVM 默认的线程栈大小
+java -XX:+PrintFlagsFinal -version | grep ThreadStackSize
+JVM 默认的垃圾收集器
+java -XX:+PrintCommandLineFlags -version
+
 -XX:+PrintFlagsFinal 输出所有参数的名称及默认值
 
 -XX:+<option> 开启 option 参数

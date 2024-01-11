@@ -1,6 +1,14 @@
 - 吞吐量：运行用户代代码时间/（运行用户代码时间+垃圾收集时间）
 - 响应时间：STW越短，响应时间越好
 ```
+-Xms2048m -Xmx4096m (堆大小)
+-Xss2m （线程栈大小）
+-XX:MaxNewSize=512m （新生代大小）
+
+-XX:+UseG1GC （用于启用 G1 垃圾收集器，G1 垃圾收集器在 JDK 8 中对于支持 Lambda 表达式和函数式编程有一定的优势）
+-XX:+UseStringDeduplication （用于启用字符串去重，这对于存储大量重复字符串的应用程序有一定的优势，例如对于函数式编程中的大量闭包的情况。）
+-XX:+PrintHeapAtGC
+
 -Xloggc:/xxx/xxx-gc-%t.log -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=20M
     -XX:+PrintGCDetails -XX:+PrintGCDateStamps
     -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/xxx/xxx-%t.dump
