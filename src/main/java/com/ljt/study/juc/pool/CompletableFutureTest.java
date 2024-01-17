@@ -122,16 +122,19 @@ class CompletableFutureTest {
     void anyOf() {
         CompletableFuture<Value> future1 = CompletableFuture.supplyAsync(() -> {
             ThreadUtils.sleepSeconds(RANDOM.nextInt(10));
+            System.out.println("future1");
             return new Value(1);
         });
 
         CompletableFuture<Value> future2 = CompletableFuture.supplyAsync(() -> {
             ThreadUtils.sleepSeconds(RANDOM.nextInt(10));
+            System.out.println("future2");
             return new Value(2);
         });
 
         CompletableFuture<Object> future = CompletableFuture.anyOf(future1, future2);
         System.out.println("end：" + future.get());
+        TimeUnit.SECONDS.sleep(30);
     }
 
     @SneakyThrows
