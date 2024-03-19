@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 打断线程 优雅的结束线程
+ * 或者使用 volatile boolean running;
  *
  * @author LiJingTang
  * @date 2020-01-02 19:58
@@ -70,7 +71,7 @@ class InterruptTest {
         t.interrupt();
 
         ThreadUtils.sleepSeconds(1);
-        // 线程已经stop
+        // 线程已经stop 也会返回false
         System.out.println(t.isInterrupted());
     }
 

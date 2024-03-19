@@ -19,8 +19,11 @@ class JoinTest {
              * while (isAlive()) {
              *    wait(0);
              * }
+             *
+             * As a thread terminates the this.notifyAll method is invoked.
+             * It is recommended that applications not use wait, notify, or notifyAll on Thread instances.
              */
-            thread.join(); // 在当前线程等待thread线程终止，相等于方法调用
+            thread.join(); // 方法会阻塞调用线程，直到被调用的线程执行完毕或者超时（如果传递了超时参数，调用线程会等待被调用线程执行，但如果超过了超时时间，它会继续执行。）。相等于方法调用
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
