@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
 class WaitNotifyTest {
 
     @Test
-    void synchWaitNotify() {
+    void syncWaitNotify() {
         final Object lock = new Object();
 
         new Thread(() -> {

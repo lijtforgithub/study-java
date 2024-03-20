@@ -1,4 +1,4 @@
-package com.ljt.study.juc.thread;
+package com.ljt.study.juc.thread.method;
 
 /**
  * 一般不设置线程的优先级 依赖操作系统线程优先级

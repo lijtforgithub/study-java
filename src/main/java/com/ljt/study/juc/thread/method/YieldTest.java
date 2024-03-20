@@ -1,4 +1,4 @@
-package com.ljt.study.juc.thread;
+package com.ljt.study.juc.thread.method;
 
 /**
  * @author LiJingTang

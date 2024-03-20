@@ -4,7 +4,7 @@ package com.ljt.study.juc.thread;
  * @author LiJingTang
  * @date 2020-01-02 19:40
  */
-class RunnableTest {
+class CreateThreadWithRunnableTest {
 
     public static void main(String[] args) {
         // 一个线程任务也可以启动两个线程

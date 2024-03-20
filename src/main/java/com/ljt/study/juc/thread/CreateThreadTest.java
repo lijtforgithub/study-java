@@ -6,7 +6,7 @@ import com.ljt.study.juc.ThreadUtils;
  * @author LiJingTang
  * @date 2020-01-02 19:43
  */
-class ThreadTest {
+class CreateThreadTest {
 
     public static void main(String[] args) {
         Thread t1 = new Thread() {
@@ -42,13 +42,6 @@ class ThreadTest {
             }
         };
         t3.start();
-    }
-
-    void defaultUncaughtExceptionHandler() {
-        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
-            System.out.println(t);
-            System.out.println(e);
-        });
     }
 
 }

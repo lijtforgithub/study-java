@@ -8,7 +8,7 @@ import com.ljt.study.juc.ThreadUtils;
  * @author LiJingTang
  * @date 2020-01-02 18:47
  */
-public class ProducerConsumer {
+public class ProducerConsumerDemo {
 
     public static void main(String[] args) {
         SyncStack stack = new SyncStack();
