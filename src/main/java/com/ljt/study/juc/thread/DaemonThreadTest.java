@@ -9,7 +9,7 @@ import static com.ljt.study.juc.ThreadUtils.sleepSeconds;
  * @author LiJingTang
  * @date 2019-11-24 14:54
  */
-class MainAndDaemonThread {
+class DaemonThreadTest {
 
     public static void main(String[] args) {
         Thread t = t1();
@@ -21,14 +21,15 @@ class MainAndDaemonThread {
     }
 
     private static void printThreadEnd() {
-        System.out.println(Thread.currentThread().getName() + " 线程执行结束");
+        System.out.println(Thread.currentThread().getName() + " end");
     }
 
     private static Thread t1() {
         return new Thread(() -> {
+            System.out.println(Thread.currentThread().getName() + " start");
             sleepSeconds(5);
             printThreadEnd();
-        });
+        }, "daemon-thread");
     }
 
     @Test
