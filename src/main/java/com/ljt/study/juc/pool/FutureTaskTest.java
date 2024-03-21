@@ -1,7 +1,5 @@
 package com.ljt.study.juc.pool;
 
-import org.junit.jupiter.api.Test;
-
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
@@ -35,14 +33,6 @@ public class FutureTaskTest {
 
         Executors.newSingleThreadExecutor().submit(futureTask);
         System.out.println("Executors : result = " + futureTask.get());
-    }
-
-    @Test
-    public void testRunnable() {
-        new Thread(new FutureTask<String>(() -> {
-            System.out.println("Callable 结合 Thread");
-            return null;
-        })).start();
     }
 
 }

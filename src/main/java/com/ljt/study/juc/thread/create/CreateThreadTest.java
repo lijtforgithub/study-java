@@ -1,4 +1,4 @@
-package com.ljt.study.juc.thread;
+package com.ljt.study.juc.thread.create;
 
 import com.ljt.study.juc.ThreadUtils;
 

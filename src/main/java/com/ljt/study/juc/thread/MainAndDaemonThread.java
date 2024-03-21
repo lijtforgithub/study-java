@@ -9,7 +9,7 @@ import static com.ljt.study.juc.ThreadUtils.sleepSeconds;
  * @author LiJingTang
  * @date 2019-11-24 14:54
  */
-class MainThread {
+class MainAndDaemonThread {
 
     public static void main(String[] args) {
         Thread t = t1();

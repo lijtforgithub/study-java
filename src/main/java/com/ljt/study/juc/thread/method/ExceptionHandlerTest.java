@@ -9,12 +9,11 @@ class ExceptionHandlerTest {
     public static void main(String[] args) {
         Thread.setDefaultUncaughtExceptionHandler(new MyUncaughtExceptionHandler());
 
-        Thread t = new Thread(new ExceptionTask());
-        t.setName("exce-thread");
+        Thread t = new Thread(new ExceptionTask(), "exce-thread");
         t.start();
     }
 
-    static class MyUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
+    private static class MyUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
 
         @Override
         public void uncaughtException(Thread t, Throwable e) {
@@ -22,7 +21,7 @@ class ExceptionHandlerTest {
         }
     }
 
-    static class ExceptionTask implements Runnable {
+    private static class ExceptionTask implements Runnable {
 
         @Override
         public void run() {
