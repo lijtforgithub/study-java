@@ -9,7 +9,7 @@ class ExceptionHandlerTest {
     public static void main(String[] args) {
         Thread.setDefaultUncaughtExceptionHandler(new MyUncaughtExceptionHandler());
 
-        Thread t = new Thread(new ExceptionTask(), "exce-thread");
+        Thread t = new Thread(new ExceptionTask(), "exception-thread");
         t.start();
     }
 
