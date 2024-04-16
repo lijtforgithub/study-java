@@ -15,6 +15,21 @@ class ThreadStateTest {
     private static final Object LOCK_O = new Object();
     private static final String MAIN = "main";
 
+
+    @Test
+    void testBlocked() {
+        Thread t = new Thread(() -> {
+            synchronized (LOCK_O) {
+            }
+        });
+
+        synchronized (LOCK_O) {
+            t.start();
+            ThreadUtils.sleepSeconds(1);
+            System.out.println(t.getState());
+        }
+    }
+
     /**
      * wait 线程进入等待队列 notify/notifyAll后 从等待队列 -> 锁池
      * wait 释放锁 进入锁池后重新竞争锁资源

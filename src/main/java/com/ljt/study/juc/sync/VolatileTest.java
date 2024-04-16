@@ -35,8 +35,8 @@ class VolatileTest {
         public void run() {
             System.out.println("start");
             while (running) {
-                // 如果加了打印语句 不加 volatile 也会终止 CPU调度发生了上下文切换 也会刷新缓存
-//                System.out.println("OK");
+                // 如果加了打印语句 实现有 synchronized 也会保持可见（synchronized在获取锁资源后也会使cpu缓存行失效）
+                System.out.println("OK");
             }
             System.out.println("end");
         }

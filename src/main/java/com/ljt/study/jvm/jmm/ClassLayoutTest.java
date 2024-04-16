@@ -1,5 +1,6 @@
 package com.ljt.study.jvm.jmm;
 
+import com.ljt.study.juc.ThreadUtils;
 import org.openjdk.jol.info.ClassLayout;
 
 /**
@@ -9,8 +10,16 @@ import org.openjdk.jol.info.ClassLayout;
 public class ClassLayoutTest {
 
     public static void main(String[] args) {
+        // JVM偏向锁延迟
+        ThreadUtils.sleepSeconds(5);
+
         Object o = new Object();
         System.out.println(ClassLayout.parseInstance(o).toPrintable());
+
+
+        synchronized (o) {
+            System.out.println(ClassLayout.parseInstance(o).toPrintable());
+        }
     }
 
 }

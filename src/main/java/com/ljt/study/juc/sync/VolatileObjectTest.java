@@ -16,7 +16,7 @@ class VolatileObjectTest {
         t.start();
         ThreadUtils.sleepSeconds(1);
         System.out.println("wakeup");
-        // 引用类型也可以
+        // 有volatile属性发生变好也会使缓存行失效 保证可见行
         test.f.setF(0);
     }
 
