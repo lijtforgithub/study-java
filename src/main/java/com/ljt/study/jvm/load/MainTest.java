@@ -1,5 +1,7 @@
 package com.ljt.study.jvm.load;
 
+import java.sql.DriverManager;
+
 /**
  * 类的静态变量初始化
  *
@@ -9,6 +11,7 @@ package com.ljt.study.jvm.load;
 public class MainTest {
 
     public static void main(String[] args) {
+        System.out.println(DriverManager.class.getClassLoader());
         System.out.println(T1.i);
         System.out.println(T2.i);
     }
