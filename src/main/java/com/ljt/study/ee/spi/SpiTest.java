@@ -14,6 +14,8 @@ class SpiTest {
         Iterator<CarService> iterator = loader.iterator();
 
         while (iterator.hasNext()) {
+            // java.util.ServiceLoader.LazyIterator.nextService
+            // Class.forName(cn, false, loader);
             iterator.next().print();
         }
     }
