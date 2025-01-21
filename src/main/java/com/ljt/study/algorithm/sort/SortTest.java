@@ -20,6 +20,10 @@ class SortTest {
 
     /**
      * 冒泡排序（稳定）
+     * 如果左边的元素大于右边的元素 交换位置
+     * 0~n
+     * 0~n-1
+     * 0~n-2
      */
     private void bubble(int[] array) {
         if (array == null || array.length < 2) {

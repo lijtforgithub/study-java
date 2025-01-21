@@ -49,7 +49,7 @@ class EorTest {
             int count = 0;
             while (n != 0) {
                 int rightOne = n & (~n + 1);
-                // 消掉最地位的1
+                // 消掉最低位的1
                 n ^= rightOne;
                 count++;
             }
