@@ -54,6 +54,7 @@ class BinarySearchTest {
         int index = -1;
 
         while (low <= high) {
+            // mid = low + (high - low) / 2
             int mid = low + ((high - low) >> 1);
             if (array[mid] >= value) {
                 index = mid;

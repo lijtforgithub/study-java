@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import sun.net.spi.nameservice.dns.DNSNameService;
 
 import java.net.URL;
+import java.sql.DriverManager;
 import java.util.Objects;
 
 /**
@@ -16,6 +17,7 @@ public class ClassLoaderTest {
 
     @Test
     public void printClassLoader() {
+        System.out.println(DriverManager.class.getClassLoader());
         /**
          * 三种类加载器
          */

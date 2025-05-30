@@ -4,12 +4,12 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.filechooser.FileSystemView;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.RandomAccessFile;
+import java.io.*;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -63,6 +63,33 @@ class ZeroCopyTest {
              FileOutputStream recvFile = new FileOutputStream(recv)) {
             // transferFrom
             sendFile.getChannel().transferTo(0, sendFile.available(), recvFile.getChannel());
+        }
+    }
+
+    public static void main(String[] args) {
+        String filePath = "your_file_path";
+        String targetIp = "127.0.0.1";
+        int targetPort = 8888;
+
+        try (FileInputStream fis = new FileInputStream(filePath);
+             FileChannel fileChannel = fis.getChannel();
+             SocketChannel socketChannel = SocketChannel.open()) {
+
+            // 连接到目标地址
+            SocketAddress socketAddress = new InetSocketAddress(targetIp, targetPort);
+            socketChannel.connect(socketAddress);
+
+            // 使用零拷贝发送文件
+            long position = 0;
+            long count = fileChannel.size();
+            while (position < count) {
+                position += fileChannel.transferTo(position, count - position, socketChannel);
+            }
+
+            System.out.println("文件发送完成");
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

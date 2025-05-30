@@ -28,7 +28,7 @@ public class LinkedListReverse {
     }
 
     /**
-     * 递归实现 当栈深度大于12000 则会出现StakOverflowError
+     * 递归实现 当栈深度大于12000 则会出现StackOverflowError
      */
     public static <E> LinkedList.SingleNode<E> reverseSingleNodeForRecursion(LinkedList.SingleNode<E> node) {
         if (Objects.isNull(node) || Objects.isNull(node.getNext())) {

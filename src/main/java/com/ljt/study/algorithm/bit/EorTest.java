@@ -56,7 +56,7 @@ class EorTest {
             return count;
         };
 
-        System.out.println(fun.applyAsInt(7));
+        System.out.println(fun.applyAsInt(3));
     }
 
 

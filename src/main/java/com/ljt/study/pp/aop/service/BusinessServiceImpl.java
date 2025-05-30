@@ -13,9 +13,14 @@ public class BusinessServiceImpl implements BusinessService {
         System.out.println(this.getClass() + ".save()");
     }
 
+    private void privateMethod() {
+        System.out.println(this.getClass() + ".privateMethod()");
+    }
+
     @Override
     public String delete() {
         save();
+        privateMethod();
         System.out.println(this.getClass() + ".delete()");
         return "OK";
     }
