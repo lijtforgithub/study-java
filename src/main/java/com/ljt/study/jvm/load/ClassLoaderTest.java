@@ -1,9 +1,7 @@
 package com.ljt.study.jvm.load;
 
 import org.junit.jupiter.api.Test;
-import sun.net.spi.nameservice.dns.DNSNameService;
 
-import java.net.URL;
 import java.sql.DriverManager;
 import java.util.Objects;
 
@@ -22,7 +20,7 @@ public class ClassLoaderTest {
          * 三种类加载器
          */
         System.out.println(ClassLoaderTest.class.getClassLoader());
-        System.out.println(DNSNameService.class.getClassLoader());
+//        System.out.println(DNSNameService.class.getClassLoader());
         System.out.println(String.class.getClassLoader());
 
         /**
@@ -30,7 +28,7 @@ public class ClassLoaderTest {
          * 自定义的类加载器的类加载器是 AppClassLoader
          */
         System.out.println(ClassLoaderTest.class.getClassLoader().getClass().getClassLoader());
-        System.out.println(DNSNameService.class.getClassLoader().getClass().getClassLoader());
+//        System.out.println(DNSNameService.class.getClassLoader().getClass().getClassLoader());
     }
 
     @Test
@@ -74,10 +72,10 @@ public class ClassLoaderTest {
 
     @Test
     public void printBootstrapClassPath() {
-        URL[] urls = sun.misc.Launcher.getBootstrapClassPath().getURLs();
-        for (URL url : urls) {
-            System.out.println(url.toExternalForm());
-        }
+//        URL[] urls = sun.misc.Launcher.getBootstrapClassPath().getURLs();
+//        for (URL url : urls) {
+//            System.out.println(url.toExternalForm());
+//        }
     }
 
 }
