@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 打断线程 优雅的结束线程
- * 或者使用 volatile boolean running;
+ * volatile 方法在某些特殊的情况下，比如线程被长时间阻塞的情况，就无法及时感受中断，所以 volatile 是不够全面的停止线程的方法。
  *
  * @author LiJingTang
  * @date 2020-01-02 19:58

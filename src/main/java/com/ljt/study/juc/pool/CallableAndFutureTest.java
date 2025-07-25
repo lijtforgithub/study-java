@@ -1,7 +1,8 @@
 package com.ljt.study.juc.pool;
 
-import java.util.Random;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * @author LiJingTang
@@ -12,27 +13,27 @@ public class CallableAndFutureTest {
     public static void main(String[] args) throws Exception {
         ExecutorService threadPool = Executors.newSingleThreadExecutor();
         Future<String> future = threadPool.submit(() -> {
-            Thread.sleep(2000);
+            System.out.println("1");
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                System.out.println("中断信号：" + Thread.currentThread().isInterrupted());
+            }
+            System.out.println("2");
+
             return "Hello,World!";
         });
 
         System.out.println("wait a result...");
 
-        System.out.println("result = " + future.get());
+        Thread.sleep(2000);
+        System.out.println(future.cancel(true));
 
-        threadPool = Executors.newFixedThreadPool(10);
-        CompletionService<Integer> completionService = new ExecutorCompletionService<>(threadPool);
-        for (int i = 1; i <= 10; i++) {
-            final int seq = i;
-            completionService.submit(() -> {
-                Thread.sleep(new Random().nextInt(5000));
-                return seq;
-            });
+        if (!future.isCancelled()) {
+            System.out.println("result = " + future.get());
         }
 
-        for (int i = 0; i <= 10; i++) {
-            System.out.println(completionService.take().get());
-        }
+        System.out.println("end");
     }
 
 }
