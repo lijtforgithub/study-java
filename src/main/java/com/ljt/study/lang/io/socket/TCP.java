@@ -23,13 +23,13 @@ class TCP {
         Server server = new Server(port);
         new Thread(server).start();
 
-        for (int i = 0; i < 10; i++) {
-            Client client = new Client("localhost", port, "No." + (i + 1));
-            new Thread(client).start();
-            ThreadUtils.sleepSeconds(1);
-        }
+//        for (int i = 0; i < 10; i++) {
+//            Client client = new Client("localhost", port, "No." + (i + 1));
+//            new Thread(client).start();
+//            ThreadUtils.sleepSeconds(1);
+//        }
 
-        ThreadUtils.sleepSeconds(30);
+        ThreadUtils.sleepSeconds(300);
         System.exit(0);
     }
 

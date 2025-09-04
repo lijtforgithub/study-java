@@ -10,9 +10,13 @@ import java.lang.management.ThreadMXBean;
  * @author LiJingTang
  * @date 2019-11-25 10:47
  */
-class ThreadMxBeanTest {
+public class ThreadMxBeanTest {
 
     public static void main(String[] args) {
+        printJvmThread();
+    }
+
+    public static void printJvmThread() {
         // 获取Java线程管理MXBean
         ThreadMXBean threadMxBean = ManagementFactory.getThreadMXBean();
         // 不需要获取同步的monitor和synchronizer信息，仅获取线程和线程堆栈信息
